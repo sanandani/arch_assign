@@ -144,7 +144,7 @@ public class SinkFilter extends FilterFramework
 	*	ids are read as stream of bytes and stored as integer.
 	********************************************************************************/
 
-	public int readId() throws EndOfStreamException
+	int readId() throws EndOfStreamException
     {
 		byte databyte = 0;				// This is the data byte read from the stream
 
@@ -169,7 +169,7 @@ public class SinkFilter extends FilterFramework
 	* The 'readMeasurement' function is used to read the measurements from filter input 
 	* port. All measurements are read as stream of bytes and stored as long value.
 	********************************************************************************/
-	public long readMeasurement() throws EndOfStreamException
+	long readMeasurement() throws EndOfStreamException
     {
 		byte databyte = 0;				// This is the data byte read from the stream
 
