@@ -5,7 +5,7 @@
 *
 * Description:
 *
-* This subclass extends the FilterFramework superclass and defines two methods to read Ids and read measurements 
+* This subclass extends the BasicFilterFramework superclass and defines two methods to read Ids and read measurements 
 * from input ports 
 *
 * Internal Methods:
@@ -17,7 +17,7 @@
 
 import java.io.*;
 
-public class InstrumentationFilter extends FilterFramework
+public class InstrumentationFilter extends BasicFilterFramework
 {
 	final int IdLength = 4;				// This is the length of IDs in the byte stream 
 	final int MeasurementLength = 8;	// This is the length of all measurements in bytes

@@ -18,7 +18,7 @@
 *
 ******************************************************************************************************************/
 
-public class MiddleFilter extends FilterFramework
+public class MiddleFilter extends BasicFilterFramework
 {
 	public void run()
     {

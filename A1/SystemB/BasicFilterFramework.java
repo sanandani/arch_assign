@@ -36,7 +36,7 @@
 
 import java.io.*;
 
-public class FilterFramework extends Thread
+public class BasicFilterFramework extends Thread
 {
 	// Define filter input and output ports
 
