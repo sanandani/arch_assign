@@ -1,5 +1,5 @@
 /******************************************************************************************************************
-* File:FilterFramework.java
+* File:BasicFilterFramework.java
 * Course: 17655
 * Project: Assignment 1
 * Copyright: Copyright (c) 2003 Carnegie Mellon University
@@ -22,12 +22,12 @@
 * OutputWritePort:	This the filter's output port. Essentially the filter's job is to read data from the input port,
 *					perform some operation on the data, then write the transformed data on the output port.
 *
-* FilterFramework:  This is a reference to the filter that is connected to the instance filter's input port. This
+* BasicFilterFramework:  This is a reference to the filter that is connected to the instance filter's input port. This
 *					reference is to determine when the upstream filter has stopped sending data along the pipe.
 *
 * Internal Methods:
 *
-*	public void Connect( FilterFramework Filter )
+*	public void Connect( BasicFilterFramework Filter )
 *	public byte ReadFilterInputPort()
 *	public void WriteFilterOutputPort(byte datum)
 *	public boolean EndOfInputStream()
@@ -48,7 +48,7 @@ public class BasicFilterFramework extends Thread
 	// the previous filter in the network and when it dies, we know that it has closed its
 	// output pipe and will send no more data.
 
-	private FilterFramework InputFilter;
+	private BasicFilterFramework InputFilter;
 
 	/***************************************************************************
 	* InnerClass:: EndOfStreamExeception
@@ -82,7 +82,7 @@ public class BasicFilterFramework extends Thread
 	* connected to another filter's output port through this method.
 	*
 	* Arguments:
-	* 	FilterFramework - this is the filter that this filter will connect to.
+	* 	BasicFilterFramework - this is the filter that this filter will connect to.
 	*
 	* Returns: void
 	*
@@ -90,7 +90,7 @@ public class BasicFilterFramework extends Thread
 	*
 	****************************************************************************/
 
-	void Connect( FilterFramework Filter )
+	void Connect( BasicFilterFramework Filter )
 	{
 		try
 		{
@@ -103,7 +103,7 @@ public class BasicFilterFramework extends Thread
 
 		catch( Exception Error )
 		{
-			System.out.println( "\n" + this.getName() + " FilterFramework error connecting::"+ Error );
+			System.out.println( "\n" + this.getName() + " BasicFilterFramework error connecting::"+ Error );
 
 		} // catch
 
@@ -304,4 +304,4 @@ public class BasicFilterFramework extends Thread
 
 	} // run
 
-} // FilterFramework class
+} // BasicFilterFramework class

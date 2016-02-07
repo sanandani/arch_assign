@@ -25,6 +25,9 @@
 ******************************************************************************************************************/
 import java.util.*;						// This class is used to interpret time words
 import java.text.SimpleDateFormat;		// This class is used to format and write time in a string format.
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class SinkFilter extends InstrumentationFilter
 {
@@ -52,8 +55,11 @@ public class SinkFilter extends InstrumentationFilter
 		/*************************************************************
 		*	First we announce to the world that we are alive...
 		**************************************************************/
-
+		try{
 		System.out.print( "\n" + this.getName() + "::Sink Reading ");
+		BufferedWriter out = new BufferedWriter(new FileWriter("pressure.txt"));
+		out.write("Time:\t\t\t\t\t\t    Temperature(C):     Altitude(m):        Pressure(psi):");
+		out.newLine();
 
 		while (true)
 		{
@@ -111,13 +117,12 @@ public class SinkFilter extends InstrumentationFilter
 
 				if ( id == 3 )
 				{
-					System.out.print( TimeStampFormat.format(TimeStamp.getTime()) + " ID = " + id + " " + Double.longBitsToDouble(measurement) );
-
+					out.write(Double.toString((Double.longBitsToDouble(measurement))));
+					out.newLine();
+					
 				} // if
-
-				System.out.print( "\n" );
-
 			} // try
+
 
 			/*******************************************************************************
 			*	The EndOfStreamExeception below is thrown when you reach end of the input
@@ -128,12 +133,17 @@ public class SinkFilter extends InstrumentationFilter
 			catch (EndOfStreamException e)
 			{
 				ClosePorts();
+				out.close();
 				System.out.print( "\n" + this.getName() + "::Sink Exiting; bytes read: " + bytesread );
 				break;
 
 			} // catch
 
 		} // while
+		}//try
+					catch(IOException e){
+						System.out.println("IOException");
+					}
 
    } // run
 
