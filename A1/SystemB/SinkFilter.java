@@ -58,8 +58,7 @@ public class SinkFilter extends InstrumentationFilter
 		try{
 		System.out.print( "\n" + this.getName() + "::Sink Reading ");
 		BufferedWriter out = new BufferedWriter(new FileWriter("pressure.txt"));
-		out.write("Time:\t\t\t\t\t\t    Temperature(C):     Altitude(m):        Pressure(psi):");
-		out.newLine();
+		out.write("Time:\tTemperature(C):\tAltitude(m):\tPressure(psi)");
 
 		while (true)
 		{
@@ -101,8 +100,10 @@ public class SinkFilter extends InstrumentationFilter
 
 				if ( id == 0 )
 				{
+					out.newLine();
 					TimeStamp.setTimeInMillis(measurement);
-
+					out.write(TimeStampFormat.format(measurement)+"\t");
+					
 				} // if
 
 				/****************************************************************************
@@ -115,11 +116,9 @@ public class SinkFilter extends InstrumentationFilter
 				// in.
 				****************************************************************************/
 
-				if ( id == 3 )
+				else
 				{
-					out.write(Double.toString((Double.longBitsToDouble(measurement))));
-					out.newLine();
-					
+					out.write(Double.toString((Double.longBitsToDouble(measurement)))+"\t");
 				} // if
 			} // try
 
@@ -141,9 +140,9 @@ public class SinkFilter extends InstrumentationFilter
 
 		} // while
 		}//try
-					catch(IOException e){
-						System.out.println("IOException");
-					}
+		catch(IOException e){
+			System.out.println("IOException");
+		}
 
    } // run
 
