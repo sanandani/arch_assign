@@ -18,7 +18,7 @@
 *
 ******************************************************************************************************************/
 
-public class MiddleFilter extends BasicFilterFramework
+public class MiddleFilter extends SinglePortFilterFramework
 {
 	public void run()
     {

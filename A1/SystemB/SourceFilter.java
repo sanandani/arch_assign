@@ -19,7 +19,7 @@
 
 import java.io.*; // note we must add this here since we use BufferedReader class to read from the keyboard
 
-public class SourceFilter extends BasicFilterFramework
+public class SourceFilter extends SinglePortFilterFramework
 {
 	public void run()
     {

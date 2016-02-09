@@ -17,7 +17,7 @@
 
 import java.io.*;
 
-public class InstrumentationFilter extends BasicFilterFramework
+public class InstrumentationFilter extends SinglePortFilterFramework
 {
 	final int IdLength = 4;				// This is the length of IDs in the byte stream 
 	final int MeasurementLength = 8;	// This is the length of all measurements in bytes
