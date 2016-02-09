@@ -72,7 +72,6 @@ public class IdentifyPressureWildPointsFilter extends InstrumentationFilter
 			}
 				catch (EndOfStreamException e)
 				{
-					
 					//write nextRecord
 					bytesread+= numberOfBytes;
 					currentRecord.add(new InstrumentationData(WILDPOINT_ID, 0l));

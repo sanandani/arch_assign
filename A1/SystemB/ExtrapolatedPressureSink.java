@@ -9,31 +9,22 @@ public class ExtrapolatedPressureSink extends InstrumentationFilter {
 
 	public void run() {
 		int bytesread = 0, numberOfBytesPerRecord = 0, indexOfWildPoint = 0;
+		boolean firstRead = true;
 		ArrayList<InstrumentationData> currentRecord = null;
+		ArrayList<Integer> recordIndicesToWrite = null;
 		try {
 				BufferedWriter out = new BufferedWriter(new FileWriter("SystemB.txt"));
-				System.out.print("\n" + "ExtrapolatedPressureSink" + "::Reading ");
-				out.write("Time:\t\t\t\t\t\t Temperature (C):\t\t\t Altitude (m):\t\t\t Pressure (psi):\n");
-				
-				currentRecord = readRecord(true);
-				
-				numberOfBytesPerRecord = 12 * currentRecord.size();
-				
-				indexOfWildPoint = getRecordIndexOf(currentRecord, WILDPOINT_ID);
-				
-				ArrayList<Integer> recordIndicesToWrite = getOrderedRecordIndicesToWrite(currentRecord, MEASUREMENT_IDS_TO_WRITE);
-				
-				if (isRecordCurrentWildPoint(currentRecord, indexOfWildPoint)) {
-					writeWildRecord(currentRecord, out, recordIndicesToWrite );
-					bytesread += numberOfBytesPerRecord;
-				} else {
-					writeRecord(currentRecord, out, recordIndicesToWrite);
-					bytesread += numberOfBytesPerRecord;
-				}
-				
 				while (true) {
 					try {
-						currentRecord = readRecord(false);
+						currentRecord = readRecord(firstRead);
+						if(firstRead){
+							numberOfBytesPerRecord = 12 * currentRecord.size();
+							indexOfWildPoint = getRecordIndexOf(currentRecord, WILDPOINT_ID);
+							recordIndicesToWrite = getOrderedRecordIndicesToWrite(currentRecord, MEASUREMENT_IDS_TO_WRITE);
+							System.out.print("\n" + "ExtrapolatedPressureSink" + "::Reading ");
+							out.write("Time:\t\t\t\t\t\t Temperature (C):\t\t\t Altitude (m):\t\t\t Pressure (psi):\n");
+							firstRead = false;
+						}
 						if (isRecordCurrentWildPoint(currentRecord, indexOfWildPoint)) {
 							writeWildRecord(currentRecord, out,recordIndicesToWrite );
 							bytesread += numberOfBytesPerRecord;
@@ -50,11 +41,7 @@ public class ExtrapolatedPressureSink extends InstrumentationFilter {
 					} // catch
 				} // while
 			} // try
-			catch (EndOfStreamException e) {
-				ClosePorts();
-				System.out.print("\nExtrapolatedPressureSink" + "Exiting; bytes read: " + bytesread);
-	
-			} catch (IOException e) {
+			catch (IOException e) {
 				e.printStackTrace();
 			}
 	}// run
