@@ -137,9 +137,7 @@ public class InstrumentationFilter extends SinglePortFilterFramework
 			InstrumentationData data = record.get(i);
 			writeBytes(ByteBuffer.allocate(IdLength).putInt(data.id).array());
 			writeBytes(ByteBuffer.allocate(MeasurementLength).putLong(data.measurement).array());
-			System.out.print("id:" + data.id + " :" + Double.toString((Double.longBitsToDouble(data.measurement))));
 		} 
-		System.out.print("\n");
 	}
    
 	public class InstrumentationData{
