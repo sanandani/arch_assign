@@ -13,7 +13,7 @@ public class ExtrapolatedPressureSink extends InstrumentationFilter {
 		ArrayList<InstrumentationData> currentRecord = null;
 		ArrayList<Integer> recordIndicesToWrite = null;
 		try {
-				BufferedWriter out = new BufferedWriter(new FileWriter("SystemB.txt"));
+				BufferedWriter out = new BufferedWriter(new FileWriter("OutputB.dat"));
 				while (true) {
 					try {
 						currentRecord = readRecord(firstRead);
