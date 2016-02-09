@@ -41,7 +41,7 @@ public class IdentifyPressureWildPointsFilter extends InstrumentationFilter
 		catch (EndOfStreamException e)
 		{
 			ClosePorts();
-			System.out.print( "\n" + this.getName() + "::Sink Exiting; bytes read: " + bytesread );
+			System.out.print( "\nIdentifyPressureWildPointsFilter" + "Exiting; bytes read: " + bytesread );
 			return;
 
 		} 
@@ -65,7 +65,6 @@ public class IdentifyPressureWildPointsFilter extends InstrumentationFilter
 				}
 				else{
 					currentRecord.add(new InstrumentationData(WILDPOINT_ID, 0l));
-					//write firstRecord to stream
 					writeRecordToOutputPort(currentRecord);
 					bytesread+= numberOfBytes;
 				}
@@ -73,12 +72,13 @@ public class IdentifyPressureWildPointsFilter extends InstrumentationFilter
 			}
 				catch (EndOfStreamException e)
 				{
-					ClosePorts();
+					
 					//write nextRecord
 					bytesread+= numberOfBytes;
 					currentRecord.add(new InstrumentationData(WILDPOINT_ID, 0l));
 					writeRecordToOutputPort(currentRecord);
-					System.out.print( "\n" + this.getName() + "::Sink Exiting; bytes read: " + bytesread );
+					ClosePorts();
+					System.out.print( "\nIdentifyPressureWildPointsFilter" + "Exiting; bytes read: " + bytesread );
 					break;
 				} // catch
 		}// while
@@ -93,9 +93,6 @@ public class IdentifyPressureWildPointsFilter extends InstrumentationFilter
 	********************************************************************************/
 	
 	private boolean isCurrentValueAWildPoint(double current, double previous, double next, boolean isFirstElement){
-		System.out.println("current" + current);
-		System.out.println("previous" + previous);
-		System.out.println("next" + next);
 		if(current < 0) 
 			{
 				return true;

@@ -129,8 +129,8 @@ public class InstrumentationFilter extends SinglePortFilterFramework
    void writeRecordToOutputPort(ArrayList<InstrumentationData> record){
 		for (int i = 0; i < record.size(); i++) {
 			InstrumentationData data = record.get(i);
-//			writeBytes(ByteBuffer.allocate(IdLength).putInt(data.id).array());
-//			writeBytes(ByteBuffer.allocate(MeasurementLength).putLong(data.measurement).array());
+			writeBytes(ByteBuffer.allocate(IdLength).putInt(data.id).array());
+			writeBytes(ByteBuffer.allocate(MeasurementLength).putLong(data.measurement).array());
 			System.out.print("id:" + data.id + " :" + Double.toString((Double.longBitsToDouble(data.measurement))));
 		} 
 		System.out.print("\n");

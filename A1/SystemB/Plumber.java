@@ -30,7 +30,7 @@ public class Plumber
 //		MiddleFilter Filter2 = new MiddleFilter();
 		IdentifyPressureWildPointsFilter Filter2 = new IdentifyPressureWildPointsFilter();
 //		ExtrapolatePressureWildPointsFilter Filter3 = new ExtrapolatePressureWildPointsFilter();
-//		ExtrapolatedPressureSink Filter4 = new ExtrapolatedPressureSink();
+		ExtrapolatedPressureSink Filter3 = new ExtrapolatedPressureSink();
 
 		/****************************************************************************
 		* Here we connect the filters starting with the sink filter (Filter 1) which
@@ -38,7 +38,7 @@ public class Plumber
 		* source filter (Filter3).
 		****************************************************************************/
 //		Filter4.Connect((MultiPortFilterFramework)Filter3,0); // This esstially says, "connect Filter3 input port to Filter2 output port
-//		Filter3.Connect((MultiPortFilterFramework)Filter2,0); // This esstially says, "connect Filter3 input port to Filter2 output port
+		Filter3.Connect((MultiPortFilterFramework)Filter2,0); // This esstially says, "connect Filter3 input port to Filter2 output port
 		Filter2.Connect((MultiPortFilterFramework)Filter1,0); // This esstially says, "connect Filter3 input port to Filter2 output port
 
 		/****************************************************************************
@@ -47,7 +47,7 @@ public class Plumber
 
 		Filter1.start();
 		Filter2.start();
-//		Filter3.start();
+		Filter3.start();
 //		Filter4.start();
 
    } // main
