@@ -14,7 +14,7 @@ public class IdentifyPressureWildPointsFilter extends InstrumentationFilter
 		/*************************************************************
 		*	First we announce to the world that we are alive...
 		**************************************************************/
-		System.out.print( "\n" + this.getName() + "::Reading ");
+		System.out.print( "\nIdentifyPressureWildPointsFilter" + "::Reading ");
 		
 		
 		try

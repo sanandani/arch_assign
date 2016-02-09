@@ -42,7 +42,9 @@ public class ExtrapolatePressureWildPointsFilter extends InstrumentationFilter {
 						nextRecord =  readRecord(false);
 						next = nextRecord.get(indexOfPressureData);
 						if (isRecordCurrentWildPoint(currentRecord, indexOfWildPoint)) {
-							current.measurement = (previous.measurement + next.measurement)/2;
+							double p = Double.longBitsToDouble(previous.measurement); 
+							double n = Double.longBitsToDouble(next.measurement);
+							current.measurement = Double.doubleToLongBits((p + n)/2);
 							writeRecordToOutputPort(currentRecord);
 							bytesread+= numberOfBytesPerRecord;
 						}
