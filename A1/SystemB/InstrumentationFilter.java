@@ -15,8 +15,12 @@
 *
 ******************************************************************************************************************/
 
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class InstrumentationFilter extends SinglePortFilterFramework
 {
@@ -26,6 +30,8 @@ public class InstrumentationFilter extends SinglePortFilterFramework
 	final int WILDPOINT_ID = 100;
 	final int TIME_ID = 0;
 	
+	Calendar TimeStamp = Calendar.getInstance();
+	SimpleDateFormat TimeStampFormat = new SimpleDateFormat("yyyy MM dd::hh:mm:ss:SSS");
 	/*******************************************************************************
 	*	The 'readId' function is used to read the id from filter input port. All 
 	*	ids are read as stream of bytes and stored as integer.
@@ -144,5 +150,36 @@ public class InstrumentationFilter extends SinglePortFilterFramework
 			this.id = id;
 			this.measurement = measurement;
 		}
+	}
+	
+	void writeMeasurementToFile(ArrayList<InstrumentationData> currentRecord, BufferedWriter out,
+			int indexInRecord) throws IOException {
+			long measurement = currentRecord.get(indexInRecord).measurement;
+			int id = currentRecord.get(indexInRecord).id;
+			if (id == TIME_ID) {
+				out.newLine();
+				TimeStamp.setTimeInMillis(measurement);
+				out.write(TimeStampFormat.format(measurement) + "\t");
+			} else{
+				out.write(Double.toString((Double.longBitsToDouble(measurement))) + "\t");
+				}
+		}
+	void writeRecord(ArrayList<InstrumentationData> currentRecord, BufferedWriter out, ArrayList<Integer> recordIndicesToWrite)
+			throws IOException {
+		for (int i = 0; i < recordIndicesToWrite.size(); i++)
+			writeMeasurementToFile(currentRecord, out, recordIndicesToWrite.get(i));
+	}
+	
+  ArrayList<Integer> getOrderedRecordIndicesToWrite(ArrayList<InstrumentationData> currentRecord, int[] idsToWrite) {
+		ArrayList<Integer> recordIndicesForWrite = new ArrayList<Integer>();
+		for (int i = 0; i < idsToWrite.length; i++) {
+			for (int j = 0; j < currentRecord.size(); j++) {
+				if (currentRecord.get(j).id == idsToWrite[i]) {
+					recordIndicesForWrite.add(j);
+					break;
+				}
+			}
+		}
+		return recordIndicesForWrite;
 	}
 } //InstrumentationFilter
