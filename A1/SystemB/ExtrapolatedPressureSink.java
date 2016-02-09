@@ -3,19 +3,19 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 
 public class ExtrapolatedPressureSink extends InstrumentationFilter {
+	final int [] IDS_TO_WRITE = {0,1,2,3};
 	public void run() {
 		int bytesread = 0, numberOfBytes = 0, indexOfWildPoint = 0;
 		ArrayList<InstrumentationData> currentRecord = null;
 		try {
 			BufferedWriter out = new BufferedWriter(new FileWriter("SystemB.txt"));
-			/*************************************************************
-			 * First we announce to the world that we are alive...
-			 **************************************************************/
+			
 			System.out.print("\n" + "ExtrapolatedPressureSink" + "::Reading ");
-			out.write("Time:\t Pressure(PSI):");
+			out.write("Time:\t\t Temperature (C):\t\t Altitude (m):\t\t Pressure (psi):\n");
 			currentRecord = readRecord(true);
 			numberOfBytes = 12 * currentRecord.size();
 			indexOfWildPoint = getRecordIndexOf(currentRecord, WILDPOINT_ID);
@@ -79,9 +79,6 @@ public class ExtrapolatedPressureSink extends InstrumentationFilter {
 
 	private void writeMeasurementToFile(ArrayList<InstrumentationData> currentRecord, BufferedWriter out,
 			int indexOfMeasurementInRecord) throws IOException {
-		if (currentRecord.get(indexOfMeasurementInRecord).id == WILDPOINT_ID) {
-			return;
-		}
 		long measurement = currentRecord.get(indexOfMeasurementInRecord).measurement;
 		if (indexOfMeasurementInRecord == TIME_ID) {
 			Calendar TimeStamp = Calendar.getInstance();
@@ -90,7 +87,7 @@ public class ExtrapolatedPressureSink extends InstrumentationFilter {
 			TimeStamp.setTimeInMillis(measurement);
 			out.write(TimeStampFormat.format(measurement) + "\t");
 		}
-		else
+		else if(Arrays.asList(IDS_TO_WRITE).contains(indexOfMeasurementInRecord))
 			out.write(Double.toString((Double.longBitsToDouble(measurement))) + "\t");
 	}
 
