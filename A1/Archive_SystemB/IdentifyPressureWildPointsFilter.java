@@ -1,10 +1,6 @@
 import java.util.ArrayList;
 public class IdentifyPressureWildPointsFilter extends InstrumentationFilter
 {
-    public IdentifyPressureWildPointsFilter() {
-        super(1, 1);
-    }
-    
 	public void run()
     {
 		int bytesread = 0, numberOfBytes, indexOfPressureData;

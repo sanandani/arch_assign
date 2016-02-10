@@ -41,31 +41,22 @@ import java.io.*;
 public class MultiPortFilterFramework extends Thread {
     // Define filter input and output ports
 
-    private PipedInputStream[] InputReadPorts;
-    private PipedOutputStream[] OutputWritePorts;
+    protected PipedInputStream[] InputReadPorts;
+    protected PipedOutputStream[] OutputWritePorts;
     private MultiPortFilterFramework[] InputFilters;
-    private int noOfInput = 1;
-    private int noOfOutput = 1;
-    static final int DEFAULT_INPUT = 0; // defaul input port is port 0;
-    static final int DEFAULT_OUTPUT = 0;// defaul input port is port 0;
 
     // The following reference to a filter is used because java pipes are able to reliably
     // detect broken pipes on the input port of the filter. This variable will point to
     // the previous filter in the network and when it dies, we know that it has closed its
     // output pipe and will send no more data.
-    public MultiPortFilterFramework(int noInput, int noOutput) {
-        if (noInput < 1 || noOutput < 1) {
-            throw new IllegalArgumentException("MultiPortFilterFramework: at least 1 input and 1 output is required");
-        }
-        noOfInput = noInput;
-        noOfOutput = noOutput;
+    public MultiPortFilterFramework(int noOfInput, int noOfOuput) {
         InputReadPorts = new PipedInputStream[noOfInput];
         InputFilters = new MultiPortFilterFramework[noOfInput];
-        OutputWritePorts = new PipedOutputStream[noOfOutput];
+        OutputWritePorts = new PipedOutputStream[noOfOuput];
         for (int i = 0; i < noOfInput; i++) {
             InputReadPorts[i] = new PipedInputStream();
         }
-        for (int i = 0; i < noOfOutput; i++) {
+        for (int i = 0; i < noOfOuput; i++) {
             OutputWritePorts[i] = new PipedOutputStream();
         }
     }
@@ -114,7 +105,7 @@ public class MultiPortFilterFramework extends Thread {
      *
      ***************************************************************************
      */
-    void Connect(MultiPortFilterFramework UpstreamFilter, int outputFromUpper, int inputPortNum) {
+    void Connect(MultiPortFilterFramework UpstreamFilter, int outputFromUpper , int inputPortNum) {
         try {
             // Connect this filter's input to the upstream pipe's output stream
 
@@ -127,10 +118,6 @@ public class MultiPortFilterFramework extends Thread {
             System.out.println("\n" + this.getName() + " MultiPortFilterFramework error connecting::" + Error);
 
         } // catch
-
-    } // Connect
-     void Connect(MultiPortFilterFramework upstreamFilter) {
-        Connect(upstreamFilter,DEFAULT_INPUT,DEFAULT_OUTPUT);
 
     } // Connect
 
@@ -294,7 +281,7 @@ public class MultiPortFilterFramework extends Thread {
 
         } // catch
 
-    } 
+    } // ClosePorts
 
     void CloseInputPort(int no) {
         try {
@@ -305,17 +292,7 @@ public class MultiPortFilterFramework extends Thread {
 
         } // catch
 
-    }
-
-    void ClosePorts() {
-        for (int i = 0; i < noOfInput; i++) {
-            CloseInputPort(i);
-        }
-        for (int i = 0; i < noOfOutput; i++) {
-            CloseOutputPort(i);
-        }
-
-    } // Close all the ports
+    } // ClosePorts
 
     /**
      * *************************************************************************
