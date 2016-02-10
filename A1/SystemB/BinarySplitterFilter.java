@@ -1,30 +1,9 @@
 
-/**
- * ****************************************************************************************************************
- * File:BinarySplitter.java
- * Course: 17655
- * Project: Assignment 1
- * Copyright: Copyright (c) 2003 Carnegie Mellon University
- * Versions:
- *	1.0 November 2008 - Sample Pipe and Filter code (ajl).
- *
- * Description:
- *
- * This class serves as an example for how to use the FilterRemplate to create a standard filter. This particular
- * example is a simple "pass-through" filter that reads data from the filter's input port and writes data out the
- * filter's output port.
- *
- * Parameters: 		None
- *
- * Internal Methods: None
- *
- *****************************************************************************************************************
- */
+
 public class BinarySplitterFilter extends MultiPortFilterFramework {
 
     public static final int NO_OF_INPUT = 1;
     public static final int NO_OF_OUTPUT = 2;
-    public static final int DEFAULT_INPUT = 0;
     public static final int OUTPUT0 = 0;
     public static final int OUTPUT1 = 1;
 
