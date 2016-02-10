@@ -1,5 +1,5 @@
 
-import java.nio.ByteBuffer;
+import java.util.ArrayList;
 
 /*
 *********************************************************************
@@ -21,62 +21,63 @@ import java.nio.ByteBuffer;
 * Internal Methods: None
 *
 ******************************************************************************************************************/
+public class LessThan10KFilter extends InstrumentationFilter {
 
-public class LessThan10KFilter extends InstrumentationFilter
-{
-	public void run()
-    {
+    private int numberOfBytesPerRecord;
+
+    public LessThan10KFilter() {
+        super(1, 1);
+    }
+
+    public void run() {
         long measurement;                                       //To store the intermitent measurement read
         int id;                                                 //To store the intermitent id read
-		int bytesread = 0;										// Number of bytes read from the input file.
-		int byteswritten = 0;                                   // Number of bytes written to the stream.
-		boolean firstRead = true;								// To track the first iteration of reading row from pipes
-		ArrayList<InstrumentationData> currentRecord = null;	// To temporarily store the current row of record
-		int indexOfAltitudeInRecord = 0;						// To fetch the index of the altitude column
-		// Next we write a message to the terminal to let the world know we are alive...
+        int bytesread = 0;										// Number of bytes read from the input file.
+        int byteswritten = 0;                                   // Number of bytes written to the stream.
+        boolean firstRead = true;								// To track the first iteration of reading row from pipes
+        ArrayList<InstrumentationData> currentRecord = null;	// To temporarily store the current row of record
+        int indexOfAltitudeInRecord = 0;						// To fetch the index of the altitude column
+        // Next we write a message to the terminal to let the world know we are alive...
 
-		System.out.print( "\n" + this.getName() + "::LessThan10KFilter Reading ");
+        System.out.print("\n" + this.getName() + "::LessThan10KFilter Reading ");
 
-		while (true)
-		{
-			/************************************************************
-			*	Here we remove greater than 10000 feet altitude rows    *
-			************************************************************/
-			try
-			{
-					//fetch each row 
-					currentRecord = readRecord(firstRead);
-					if(firstRead){
-						numberOfBytesPerRecord = 12 * currentRecord.size();
-						indexOfAltitudeInRecord = getRecordIndexOf(currentRecord, ALTITUDE_ID);
-						firstRead = false;
-					}
+        while (true) {
+            /**
+             * **********************************************************
+             * Here we remove greater than 10000 feet altitude rows *
+			***********************************************************
+             */
+            try {
+                //fetch each row 
+                currentRecord = readRecord(firstRead);
+                if (firstRead) {
+                    numberOfBytesPerRecord = 12 * currentRecord.size();
+                    indexOfAltitudeInRecord = getRecordIndexOf(currentRecord, ALTITUDE_ID);
+                    firstRead = false;
+                }
 
-                    //check for less than 10k value of altitude and accordingly update it
-                    if (Double.longBitsToDouble(currentRecord.get(indexOfAltitudeInRecord).measurement)>9999){
-                        //write to sink filter the >9999 values             
-                        //all the columns     
-                        writeRecordToOutputPort(currentRecord, //file portno1)
-                    }
-                    else {
-                    	//otherwise pass it to next filter
-                    	writeRecordToOutputPort(currentRecord,  // next filter portno2)
-                    	byteswritten+=numberOfBytesPerRecord;	// we only count the bytes written for the next filters other than sink filter
-                    }
-                    bytesread+=numberOfBytesPerRecord;
+                //check for less than 10k value of altitude and accordingly update it
+                if (Double.longBitsToDouble(currentRecord.get(indexOfAltitudeInRecord).measurement) > 9999) {
+                    //write to sink filter the >9999 values             
+                    //all the columns     
+                    writeRecordToOutputPort(currentRecord, 0);
+                } else {
+                    //otherwise pass it to next filter
+                    writeRecordToOutputPort(currentRecord, 1);
+                            byteswritten += numberOfBytesPerRecord;	// we only count the bytes written for the next filters other than sink filter
+                }
+                bytesread += numberOfBytesPerRecord;
 
-			} // try
+            } // try
+            catch (EndOfStreamException e) {
+                ClosePorts();
+                System.out.print("\n" + this.getName() + "::LessThan10KFilter Exiting; bytes read: " + bytesread + " bytes written: " + byteswritten);
+                break;
 
-			catch (FilterFramework.EndOfStreamException e)
-			{
-				ClosePorts();
-				System.out.print( "\n" + this.getName() + "::LessThan10KFilter Exiting; bytes read: " + bytesread + " bytes written: " + byteswritten );
-				break;
+            } // catch
 
-			} // catch
+        } // while
 
-		} // while
-
-   } // run
+    } // run
 
 } // MiddleFilter
