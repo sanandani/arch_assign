@@ -37,7 +37,7 @@ public class ConvertAltitudeFilter extends InstrumentationFilter
                             id = readId();
                             measurement = readMeasurement();
                             writeBytes(ByteBuffer.allocate(IdLength).putInt(id).array());
-                            if (id==5){
+                            if (id==2){
                                 temp = Double.longBitsToDouble(measurement);
                                 temp = (temp*12.0)*0.0254;
                                 ByteBuffer.wrap(bytes).putDouble(temp);

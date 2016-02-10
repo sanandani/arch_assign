@@ -39,7 +39,7 @@ public class RemoveAttributesFilter extends InstrumentationFilter
 			{
                                 id = readId();
                                 measurement = readMeasurement();
-                                if(id==0||id==4||id==3||id==5)
+                                if(id==0||id==4||id==3||id==2)
                                 {
                                     count++;
                                     if(count ==1) {
