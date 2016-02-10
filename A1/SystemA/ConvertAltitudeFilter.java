@@ -1,26 +1,15 @@
-
-import java.nio.ByteBuffer;
-
-/*
-*********************************************************************
-* File:MiddleFilter.java
+/******************************************************************************************************************
+* File:ConvertAltitudeFilter.java
 * Course: 17655
 * Project: Assignment 1
-* Copyright: Copyright (c) 2003 Carnegie Mellon University
-* Versions:
-*	1.0 November 2008 - Sample Pipe and Filter code (ajl).
 *
 * Description:
 *
-* This class serves as an example for how to use the FilterRemplate to create a standard filter. This particular
-* example is a simple "pass-through" filter that reads data from the filter's input port and writes data out the
-* filter's output port.
-*
-* Parameters: 		None
-*
-* Internal Methods: None
+* This class converts altitude from feet to meters
 *
 ******************************************************************************************************************/
+
+import java.nio.ByteBuffer;
 
 public class ConvertAltitudeFilter extends InstrumentationFilter
 {
