@@ -26,12 +26,10 @@ public class LessThan10KFilter extends InstrumentationFilter {
     private int numberOfBytesPerRecord;
 
     public LessThan10KFilter() {
-        super(1, 1);
+        super(1, 2);
     }
 
     public void run() {
-        long measurement;                                       //To store the intermitent measurement read
-        int id;                                                 //To store the intermitent id read
         int bytesread = 0;										// Number of bytes read from the input file.
         int byteswritten = 0;                                   // Number of bytes written to the stream.
         boolean firstRead = true;								// To track the first iteration of reading row from pipes
@@ -55,9 +53,9 @@ public class LessThan10KFilter extends InstrumentationFilter {
                     indexOfAltitudeInRecord = getRecordIndexOf(currentRecord, ALTITUDE_ID);
                     firstRead = false;
                 }
-
+                Double altmeasurement = Double.longBitsToDouble(currentRecord.get(indexOfAltitudeInRecord).measurement);
                 //check for less than 10k value of altitude and accordingly update it
-                if (Double.longBitsToDouble(currentRecord.get(indexOfAltitudeInRecord).measurement) > 9999) {
+                if (altmeasurement > 9999) {
                     //write to sink filter the >9999 values             
                     //all the columns     
                     writeRecordToOutputPort(currentRecord, 0);

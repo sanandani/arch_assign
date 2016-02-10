@@ -38,15 +38,16 @@ public class Plumber {
         BinarySplitterFilter splitter1 = new BinarySplitterFilter();
         BinarySplitterFilter splitter2 = new BinarySplitterFilter();
 
-        LessThan10KFilter removeLessThan10k = new LessThan10KFilter();
+        CommonSinkFilter sink = new CommonSinkFilter("OutputC.dat");
+        CommonSinkFilter sink2 = new CommonSinkFilter("Lessthan10k.dat");
+//        CommonSinkFilter sink3 = new CommonSinkFilter("Greaterthan10k.dat");
+        LessThan10KFilter lessThan10K = new LessThan10KFilter();
 
         IdentifyPressureWildPointsFilter identifyWildPoint = new IdentifyPressureWildPointsFilter();
-
-        RejectedPressureWildPointsSink sink1 = new RejectedPressureWildPointsSink();
+//
+        RejectedPressureWildPointsSink rejectedPressureWildPointsSink = new RejectedPressureWildPointsSink();
         ExtrapolatePressureWildPointsFilter extrapolate = new ExtrapolatePressureWildPointsFilter();
-        ExtrapolatedPressureSink sink2 = new ExtrapolatedPressureSink();
-        GeneralSinkFilter sink3 = new GeneralSinkFilter();
-        GeneralSinkFilter sink4 = new GeneralSinkFilter();
+        ExtrapolatedPressureSink extrapolateSink = new ExtrapolatedPressureSink("GreaterThan10KExtrapolatedOutputC.dat");
 
         /**
          * **************************************************************************
@@ -59,12 +60,21 @@ public class Plumber {
         extrapolate.Connect(splitter2, 1, 0);
         sink1.Connect(splitter2, 0, 0);
         splitter2.Connect(identifyWildPoint);
-        identifyWildPoint.Connect(removeLessThan10k, 0, 0);
+        
         removeLessThan10k.Connect(splitter1, 0, 0);
         sink3.Connect(removeLessThan10k,1,0);//write to LessThan10K.dat
-        sink4.Connect(splitter1,1,0);//write to outputC.dat
-        splitter1.Connect(sort);*/
-        sink1.Connect(sort);
+        sink4.Connect(splitter1,1,0);//write to outputC.dat*/
+       
+        
+        extrapolateSink.Connect(extrapolate);
+        rejectedPressureWildPointsSink.Connect(splitter2,0,0);
+        extrapolate.Connect(splitter2,1,0);
+        sink2.Connect(lessThan10K,1,0);
+        splitter2.Connect(identifyWildPoint);
+        identifyWildPoint.Connect(lessThan10K, 0, 0);
+        lessThan10K.Connect(splitter1,0,0);
+        sink.Connect(splitter1,1,0);
+        splitter1.Connect(sort);
         sort.Connect(merger);
         merger.Connect(sourceA, 0, 0);
         merger.Connect(sourceB, 0, 1); // This esstially says, "connect Filter3 input port to Filter2 output port
@@ -80,16 +90,19 @@ public class Plumber {
         sourceB.start();
         merger.start();
         sort.start();
-        /*splitter1.start();
-        removeLessThan10k.start();
+        splitter1.start();
+        lessThan10K.start();
+        sink.start();
+        sink2.start();
         identifyWildPoint.start();
         splitter2.start();
         extrapolate.start();
-        sink1.start();
-        sink2.start();
-        sink3.start();
-        sink4.start();*/
-        sink1.start();
+        rejectedPressureWildPointsSink.start();
+        extrapolateSink.start();
+        
+        
+        
+//        merger.start();
 
     } // main
 

@@ -140,6 +140,7 @@ public class SortByTimeFilter extends InstrumentationFilter {
              */
             catch (EndOfStreamException e) {
                 Collections.sort(instrumentationDataCompleteArrayList, instrumentationDataList.someComp);
+//                }
                 int storedId = 0;
                 long storedMeasurement = 0L;
                 for (int j = 0; j < instrumentationDataCompleteArrayList.size(); j++) {
@@ -149,8 +150,6 @@ public class SortByTimeFilter extends InstrumentationFilter {
                         writeBytes(ByteBuffer.allocate(IdLength).putInt(storedId).array());
                         writeBytes(ByteBuffer.allocate(MeasurementLength).putLong(storedMeasurement).array());
                         byteswritten += IdLength + MeasurementLength;
-                        //System.out.println("Position ======="+j+"=====ID======"+instrumentationDataCompleteArrayList.get(j).getInstrumentationData().get(k).id);
-                        //System.out.println("Position ======="+j+"====="+instrumentationDataCompleteArrayList.get(j).getInstrumentationData().get(k).measurement);	
                     } //for
                 }  // for
                 ClosePorts();

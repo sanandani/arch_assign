@@ -5,11 +5,14 @@ import java.util.ArrayList;
 
 public class ExtrapolatedPressureSink extends InstrumentationFilter {
         
-    public ExtrapolatedPressureSink() {
+	private String filename;
+
+	public ExtrapolatedPressureSink(String filename) {
         super(1, 1);
+        this.filename = filename;
     }
     
-	final int[] MEASUREMENT_IDS_TO_WRITE = { 0, 4, 5, 3 };
+	final int[] MEASUREMENT_IDS_TO_WRITE = { 0, 4, 2, 3 };
 
 	public void run() {
 		int bytesread = 0, numberOfBytesPerRecord = 0, indexOfWildPoint = 0;
@@ -17,7 +20,7 @@ public class ExtrapolatedPressureSink extends InstrumentationFilter {
 		ArrayList<InstrumentationData> currentRecord = null;
 		ArrayList<Integer> recordIndicesToWrite = null;
 		try {
-				BufferedWriter out = new BufferedWriter(new FileWriter("OutputB.dat"));
+				BufferedWriter out = new BufferedWriter(new FileWriter(filename));
 				while (true) {
 					try {
 						currentRecord = readRecord(firstRead);
