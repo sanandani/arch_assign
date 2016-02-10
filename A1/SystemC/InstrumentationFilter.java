@@ -31,6 +31,7 @@ public class InstrumentationFilter extends MultiPortFilterFramework {
     final int MeasurementLength = 8;	// This is the length of all measurements in bytes
     final int PRESSURE_ID = 3;
     final int WILDPOINT_ID = 100;
+    final int ALTITUDE_ID = 2;
     final int TIME_ID = 0;
     protected static final int DEFAULT_INPUT=0;
     protected static final int DEFAULT_OUTPUT=0;
@@ -172,6 +173,13 @@ public class InstrumentationFilter extends MultiPortFilterFramework {
             InstrumentationData data = record.get(i);
             writeBytes(ByteBuffer.allocate(IdLength).putInt(data.id).array());
             writeBytes(ByteBuffer.allocate(MeasurementLength).putLong(data.measurement).array());
+        }
+    }
+     void writeRecordToOutputPort(ArrayList<InstrumentationData> record, int portNum) {
+        for (int i = 0; i < record.size(); i++) {
+            InstrumentationData data = record.get(i);
+            writeBytes(portNum,ByteBuffer.allocate(IdLength).putInt(data.id).array());
+            writeBytes(portNum,ByteBuffer.allocate(MeasurementLength).putLong(data.measurement).array());
         }
     }
 
