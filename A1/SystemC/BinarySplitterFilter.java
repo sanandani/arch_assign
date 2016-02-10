@@ -57,7 +57,6 @@ public class BinarySplitterFilter extends MultiPortFilterFramework {
                 bytesread++;
                 for (int i = 0; i < NO_OF_OUTPUT; i++) {
                     WriteFilterOutputPort(i, databyte);
-                    
                 }
                 byteswritten++;
 
