@@ -1,62 +1,34 @@
 
-/**
- * ****************************************************************************************************************
- * File:FilterFramework.java
- * Course: 17655
- * Project: Assignment 1
- * Copyright: Copyright (c) 2003 Carnegie Mellon University
- * Versions:
- *	1.0 November 2008 - Initial rewrite of original assignment 1 (ajl).
- *
- * Description:
- *
- * This superclass defines a skeletal filter framework that defines a filter in terms of the input and output
- * ports. All filters must be defined in terms of this framework - that is, filters must extend this class
- * in order to be considered valid system filters. Filters as standalone threads until the inputport no longer
- * has any data - at which point the filter finishes up any work it has to do and then terminates.
- *
- * Parameters:
- *
- * InputReadPort:	This is the filter's input port. Essentially this port is connected to another filter's piped
- *					output steam. All filters connect to other filters by connecting their input ports to other
- *					filter's output ports. This is handled by the Connect() method.
- *
- * OutputWritePort:	This the filter's output port. Essentially the filter's job is to read data from the input port,
- *					perform some operation on the data, then write the transformed data on the output port.
- *
- * FilterFramework:  This is a reference to the filter that is connected to the instance filter's input port. This
- *					reference is to determine when the upstream filter has stopped sending data along the pipe.
- *
- * Internal Methods:
- *
- *	public void Connect( FilterFramework Filter )
- *	public byte ReadFilterInputPort()
- *	public void WriteFilterOutputPort(byte datum)
- *	public boolean EndOfInputStream()
- *
- *****************************************************************************************************************
- */
 import java.io.*;
 
 public class MultiPortFilterFramework extends Thread {
     // Define filter input and output ports
 
-    protected PipedInputStream[] InputReadPorts;
-    protected PipedOutputStream[] OutputWritePorts;
+    private PipedInputStream[] InputReadPorts;
+    private PipedOutputStream[] OutputWritePorts;
     private MultiPortFilterFramework[] InputFilters;
+    private int noOfInput = 1;
+    private int noOfOutput = 1;
+    static final int DEFAULT_INPUT = 0; // defaul input port is port 0;
+    static final int DEFAULT_OUTPUT = 0;// defaul input port is port 0;
 
     // The following reference to a filter is used because java pipes are able to reliably
     // detect broken pipes on the input port of the filter. This variable will point to
     // the previous filter in the network and when it dies, we know that it has closed its
     // output pipe and will send no more data.
-    public MultiPortFilterFramework(int noOfInput, int noOfOuput) {
+    public MultiPortFilterFramework(int noInput, int noOutput) {
+        if (noInput < 1 || noOutput < 1) {
+            throw new IllegalArgumentException("MultiPortFilterFramework: at least 1 input and 1 output is required");
+        }
+        noOfInput = noInput;
+        noOfOutput = noOutput;
         InputReadPorts = new PipedInputStream[noOfInput];
         InputFilters = new MultiPortFilterFramework[noOfInput];
-        OutputWritePorts = new PipedOutputStream[noOfOuput];
+        OutputWritePorts = new PipedOutputStream[noOfOutput];
         for (int i = 0; i < noOfInput; i++) {
             InputReadPorts[i] = new PipedInputStream();
         }
-        for (int i = 0; i < noOfOuput; i++) {
+        for (int i = 0; i < noOfOutput; i++) {
             OutputWritePorts[i] = new PipedOutputStream();
         }
     }
@@ -96,16 +68,18 @@ public class MultiPortFilterFramework extends Thread {
      * each filter's inputport is connected to another filter's output port
      * through this method.
      *
-     * Arguments: FilterFramework - this is the filter that this filter will
-     * connect to.
-     *
+     * Arguments: 
+     * UpstreamFilter - this is the filter that this filter will connect to. 
+     * outputFromUPper - this is the port number of the output port of the upstreamFilter
+     * inputPortNum- this si the port number of the input port of this filter
+     * 
      * Returns: void
      *
      * Exceptions: IOException
      *
      ***************************************************************************
      */
-    void Connect(MultiPortFilterFramework UpstreamFilter, int outputFromUpper , int inputPortNum) {
+    void Connect(MultiPortFilterFramework UpstreamFilter, int outputFromUpper, int inputPortNum) {
         try {
             // Connect this filter's input to the upstream pipe's output stream
 
@@ -120,20 +94,13 @@ public class MultiPortFilterFramework extends Thread {
         } // catch
 
     } // Connect
+     void Connect(MultiPortFilterFramework upstreamFilter) {
+        Connect(upstreamFilter,DEFAULT_INPUT,DEFAULT_OUTPUT);
 
-    /**
-     * *************************************************************************
-     * CONCRETE METHOD:: ReadFilterInputPort Purpose: This method reads data
-     * from the input port one byte at a time.
-     *
-     * Arguments: void
-     *
-     * Returns: byte of data read from the input port of the filter.
-     *
-     * Exceptions: IOExecption, EndOfStreamException (rethrown)
-     *
-     ***************************************************************************
-     */
+    } // Connect
+
+   
+    
     byte ReadFilterInputPort(int inputPortNum) throws EndOfStreamException {
         byte datum = 0;
 
@@ -257,6 +224,30 @@ public class MultiPortFilterFramework extends Thread {
 
     } // EndOfInputStream
 
+    
+    void CloseOutputPort(int no) {
+        try {
+
+            OutputWritePorts[no].close();
+
+        } catch (Exception Error) {
+            System.out.println("\n" + this.getName() + " CloseOutputPort error::" + Error);
+
+        } // catch
+
+    } 
+
+    void CloseInputPort(int no) {
+        try {
+            InputReadPorts[no].close();
+
+        } catch (Exception Error) {
+            System.out.println("\n" + this.getName() + " CloseInputPort error::" + Error);
+
+        } // catch
+
+    }
+    
     /**
      * *************************************************************************
      * CONCRETE METHOD:: ClosePorts Purpose: This method is used to close the
@@ -271,28 +262,16 @@ public class MultiPortFilterFramework extends Thread {
      *
      ***************************************************************************
      */
-    void CloseOutputPort(int no) {
-        try {
 
-            OutputWritePorts[no].close();
+    void ClosePorts() {
+        for (int i = 0; i < noOfInput; i++) {
+            CloseInputPort(i);
+        }
+        for (int i = 0; i < noOfOutput; i++) {
+            CloseOutputPort(i);
+        }
 
-        } catch (Exception Error) {
-            System.out.println("\n" + this.getName() + " CloseOutputPort error::" + Error);
-
-        } // catch
-
-    } // ClosePorts
-
-    void CloseInputPort(int no) {
-        try {
-            InputReadPorts[no].close();
-
-        } catch (Exception Error) {
-            System.out.println("\n" + this.getName() + " CloseInputPort error::" + Error);
-
-        } // catch
-
-    } // ClosePorts
+    } // Close all the ports
 
     /**
      * *************************************************************************
