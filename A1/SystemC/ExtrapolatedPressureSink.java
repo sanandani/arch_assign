@@ -4,7 +4,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class ExtrapolatedPressureSink extends InstrumentationFilter {
-
+        
+    public ExtrapolatedPressureSink() {
+        super(1, 1);
+    }
+    
 	final int[] MEASUREMENT_IDS_TO_WRITE = { 0, 4, 5, 3 };
 
 	public void run() {

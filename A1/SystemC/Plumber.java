@@ -26,7 +26,7 @@ public class Plumber
 		* Here we instantiate three filters.
 		****************************************************************************/
 
-		SourceFilter Filter1 = new SourceFilter();
+		SourceFilter Filter1 = new SourceFilter(argv[0]);
 		ConvertAltitudeFilter Filter2 = new ConvertAltitudeFilter();
 		ConvertTemperatureFilter Filter3 = new ConvertTemperatureFilter();
 		IdentifyPressureWildPointsFilter Filter4 = new IdentifyPressureWildPointsFilter();
@@ -40,13 +40,13 @@ public class Plumber
 		* we connect to Filter2 the middle filter. Then we connect Filter2 to the
 		* source filter (Filter3).
 		****************************************************************************/
-		Filter8.Connect((MultiPortFilterFramework)Filter7, 0);
-		Filter7.Connect((MultiPortFilterFramework)Filter5, 0);
-		Filter6.Connect((MultiPortFilterFramework)Filter5, 1);
-		Filter5.Connect((MultiPortFilterFramework)Filter4, 0);
-		Filter4.Connect((MultiPortFilterFramework)Filter3,0);
-		Filter3.Connect((MultiPortFilterFramework)Filter2,0); // This esstially says, "connect Filter3 input port to Filter2 output port
-		Filter2.Connect((MultiPortFilterFramework)Filter1,0); // This esstially says, "connect Filter3 input port to Filter2 output port
+		Filter8.Connect(Filter7);
+		Filter7.Connect(Filter5,0,0);
+		Filter6.Connect(Filter5,1,0);
+		Filter5.Connect(Filter4);
+		Filter4.Connect(Filter3);
+		Filter3.Connect(Filter2); // This esstially says, "connect Filter3 input port to Filter2 output port
+		Filter2.Connect(Filter1); // This esstially says, "connect Filter3 input port to Filter2 output port
 
 		/****************************************************************************
 		* Here we start the filters up. All-in-all,... its really kind of boring.
