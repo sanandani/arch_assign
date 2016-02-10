@@ -57,7 +57,7 @@ public class SinkFilter extends InstrumentationFilter
 		**************************************************************/
 		try{
 		System.out.print( "\n" + this.getName() + "::Sink Reading ");
-		BufferedWriter out = new BufferedWriter(new FileWriter("systemA.txt"));
+		BufferedWriter out = new BufferedWriter(new FileWriter("OutputA.dat"));
 		out.write("Time:\tTemperature(C):\tAltitude(m):");
 		while (true)
 		{
