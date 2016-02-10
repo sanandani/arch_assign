@@ -15,8 +15,8 @@ public class RejectedPressureWildPointsSink extends InstrumentationFilter {
         int bytesread = 0, numberOfBytesPerRecord = 0, indexOfWildPoint = 0;
         ArrayList<InstrumentationData> currentRecord = null;
         try {
-            BufferedWriter out = new BufferedWriter(new FileWriter("WildPoints.dat"));
-            System.out.print("\n" + "ExtrapolatedPressureSink" + "::Reading ");
+            BufferedWriter out = new BufferedWriter(new FileWriter("PressureWildPoints.dat"));
+            System.out.print("\n" + "RejectedPressureWildPointsSink" + "::Reading ");
             out.write("Time:\t\t\t\t\t\t Pressure (psi):\n");
 
             currentRecord = readRecord(true);
