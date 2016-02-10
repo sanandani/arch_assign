@@ -7,13 +7,8 @@
  *
  * Description:
  *
- * This subclass extends the BasicFilterFramework superclass and defines two methods to read Ids and read measurements
- * from input ports
+ * This subclass extends the MultiPortFilterFramework and house utility methods.
  *
- * Internal Methods:
- *
- *	public int readId()
- *	public long readMeasurement()
  *
  *****************************************************************************************************************
  */
@@ -88,10 +83,25 @@ public class InstrumentationFilter extends MultiPortFilterFramework {
     long readMeasurement() throws EndOfStreamException {
         return readMeasurementFromPort(DEFAULT_INPUT);
     }// readMeasurement
+
+     /**
+     * *****************************************************************************
+     * The 'readMeasurement' function is used to read the measurements from
+     * a given input port. All measurements are read as stream of bytes and
+     * stored as long value.
+    *******************************************************************************
+     */
     long readMeasurement(int portNum) throws EndOfStreamException {
         return readMeasurementFromPort(portNum);
     }// readMeasurement
     
+     /**
+     * *****************************************************************************
+     * The 'readMeasurementFromPort' function is used to read the measurements from
+     * a given input port. All measurements are read as stream of bytes and
+     * stored as long value.
+    *******************************************************************************
+     */
     long readMeasurementFromPort(int portNum) throws EndOfStreamException {
         byte databyte = 0;				// This is the data byte read from the stream
 
@@ -126,11 +136,23 @@ public class InstrumentationFilter extends MultiPortFilterFramework {
         }
     }
     
+    /**
+     * ******************************************************************************
+     * The 'writeBytes' function is used to write the measurements from filter
+     * to a given output port. All measurements are written as stream of bytes.   *
+    *******************************************************************************
+     */
     void writeBytes(int outputport, byte[] datum) {
         for (int i = 0; i < datum.length; i++) {
             WriteFilterOutputPort(outputport,datum[i]);
         }
     }
+
+    /**
+     * ************************************************************************************
+     * The 'getRecordIndexOf' function is used to get the index of a measurement from a row 
+    ***************************************************************************************
+     */
 
     int getRecordIndexOf(ArrayList<InstrumentationData> record, int id) {
         for (int i = 0; i < record.size(); i++) {
@@ -141,6 +163,12 @@ public class InstrumentationFilter extends MultiPortFilterFramework {
         return -1;
     }
 
+    /**
+     * ******************************************************************************
+     * The 'readRecord' function is used to read a row from the input port
+     * A row is an ArrayList<InstrumentationData> 
+    *******************************************************************************
+     */
     ArrayList<InstrumentationData> readRecord(boolean isFirstRead) throws EndOfStreamException {
         int id = 0;
         long measurement;
@@ -166,7 +194,12 @@ public class InstrumentationFilter extends MultiPortFilterFramework {
         }
         return record;
     }
-
+    /**
+     * ******************************************************************************
+     * The 'writeRecordToOutputPort' function is used to write a row to the output port
+     * A row is an ArrayList<InstrumentationData> 
+    *******************************************************************************
+     */
     void writeRecordToOutputPort(ArrayList<InstrumentationData> record) {
         for (int i = 0; i < record.size(); i++) {
             InstrumentationData data = record.get(i);
@@ -175,6 +208,11 @@ public class InstrumentationFilter extends MultiPortFilterFramework {
         }
     }
 
+    /**
+     * **********************************************************************************************
+     * The 'InstrumentationData' class is a datastructure to house the id and measurement values 
+    *************************************************************************************************
+     */
     public class InstrumentationData {
 
         public int id;
@@ -186,6 +224,11 @@ public class InstrumentationFilter extends MultiPortFilterFramework {
         }
     }
 
+    /**
+     * ******************************************************************************
+     * The 'writeMeasurementToFile' function is used to write a measurement to a file
+    *******************************************************************************
+     */
     void writeMeasurementToFile(ArrayList<InstrumentationData> currentRecord, BufferedWriter out,
             int indexInRecord) throws IOException {
         long measurement = currentRecord.get(indexInRecord).measurement;
@@ -198,14 +241,23 @@ public class InstrumentationFilter extends MultiPortFilterFramework {
             out.write(Double.toString((Double.longBitsToDouble(measurement))) + "\t");
         }
     }
-
+     /**
+     * ******************************************************************************
+     * The 'writeRecord' function is used to write a record to a file
+    *******************************************************************************
+     */
     void writeRecord(ArrayList<InstrumentationData> currentRecord, BufferedWriter out, ArrayList<Integer> recordIndicesToWrite)
             throws IOException {
         for (int i = 0; i < recordIndicesToWrite.size(); i++) {
             writeMeasurementToFile(currentRecord, out, recordIndicesToWrite.get(i));
         }
     }
-
+    /**
+     * ******************************************************************************
+     * The 'getOrderedRecordIndicesToWrite' function is used to find the order of 
+     * measurements for writing a record to a file.
+    *******************************************************************************
+     */
     ArrayList<Integer> getOrderedRecordIndicesToWrite(ArrayList<InstrumentationData> currentRecord, int[] idsToWrite) {
         ArrayList<Integer> recordIndicesForWrite = new ArrayList<Integer>();
         for (int i = 0; i < idsToWrite.length; i++) {

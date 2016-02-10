@@ -9,7 +9,7 @@ public class ExtrapolatedPressureSink extends InstrumentationFilter {
         super(1, 1);
     }
     
-	final int[] MEASUREMENT_IDS_TO_WRITE = { 0, 4, 5, 3 };
+	final int[] MEASUREMENT_IDS_TO_WRITE = { 0, 4, 2, 3 };
 
 	public void run() {
 		int bytesread = 0, numberOfBytesPerRecord = 0, indexOfWildPoint = 0;
