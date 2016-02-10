@@ -25,7 +25,6 @@ public class SourceFilter extends FilterFramework
     private String fileName;
 
     public SourceFilter(String fileName) {
-        super(1, 1);
         this.fileName = fileName;
     }
 
