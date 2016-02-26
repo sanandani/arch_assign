@@ -8,6 +8,6 @@
  *
  * @author Penny
  */
-public class DBAccessManagerInterface {
-    
+public interface DBAccessManagerInterface {
+    public UserType login(String username, String pwd);
 }
