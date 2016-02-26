@@ -9,8 +9,14 @@
  * @author Penny
  */
 public class UserObject {
+
     private Enum userType;
     private String token;
+
+    public UserObject(Enum userType, String token) {
+        this.userType = userType;
+        this.token = token;
+    }
 
     /**
      * @return the userType
@@ -39,5 +45,5 @@ public class UserObject {
     public void setToken(String token) {
         this.token = token;
     }
-    
+
 }
