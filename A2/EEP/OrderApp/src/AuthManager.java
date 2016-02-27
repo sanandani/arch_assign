@@ -39,7 +39,7 @@ public class AuthManager implements AuthManagerInterface{
 
     private static boolean isValidToken(String token) {
         try {
-            if (token.substring(4).equals("_signed")) {
+            if (token.substring(5,12).equals("_signed")) {
                 return true;
             } else {
                 return false;
