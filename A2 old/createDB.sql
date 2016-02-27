@@ -1,5 +1,5 @@
-create database inventory;
-use inventory;
+create database eep;
+use eep;
 -- MySQL dump 10.13  Distrib 5.1.42, for Win32 (ia32)
 --
 -- Host: localhost    Database: inventory
@@ -292,3 +292,35 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2014-02-13 15:49:42
+
+
+create database userinfo; 
+use userinfo;
+-- MySQL dump 10.13  Distrib 5.1.42, for Win32 (ia32)
+--
+-- Host: localhost    Database: userinfo
+-- ------------------------------------------------------
+-- Server version	5.1.42-community
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `users` (
+  `user_id` varchar(10) DEFAULT NULL,
+  `username` varchar(30) NOT NULL UNIQUE,
+  `password` varchar(20) DEFAULT NULL,
+  `user_type` varchar(10) NOT NULL,
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `users`
+--
+
+LOCK TABLES `users` WRITE;
+INSERT INTO `users` VALUES ('US001','trailblazers','1','ORDER'),('US002','trailblazers2','2','ID'),('US003','trailblazers3','3','SHIPPING');
+UNLOCK TABLES;
+

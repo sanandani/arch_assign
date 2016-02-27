@@ -15,7 +15,7 @@ public interface DBAccessManagerInterface {
     //inventory: reduce quantity by 1;
     public int reduceQuantityByOne(String table, String productId);
 
-    //return numebers of items deleted
+    //return numbers of items deleted; -1 if nothing was deleted
     public int delete(String table, String productId);
 
     public ResultSet select(String table);
