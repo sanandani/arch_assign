@@ -14,6 +14,10 @@ import java.sql.Statement;
  *
  * @author Shubham
  */
-public class DBAccessManager {
+public class DBAccessManager implements DBAccessManagerInterface {
+
+    public UserType login(String username, String pwd) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
    
 }
