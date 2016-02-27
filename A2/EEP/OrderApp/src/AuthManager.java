@@ -3,17 +3,12 @@
  *
  * @author Penny
  */
-public class AuthManager implements AuthManagerInterface {
+public class AuthManager{
+
+    private static DBAccessManager dbm = new DBAccessManager();
 
     public static UserObject login(String username, String pwd) {
-        //login(String username, String pwd)
-        //new DBAccessManager();
-        return new UserObject(login(String username
-        , String pwd
-        ), generateToken(username)
-    
-
-    );
+        return new UserObject(dbm.login(username, pwd), generateToken(username));
     }
 
     public static String generateToken(String username) {
