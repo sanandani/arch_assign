@@ -8,7 +8,7 @@ import java.util.Calendar;
  */
 public class AuthManager implements AuthManagerInterface{
 
-    private static DBAccessManager dbm = new DBAccessManager();
+    private static DBAccessManagerInterface dbm = new DBAccessManager();
 
     public  UserObject login(String username, String pwd) {
         UserType ut = dbm.login(username, pwd);
