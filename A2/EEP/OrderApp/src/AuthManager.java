@@ -1,24 +1,43 @@
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 /**
  *
  * @author Penny
  */
-public class AuthManager{
+public class AuthManager implements AuthManagerInterface{
 
     private static DBAccessManager dbm = new DBAccessManager();
 
-    public static UserObject login(String username, String pwd) {
-        return new UserObject(dbm.login(username, pwd), generateToken(username));
+    public  UserObject login(String username, String pwd) {
+        UserType ut = dbm.login(username, pwd);
+        if (ut != null) {
+            Logger.log("user " + username + " is logging in to the system at " + getTime());
+            return new UserObject(dbm.login(username, pwd), generateToken(username));
+        } else {
+            return new UserObject(null, null);
+        }
     }
 
-    public static String generateToken(String username) {
-        int hash = 7;
+    public  void logout(String token) {
+        Logger.log("user " + decryptToken(token) + " is logging out the system at " + getTime());
+
+    }
+
+    //simulation assume username has at least 5 characters
+    private static String generateToken(String username) {
         //this hash is a simulation 
-        hash = username.charAt(0) + username.charAt(2);
-        return "u_" + hash + "_signed";
+        return "u_" + username.substring(0, 3) + "_signed" + username.substring(3);
     }
 
-    public static boolean isValidToken(String token) {
+    private static String decryptToken(String token) {
+
+        String username = token.substring(2, 5) + token.substring(12);
+        return "u_" + username.substring(0, 3) + "_signed" + username.substring(3);
+    }
+
+    private static boolean isValidToken(String token) {
         try {
             if (token.substring(4).equals("_signed")) {
                 return true;
@@ -28,5 +47,9 @@ public class AuthManager{
         } catch (Exception e) {
             return false;
         }
+    }
+
+    private static String getTime() {
+        return new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
     }
 }
