@@ -18,12 +18,15 @@ import java.sql.*;
  *
  * @author lattanze
  */
-public class NewJFrame extends javax.swing.JFrame {
-    Integer updateOrderID;
+public class ShippingNewJFrame extends javax.swing.JFrame {
+    String updateOrderID;
     String versionID = "v2.10.10";
+    private AuthManagerInterface securityImpl = new AuthManager();
+    // Token needs to be set dynamically after the login has been completed
+    String token = "User_Authenticated";
     
     /** Creates new form NewJFrame */
-    public NewJFrame() {
+    public ShippingNewJFrame() {
         initComponents();
         jLabel1.setText("Shipping Application " + versionID);
     }
@@ -349,49 +352,16 @@ public class NewJFrame extends javax.swing.JFrame {
         // button is disabled until an order is selected... just in case the
         // check is here.
 
-        if ( !orderBlank )
-        {
-            try
-            {
-                msgString = ">> Establishing Driver...";
-                jTextArea4.setText("\n"+msgString);
-
-                //Load J Connector for MySQL - explicit loads are not needed for 
-                //connectors that are version 4 and better
-                //Class.forName( "com.mysql.jdbc.Driver" );
-
-                msgString = ">> Setting up URL...";
-                jTextArea4.append("\n"+msgString);
-
-                //define the data source
-                String SQLServerIP = jTextField1.getText();
-                String sourceURL = "jdbc:mysql://" + SQLServerIP + ":3306/orderinfo";
-
-                msgString = ">> Establishing connection with: " + sourceURL + "...";
-                jTextArea4.append("\n"+msgString);
-
-                //create a connection to the db - note the default account is "remote"
-                //and the password is "remote_pass" - you will have to set this
-                //account up in your database
-                DBConn = DriverManager.getConnection(sourceURL,"remote","remote_pass");
-
-            } catch (Exception e) {
-
-                errString =  "\nProblem connecting to orderinfo database:: " + e;
-                jTextArea4.append(errString);
-                connectError = true;
-
-            } // end try-catch
-
-        } // blank order check 
+        // Code removed for database connectivity
 
         if ( !connectError && !orderBlank )
         {
             try
             {
-                s = DBConn.createStatement();
-                SQLStatement = "SELECT * FROM orders WHERE order_id = " + Integer.parseInt(orderID);
-                res = s.executeQuery( SQLStatement );
+//                s = DBConn.createStatement();
+//                SQLStatement = "SELECT * FROM orders WHERE order_id = " + Integer.parseInt(orderID);
+                  // Calling the authorization layer which will help to fetch data using data access layer
+                  res = securityImpl.select("orders",orderID,this.token);
                 
                 // Get the information from the database. Display the
                 // first and last name, address, phone number, address, and
@@ -411,8 +381,9 @@ public class NewJFrame extends javax.swing.JFrame {
                 } // for each element in the return SQL query
 
                 // get the order items from the related order table
-                SQLStatement = "SELECT * FROM " + orderTable;
-                res = s.executeQuery( SQLStatement );
+                //SQLStatement = "SELECT * FROM " + orderTable;
+                // Calling the authorization layer which will help to fetch data using data access layer
+                res = securityImpl.select(orderTable,this.token);
 
 
                 // list the items on the form that comprise the order
@@ -427,7 +398,7 @@ public class NewJFrame extends javax.swing.JFrame {
                 } // while
 
                 // This global variable is used to update the record as shipped
-                updateOrderID = Integer.parseInt(orderID);
+                updateOrderID = orderID;
 
                 // Update the form
                 jButton1.setEnabled(true);
@@ -458,38 +429,8 @@ public class NewJFrame extends javax.swing.JFrame {
         Statement s = null;                 // SQL statement pointer
         String SQLStatement = null;         // SQL statement string
 
-        // Connect to the order database
-        try
-        {
-            msgString = ">> Establishing Driver...";
-            jTextArea4.setText("\n"+msgString);
-
-            //load JDBC driver class for MySQL
-            Class.forName( "com.mysql.jdbc.Driver" );
-
-            msgString = ">> Setting up URL...";
-            jTextArea4.append("\n"+msgString);
-
-            //define the data source
-            String SQLServerIP = jTextField1.getText();
-            String sourceURL = "jdbc:mysql://" + SQLServerIP + ":3306/orderinfo";
-
-            msgString = ">> Establishing connection with: " + sourceURL + "...";
-            jTextArea4.append("\n"+msgString);
-
-            //create a connection to the db - note the default account is "remote"
-            //and the password is "remote_pass" - you will have to set this
-            //account up in your database
-            DBConn = DriverManager.getConnection(sourceURL,"remote","remote_pass");
-
-        } catch (Exception e) {
-
-            errString =  "\nProblem connecting to orderinfo database:: " + e;
-            jTextArea4.append(errString);
-            connectError = true;
-
-        } // end try-catch
-
+        // Connect to the order database - Code Removed
+        
         // If we are connected, then we update the shipped status
 
         if ( !connectError )
@@ -497,11 +438,11 @@ public class NewJFrame extends javax.swing.JFrame {
             try
             {
                 // first we create the query
-                s = DBConn.createStatement();
-                SQLStatement = "UPDATE orders SET shipped=" + true + " WHERE order_id=" + updateOrderID;
+                //s = DBConn.createStatement();
+                //SQLStatement = "UPDATE orders SET shipped=" + true + " WHERE order_id=" + updateOrderID;
 
                 // execute the statement
-                rows = s.executeUpdate( SQLStatement );
+                rows = securityImpl.setOrderShipped(updateOrderID, true, this.token);
 
                 // if the query worked, then we display the data in TextArea 4 - BTW, its highly
                 // unlikely that the row won't exist and if it does the database tables are
@@ -583,36 +524,7 @@ public class NewJFrame extends javax.swing.JFrame {
         jTextField5.setText("");
 
         // Connect to the order database
-        try
-        {
-            msgString = ">> Establishing Driver...";
-            jTextArea4.setText("\n"+msgString);
-
-            //load JDBC driver class for MySQL
-            Class.forName( "com.mysql.jdbc.Driver" );
-
-            msgString = ">> Setting up URL...";
-            jTextArea4.append("\n"+msgString);
-
-            //define the data source
-            String SQLServerIP = jTextField1.getText();
-            String sourceURL = "jdbc:mysql://" + SQLServerIP + ":3306/orderinfo";
-
-            msgString = ">> Establishing connection with: " + sourceURL + "...";
-            jTextArea4.append("\n"+msgString);
-
-            //create a connection to the db - note the default account is "remote"
-            //and the password is "remote_pass" - you will have to set this
-            //account up in your database
-            DBConn = DriverManager.getConnection(sourceURL,"remote","remote_pass");
-
-        } catch (Exception e) {
-
-            errString =  "\nProblem connecting to orderinfo database:: " + e;
-            jTextArea4.append(errString);
-            connectError = true;
-
-        } // end try-catch
+        // Remove data for data base connectivity
 
         // If we are connected, then we get the list of trees from the
         // inventory database
@@ -622,8 +534,9 @@ public class NewJFrame extends javax.swing.JFrame {
             try
             {
                 // Create a query to get all the orders and execute the query
-                s = DBConn.createStatement();
-                res = s.executeQuery( "Select * from orders" );
+                //s = DBConn.createStatement();
+                //res = s.executeQuery( "Select * from orders" );
+                res = securityImpl.select("orders", this.token);
 
                 //Display the data in the textarea
                 jTextArea1.setText("");
@@ -690,36 +603,7 @@ public class NewJFrame extends javax.swing.JFrame {
         jTextField5.setText("");
 
         // Connect to the order database
-        try
-        {
-            msgString = ">> Establishing Driver...";
-            jTextArea4.setText("\n"+msgString);
-
-            //load JDBC driver class for MySQL
-            Class.forName( "com.mysql.jdbc.Driver" );
-
-            msgString = ">> Setting up URL...";
-            jTextArea4.append("\n"+msgString);
-
-            //define the data source
-            String SQLServerIP = jTextField1.getText();
-            String sourceURL = "jdbc:mysql://" + SQLServerIP + ":3306/orderinfo";
-
-            msgString = ">> Establishing connection with: " + sourceURL + "...";
-            jTextArea4.append("\n"+msgString);
-
-            //create a connection to the db - note the default account is "remote"
-            //and the password is "remote_pass" - you will have to set this
-            //account up in your database
-            DBConn = DriverManager.getConnection(sourceURL,"remote","remote_pass");
-
-        } catch (Exception e) {
-
-            errString =  "\nProblem connecting to orderinfo database:: " + e;
-            jTextArea4.append(errString);
-            connectError = true;
-
-        } // end try-catch
+        // Remove database connectivity code - Moved to Data access layer
 
         // If we are connected, then we get the list of trees from the
         // inventory database
@@ -730,9 +614,9 @@ public class NewJFrame extends javax.swing.JFrame {
             {
                 // Create a query to get all the rows from the orders database
                 // and execute the query.
-                s = DBConn.createStatement();
-                res = s.executeQuery( "Select * from orders" );
-
+                //s = DBConn.createStatement();
+                //res = s.executeQuery( "Select * from orders" );
+                res = securityImpl.select("orders", this.token);
                 //Display the data in the textarea
                 jTextArea1.setText("");
 
@@ -781,7 +665,7 @@ public class NewJFrame extends javax.swing.JFrame {
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new NewJFrame().setVisible(true);
+                new ShippingNewJFrame().setVisible(true);
             }
         });
     }
