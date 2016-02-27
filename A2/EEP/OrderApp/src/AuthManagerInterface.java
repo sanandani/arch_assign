@@ -19,16 +19,16 @@ public interface AuthManagerInterface {
     public ResultSet select(String table, String productId,String token);
 
    
-    public boolean createOrderTable(String orderTableName,String token);
+    public int createOrderTable(String orderTableName,String token);
     
    // the shipped is always false
-    public boolean insertOrder(String dateTimeStamp, String firstName, 
+    public int insertOrder(String dateTimeStamp, String firstName, 
             String lastName, String customerAddress, String phoneNumber, 
-            String fCost, Boolean shipped, String orderTableName,String token);
+            float fCost, Boolean shipped, String orderTableName,String token);
     
-     public boolean dropOrderTable(String orderTableName,String token);
-     public boolean insertOrder(String orderTableName, String productId, 
-             String description, String perUnitCost,String token);
+     public int dropOrderTable(String orderTableName,String token);
+     public int insertOrder(String orderTableName, String productId, 
+             String description, Float perUnitCost,String token);
      
      /***********Shippings****************/
      //update "orders" table
