@@ -312,7 +312,6 @@ public class ShippingNewJFrame extends javax.swing.JFrame {
         // in jTextArea3.
 
         Boolean connectError = false;       // Error flag
-        Connection DBConn = null;           // MySQL connection handle    
         String errString = null;            // String for displaying errors
         int beginIndex;                     // Parsing index
         int endIndex;                       // Parsing index
@@ -421,7 +420,6 @@ public class ShippingNewJFrame extends javax.swing.JFrame {
         // to shipped.
 
         Boolean connectError = false;       // Error flag
-        Connection DBConn = null;           // MySQL connection handle
         String errString = null;            // String for displaying errors
         String msgString = null;            // String for displaying non-error messages
         ResultSet res = null;               // SQL query result set pointer
@@ -506,7 +504,6 @@ public class ShippingNewJFrame extends javax.swing.JFrame {
         // jTextArea1.
 
         Boolean connectError = false;       // Error flag
-        Connection DBConn = null;           // MySQL connection handle
         String errString = null;            // String for displaying errors
         String msgString = null;            // String for displaying non-error messages
         ResultSet res = null;               // SQL query result set pointer
@@ -585,7 +582,6 @@ public class ShippingNewJFrame extends javax.swing.JFrame {
         // orders is written to jTextArea1.
 
         Boolean connectError = false;       // Error flag
-        Connection DBConn = null;           // MySQL connection handle
         String errString = null;            // String for displaying errors
         String msgString = null;            // String for displaying non-error messages
         ResultSet res = null;               // SQL query result set pointer

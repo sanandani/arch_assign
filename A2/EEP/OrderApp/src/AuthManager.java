@@ -54,7 +54,7 @@ public class AuthManager implements AuthManagerInterface{
         return new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
     }
 
-    public boolean insertInventory(String table, String productId, String description, String quantity, String perUnitCost, String token) {
+    public int insertInventory(String table, String productId, String description, int quantity, float perUnitCost, String token) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -90,7 +90,7 @@ public class AuthManager implements AuthManagerInterface{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public boolean setOrderShipped(String orderId, Boolean shipped, String token) {
+    public int setOrderShipped(String orderId, Boolean shipped, String token) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

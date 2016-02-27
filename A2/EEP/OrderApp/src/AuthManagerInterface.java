@@ -5,8 +5,7 @@ import java.sql.ResultSet;
 public interface AuthManagerInterface {
     public UserObject login(String username, String pwd);
     public void logout(String token);
-    public boolean insertInventory(String table, String productId, 
-            String description, String quantity, String perUnitCost,String token);
+    public int insertInventory(String table, String productId, String description, int quantity, float perUnitCost, String token) ;
 
     //inventory: reduce quantity by 1;
     public int reduceQuantityByOne(String table, String productId,String token);
@@ -32,5 +31,5 @@ public interface AuthManagerInterface {
      
      /***********Shippings****************/
      //update "orders" table
-     public boolean setOrderShipped(String orderId, Boolean shipped, String token);
+     public int setOrderShipped(String orderId, Boolean shipped, String token);
 }

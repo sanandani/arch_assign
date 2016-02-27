@@ -314,7 +314,6 @@ public class NewJFrame extends javax.swing.JFrame {
 
         // Database parameters
         Boolean connectError = false;       // Error flag
-        Connection DBConn = null;           // MySQL connection handle
         String errString = null;            // String for displaying errors
         String msgString = null;            // String for displaying non-error messages
         ResultSet res = null;               // SQL query result set pointer
@@ -455,7 +454,6 @@ public class NewJFrame extends javax.swing.JFrame {
         String customerAddress;         // Buyers mailing address
         int endIndex;                   // String paring index
         String firstName = null;        // Customer's first name
-        Connection DBConn = null;       // MySQL connection handle
         float fCost;                    // Total order cost
         String description;             // Tree, seed, or shrub description
         Boolean executeError = false;   // Error flag
@@ -662,7 +660,6 @@ public class NewJFrame extends javax.swing.JFrame {
         // item by triple clicking the item.
 
         Boolean connectError = false;       // Error flag
-        Connection DBConn = null;           // MySQL connection handle
         String errString = null;            // String for displaying errors
         String msgString = null;            // String for displaying non-error messages
         ResultSet res = null;               // SQL query result set pointer
@@ -711,7 +708,6 @@ public class NewJFrame extends javax.swing.JFrame {
         // item by triple clicking the item.
 
         Boolean connectError = false;       // Error flag
-        Connection DBConn = null;           // MySQL connection handle
         String errString = null;            // String for displaying errors
         String msgString = null;            // String for displaying non-error messages
         ResultSet res = null;               // SQL query result set pointer
