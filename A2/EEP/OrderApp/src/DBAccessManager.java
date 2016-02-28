@@ -58,7 +58,7 @@ public class DBAccessManager implements DBAccessManagerInterface {
         return null;
     }
     
-    public boolean insertInventory(String table, String productId, String description, String quantity, String perUnitCost) {
+    public int insertInventory(String table, String productId, String description, int quantity, float perUnitCost) {
         
         Connection conn = getConnection();       // Connection
         Statement s = null;                 // SQL statement pointer
@@ -76,14 +76,14 @@ public class DBAccessManager implements DBAccessManagerInterface {
             try
             {
                 s = conn.createStatement();
-                return s.executeUpdate(SQLstatement)>0;
+                return s.executeUpdate(SQLstatement);
             } catch (Exception e) {
-                return false;
+                return 0;
                 //Print error 
 
             } // end try-catch
         } // if connect check
-        return false;    
+        return 0;    
     }
 
     public int reduceQuantityByOne(String table, String productId) {
@@ -185,7 +185,7 @@ public class DBAccessManager implements DBAccessManagerInterface {
         return null;
     }
 
-    public boolean createOrderTable(String orderTableName) {
+    public int createOrderTable(String orderTableName) {
         Connection conn = getConnection();       // Connection
         Statement s = null;                 // SQL statement pointer
         String SQLstatement = ( "CREATE TABLE " + orderTableName +
@@ -201,17 +201,17 @@ public class DBAccessManager implements DBAccessManagerInterface {
             try
             {
                 s = conn.createStatement();
-                return s.executeUpdate(SQLstatement)>0;
+                return s.executeUpdate(SQLstatement);
             } catch (Exception e) {
-                return false;
+                return 0;
                 //Print error 
 
             } // end try-catch
         } // if connect check
-        return false;
+        return 0;
     }
 
-    public boolean insertOrder(String dateTimeStamp, String firstName, String lastName, String customerAddress, String phoneNumber, String fCost, Boolean shipped, String orderTableName) {
+    public int insertOrder(String dateTimeStamp, String firstName, String lastName, String customerAddress, String phoneNumber, float fCost, Boolean shipped, String orderTableName) {
         Connection conn = getConnection();       // Connection
         Statement s = null;                 // SQL statement pointer
         String SQLstatement = ( "INSERT INTO orders (order_date, " + "first_name, " +
@@ -229,17 +229,17 @@ public class DBAccessManager implements DBAccessManagerInterface {
             try
             {
                 s = conn.createStatement();
-                return s.executeUpdate(SQLstatement)>0;
+                return s.executeUpdate(SQLstatement);
             } catch (Exception e) {
-                return false;
+                return 0;
                 //Print error 
 
             } // end try-catch
         } // if connect check
-        return false;
+        return 0;
     }
 
-    public boolean dropOrderTable(String orderTableName) {
+    public int dropOrderTable(String orderTableName) {
         Connection conn = getConnection();       // Connection
         Statement s = null;                 // SQL statement pointer
         String SQLstatement = ( "DROP TABLE " + orderTableName + ";" );
@@ -252,17 +252,17 @@ public class DBAccessManager implements DBAccessManagerInterface {
             try
             {
                 s = conn.createStatement();
-                return s.executeUpdate(SQLstatement)>0;
+                return s.executeUpdate(SQLstatement);
             } catch (Exception e) {
-                return false;
+                return 0;
                 //Print error 
 
             } // end try-catch
         } // if connect check
-        return false;
+        return 0;
     }
 
-    public boolean insertOrder(String orderTableName, String productId, String description, String perUnitCost) {
+    public int insertOrder(String orderTableName, String productId, String description, float perUnitCost) {
         Connection conn = getConnection();       // Connection
         Statement s = null;                 // SQL statement pointer
         String SQLstatement = ( "INSERT INTO " + orderTableName +
@@ -278,17 +278,17 @@ public class DBAccessManager implements DBAccessManagerInterface {
             try
             {
                 s = conn.createStatement();
-                return s.executeUpdate(SQLstatement)>0;
+                return s.executeUpdate(SQLstatement);
             } catch (Exception e) {
-                return false;
+                return 0;
                 //Print error 
 
             } // end try-catch
         } // if connect check
-        return false;
+        return 0;
     }
 
-    public boolean setOrderShipped(String orderId, Boolean shipped) {
+    public int setOrderShipped(String orderId, Boolean shipped) {
         
         Connection conn = getConnection();       // Connection
         Statement s = null;                 // SQL statement pointer
@@ -302,13 +302,13 @@ public class DBAccessManager implements DBAccessManagerInterface {
             try
             {
                 s = conn.createStatement();
-                return s.executeUpdate(SQLstatement)>0;
+                return s.executeUpdate(SQLstatement);
             } catch (Exception e) {
-                return false;
+                return 0;
                 //Print error 
 
             } // end try-catch
         } // if connect check
-        return false;
+        return 0;
     }
 }

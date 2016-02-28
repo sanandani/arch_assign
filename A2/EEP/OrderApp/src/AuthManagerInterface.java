@@ -27,7 +27,7 @@ public interface AuthManagerInterface {
     
      public int dropOrderTable(String orderTableName,String token);
      public int insertOrder(String orderTableName, String productId, 
-             String description, Float perUnitCost,String token);
+             String description, float perUnitCost,String token);
      
      /***********Shippings****************/
      //update "orders" table

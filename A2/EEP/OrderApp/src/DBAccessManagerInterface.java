@@ -10,7 +10,7 @@ public interface DBAccessManagerInterface {
      * ******EEP Inventor*****
      */
     //insert trees, shrubs,seeds
-    public boolean insertInventory(String table, String productId, String description, String quantity, String perUnitCost);
+    public int insertInventory(String table, String productId, String description, int quantity, float perUnitCost);
 
     //inventory: reduce quantity by 1;
     public int reduceQuantityByOne(String table, String productId);
@@ -44,19 +44,19 @@ public interface DBAccessManagerInterface {
                             "(item_id int unsigned not null auto_increment primary key, " +
                             "product_id varchar(20), description varchar(80), " +
                             "item_price float(7,2) );"  */
-    public boolean createOrderTable(String orderTableName);
+    public int createOrderTable(String orderTableName);
     
    // the shipped is always false
-    public boolean insertOrder(String dateTimeStamp, String firstName, 
+    public int insertOrder(String dateTimeStamp, String firstName, 
             String lastName, String customerAddress, String phoneNumber, 
-            String fCost, Boolean shipped, String orderTableName);
+            float fCost, Boolean shipped, String orderTableName);
     
-     public boolean dropOrderTable(String orderTableName);
-     public boolean insertOrder(String orderTableName, String productId, 
-             String description, String perUnitCost);
+     public int dropOrderTable(String orderTableName);
+     public int insertOrder(String orderTableName, String productId, 
+             String description, float perUnitCost);
      
      /***********Shippings****************/
      //update "orders" table
-     public boolean setOrderShipped(String orderId, Boolean shipped);
+     public int setOrderShipped(String orderId, Boolean shipped);
      
 }

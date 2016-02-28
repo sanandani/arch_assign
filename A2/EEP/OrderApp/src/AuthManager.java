@@ -86,7 +86,7 @@ public class AuthManager implements AuthManagerInterface{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public int insertOrder(String orderTableName, String productId, String description, Float perUnitCost, String token) {
+    public int insertOrder(String orderTableName, String productId, String description, float perUnitCost, String token) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
