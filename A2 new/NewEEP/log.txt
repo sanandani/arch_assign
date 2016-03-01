@@ -57,3 +57,4 @@ user trail2 is logging in to the system at 20160301_011103
 user trail2 is logging in to the system at 20160301_011423
 user trail2 is logging out the system at 20160301_011553
 user trail3 is logging in to the system at 20160301_011557
+user trail2 is logging in to the system at 20160301_160938

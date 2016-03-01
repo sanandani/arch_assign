@@ -1,3 +1,4 @@
+drop database inventory;
 create database inventory;
 use inventory;
 -- MySQL dump 10.13  Distrib 5.1.42, for Win32 (ia32)
@@ -102,7 +103,7 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2010-02-10 15:33:35
-
+drop database orderinfo;
 create database orderinfo;
 use orderinfo;
 -- MySQL dump 10.13  Distrib 5.1.42, for Win32 (ia32)
@@ -162,7 +163,7 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2010-02-10 19:32:41
-
+drop database leaftech;
 create database leaftech;
 use leaftech;
 -- MySQL dump 10.13  Distrib 5.6.15, for Win32 (x86)
@@ -293,7 +294,7 @@ UNLOCK TABLES;
 
 -- Dump completed on 2014-02-13 15:49:42
 
-
+drop database userinfo;
 create database userinfo;
 use userinfo;
 -- MySQL dump 10.13  Distrib 5.1.42, for Win32 (ia32)
