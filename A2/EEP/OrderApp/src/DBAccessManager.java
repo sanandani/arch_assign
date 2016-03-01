@@ -40,20 +40,23 @@ public class DBAccessManager implements DBAccessManagerInterface {
     }
     
     public UserType login(String username, String pwd) {
+        System.out.println(pwd);
         Connection conn = getConnection("users");       // Connection
         ResultSet res = null;               // SQL query result set pointer
         Statement s = null;                 // SQL statement pointer
         String str = null;
         // If we are connected, then we get the list of "table" from the
         //  database
-
+        if(conn==null){
+            System.out.println("null");
+        }
         if (conn!=null)
         {
             try
             {
                 s = conn.createStatement();
                 res = s.executeQuery( "Select * from users where username = '"+username+"' and password = '"+pwd+"'" );
-                
+                System.out.println(res);
                 if (res.next()){
                     str = (String) res.getObject(4);//user type
                     if(str.equalsIgnoreCase("IT"))
