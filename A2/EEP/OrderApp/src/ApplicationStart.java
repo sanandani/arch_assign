@@ -154,10 +154,10 @@ public class ApplicationStart extends javax.swing.JFrame {
         if(user == null){
             ErrorLabel.setVisible(true);
         }
-        else {
+        else  {
           ErrorLabel.setVisible(false);
           Enum usertype = user.getUserType();
-          if(usertype == UserType.IT){
+          if(usertype == UserType.OT){
           
           }
           else if(usertype == UserType.IT){
