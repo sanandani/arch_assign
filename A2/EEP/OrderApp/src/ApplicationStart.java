@@ -146,7 +146,6 @@ public class ApplicationStart extends javax.swing.JFrame {
     private void loginButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginButtonMouseClicked
         String username = jTextField1.getText();
         String pwd = new String(passwordField.getPassword());
-        System.out.println(pwd);
         UserObject user = authmanager.login(username, pwd);
         if(user.getUserType() == null){
             ErrorLabel.setVisible(true);
@@ -156,13 +155,13 @@ public class ApplicationStart extends javax.swing.JFrame {
           Enum usertype = user.getUserType();
           this.setVisible(false);
           if(usertype == UserType.ORDER){
-          order.setVisible(true);
+            order.setVisible(true);
           }
           else if(usertype == UserType.IT){
-          inventory.setVisible(true);
+            inventory.setVisible(true);
           }
-          else{
-          shipping.setVisible(true);
+          else {
+            shipping.setVisible(true);
           }
         }
         
