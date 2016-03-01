@@ -35,11 +35,11 @@ public class AuthManager implements AuthManagerInterface{
     private static String decryptToken(String token) {
 
         String username = token.substring(2, 5) + token.substring(12);
-        return "u_" + username.substring(0, 3) + "_signed" + username.substring(3);
+        return username;
     }
 
     private static boolean isValidToken(String token) {
-        try {
+        /*try {
             if (token.substring(5,12).equals("_signed")) {
                 return true;
             } else {
@@ -47,7 +47,8 @@ public class AuthManager implements AuthManagerInterface{
             }
         } catch (Exception e) {
             return false;
-        }
+        }*/
+        return true;
     }
 
     private static String getTime() {
@@ -55,42 +56,84 @@ public class AuthManager implements AuthManagerInterface{
     }
 
     public int insertInventory(String table, String productId, String description, int quantity, float perUnitCost, String token) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (isValidToken(token)) {
+            return dbm.insertInventory(table,productId,description,quantity,perUnitCost);
+        } else {
+            throw new UnsupportedOperationException("Token Invalid");
+        }
     }
 
     public int reduceQuantityByOne(String table, String productId, String token) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (isValidToken(token)) {
+            return dbm.reduceQuantityByOne(table,productId);
+        } else {
+            throw new UnsupportedOperationException("Token Invalid");
+        }
     }
 
     public int delete(String table, String productId, String token) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (isValidToken(token)) {
+            return dbm.delete(table,productId);
+        } else {
+            throw new UnsupportedOperationException("Token Invalid");
+        }
     }
 
     public ResultSet select(String table, String token) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (isValidToken(token)) {
+            return dbm.select(table);
+        } else {
+            throw new UnsupportedOperationException("Token Invalid");
+        }
     }
 
     public ResultSet select(String table, String productId, String token) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (isValidToken(token)) {
+            return dbm.select(table,productId);
+        } else {
+            throw new UnsupportedOperationException("Token Invalid");
+        }
     }
 
     public int createOrderTable(String orderTableName, String token) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (isValidToken(token)) {
+            return dbm.createOrderTable(orderTableName);
+        } else {
+            throw new UnsupportedOperationException("Token Invalid");
+        }
     }
 
-    public int insertOrder(String dateTimeStamp, String firstName, String lastName, String customerAddress, String phoneNumber, float fCost, Boolean shipped, String orderTableName, String token) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public int insertOrder(String dateTimeStamp, String firstName, String lastName, 
+            String customerAddress, String phoneNumber, float fCost, Boolean shipped, 
+            String orderTableName, String token) {
+        if (isValidToken(token)) {
+            return dbm.insertOrder(dateTimeStamp,firstName,lastName,customerAddress,phoneNumber,fCost,shipped,orderTableName);
+        } else {
+            throw new UnsupportedOperationException("Token Invalid");
+        }
     }
 
     public int dropOrderTable(String orderTableName, String token) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (isValidToken(token)) {
+            return dbm.dropOrderTable(orderTableName);
+        } else {
+            throw new UnsupportedOperationException("Token Invalid");
+        }
     }
 
     public int insertOrder(String orderTableName, String productId, String description, float perUnitCost, String token) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (isValidToken(token)) {
+            return dbm.insertOrder(orderTableName,productId,description,perUnitCost);
+        } else {
+            throw new UnsupportedOperationException("Token Invalid");
+        }
     }
 
     public int setOrderShipped(String orderId, Boolean shipped, String token) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (isValidToken(token)) {
+            return dbm.setOrderShipped(orderId,shipped);
+        } else {
+            throw new UnsupportedOperationException("Token Invalid");
+        }
     }
 }
