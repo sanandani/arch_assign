@@ -1,5 +1,5 @@
-create database eep;
-use eep;
+create database inventory;
+use inventory;
 -- MySQL dump 10.13  Distrib 5.1.42, for Win32 (ia32)
 --
 -- Host: localhost    Database: inventory
