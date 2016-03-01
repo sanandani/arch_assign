@@ -15,7 +15,7 @@ public class AuthManager implements AuthManagerInterface{
         UserType ut = dbm.login(username, pwd);
         if (ut != null) {
             Logger.log("user " + username + " is logging in to the system at " + getTime());
-            return new UserObject(dbm.login(username, pwd), generateToken(username));
+            return new UserObject(ut, generateToken(username));
         } else {
             return new UserObject(null, null);
         }
