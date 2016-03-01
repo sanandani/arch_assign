@@ -3,6 +3,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.HashMap;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -15,12 +16,23 @@ import java.sql.Statement;
  * @author Shubham
  */
 public class DBAccessManager implements DBAccessManagerInterface {
-    public Connection getConnection () {
+    public Connection getConnection (String table) {
         Connection DBConn = null;           // MySQL connection handle
-        String sourceURL = "localhost";            //TODO hard code this
+        HashMap <String,String> tableMap = new HashMap <String,String>();
+        tableMap.put("seeds","eep");
+        tableMap.put("shrubs","eep");
+        tableMap.put("trees","eep");
+        tableMap.put("cultureboxes","leaftech");
+        tableMap.put("genomics","leaftech");
+        tableMap.put("processing","leaftech");
+        tableMap.put("referencematerials","leaftech");
+        tableMap.put("orders","orderinfo");
+        tableMap.put("users","userinfo");
+        String dbName = tableMap.get(table);
+        String sourceURL = "jdbc:mysql://localhost:3306/"+dbName;
         try
         {
-            DBConn = DriverManager.getConnection(sourceURL,"remote","remote_pass");
+            DBConn = DriverManager.getConnection(sourceURL,"root","");
         } catch (Exception e) {
             return DBConn;
         } // end try-catch
@@ -28,7 +40,7 @@ public class DBAccessManager implements DBAccessManagerInterface {
     }
     
     public UserType login(String username, String pwd) {
-        Connection conn = getConnection();       // Connection
+        Connection conn = getConnection("users");       // Connection
         ResultSet res = null;               // SQL query result set pointer
         Statement s = null;                 // SQL statement pointer
         String str = null;
@@ -60,7 +72,7 @@ public class DBAccessManager implements DBAccessManagerInterface {
     
     public int insertInventory(String table, String productId, String description, int quantity, float perUnitCost) {
         
-        Connection conn = getConnection();       // Connection
+        Connection conn = getConnection(table);       // Connection
         Statement s = null;                 // SQL statement pointer
         String SQLstatement = ( "INSERT INTO " + table +
                         " (product_id, description, quantity, item_price) " +
@@ -88,7 +100,7 @@ public class DBAccessManager implements DBAccessManagerInterface {
 
     public int reduceQuantityByOne(String table, String productId) {
         
-        Connection conn = getConnection();       // Connection
+        Connection conn = getConnection(table);       // Connection
         Statement s = null;                 // SQL statement pointer
         String SQLstatement = ("UPDATE "+table+" set quantity=(quantity-1) where product_code = '" + productId + "';");
 
@@ -111,7 +123,7 @@ public class DBAccessManager implements DBAccessManagerInterface {
     }
 
     public int delete(String table, String productId) {
-        Connection conn = getConnection();       // Connection
+        Connection conn = getConnection(table);       // Connection
         ResultSet res = null;               // SQL query result set pointer
         Statement s = null;                 // SQL statement pointer
 
@@ -136,13 +148,14 @@ public class DBAccessManager implements DBAccessManagerInterface {
     }
 
     public ResultSet select(String table) {
-        Connection conn = getConnection();       // Connection
+        Connection conn = getConnection(table);       // Connection
         ResultSet res = null;               // SQL query result set pointer
         Statement s = null;                 // SQL statement pointer
 
+        
         // If we are connected, then we get the list of "table" from the
         //  database
-
+        
         if (conn!=null)
         {
             try
@@ -161,10 +174,9 @@ public class DBAccessManager implements DBAccessManagerInterface {
     }
 
     public ResultSet select(String table, String productId) {
-        Connection conn = getConnection();       // Connection
+        Connection conn = getConnection(table);       // Connection
         ResultSet res = null;               // SQL query result set pointer
         Statement s = null;                 // SQL statement pointer
-
         // If we are connected, then we get the list of "table" from the
         //  database
 
@@ -186,7 +198,7 @@ public class DBAccessManager implements DBAccessManagerInterface {
     }
 
     public int createOrderTable(String orderTableName) {
-        Connection conn = getConnection();       // Connection
+        Connection conn = getConnection(orderTableName);       // Connection
         Statement s = null;                 // SQL statement pointer
         String SQLstatement = ( "CREATE TABLE " + orderTableName +
                             "(item_id int unsigned not null auto_increment primary key, " +
@@ -212,7 +224,7 @@ public class DBAccessManager implements DBAccessManagerInterface {
     }
 
     public int insertOrder(String dateTimeStamp, String firstName, String lastName, String customerAddress, String phoneNumber, float fCost, Boolean shipped, String orderTableName) {
-        Connection conn = getConnection();       // Connection
+        Connection conn = getConnection("orders");       // Connection
         Statement s = null;                 // SQL statement pointer
         String SQLstatement = ( "INSERT INTO orders (order_date, " + "first_name, " +
                         "last_name, address, phone, total_cost, shipped, " +
@@ -240,7 +252,7 @@ public class DBAccessManager implements DBAccessManagerInterface {
     }
 
     public int dropOrderTable(String orderTableName) {
-        Connection conn = getConnection();       // Connection
+        Connection conn = getConnection(orderTableName);       // Connection
         Statement s = null;                 // SQL statement pointer
         String SQLstatement = ( "DROP TABLE " + orderTableName + ";" );
 
@@ -263,7 +275,7 @@ public class DBAccessManager implements DBAccessManagerInterface {
     }
 
     public int insertOrder(String orderTableName, String productId, String description, float perUnitCost) {
-        Connection conn = getConnection();       // Connection
+        Connection conn = getConnection(orderTableName);       // Connection
         Statement s = null;                 // SQL statement pointer
         String SQLstatement = ( "INSERT INTO " + orderTableName +
                         " (product_id, description, item_price) " +
@@ -290,7 +302,7 @@ public class DBAccessManager implements DBAccessManagerInterface {
 
     public int setOrderShipped(String orderId, Boolean shipped) {
         
-        Connection conn = getConnection();       // Connection
+        Connection conn = getConnection("orders");       // Connection
         Statement s = null;                 // SQL statement pointer
         String SQLstatement = ("UPDATE orders set shipped=false where order_id = '" + orderId + "';");
         
