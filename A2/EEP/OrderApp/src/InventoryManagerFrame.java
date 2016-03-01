@@ -37,10 +37,10 @@ public class InventoryManagerFrame extends javax.swing.JFrame {
     public InventoryManagerFrame() {
         initComponents();
         jLabel1.setText("LeafTech Inventory Management Application " + versionID);
-        jRadioButton1.setSelected(false);
-        jRadioButton2.setSelected(false);
-        jRadioButton3.setSelected(false);
-        jRadioButton4.setSelected(false);
+        cultureRadioButton.setSelected(false);
+        processingRadioButton.setSelected(false);
+        genomicsRadioButton.setSelected(false);
+        referenceMaterialButton.setSelected(false);
     }
 
     /** This method is called from within the constructor to
@@ -52,14 +52,13 @@ public class InventoryManagerFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
-        jRadioButton3 = new javax.swing.JRadioButton();
+        cultureRadioButton = new javax.swing.JRadioButton();
+        processingRadioButton = new javax.swing.JRadioButton();
+        genomicsRadioButton = new javax.swing.JRadioButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
         jTextField2 = new javax.swing.JTextField();
         jTextField3 = new javax.swing.JTextField();
         jTextField4 = new javax.swing.JTextField();
@@ -68,9 +67,8 @@ public class InventoryManagerFrame extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
-        jRadioButton4 = new javax.swing.JRadioButton();
+        referenceMaterialButton = new javax.swing.JRadioButton();
         jSeparator2 = new javax.swing.JSeparator();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
@@ -85,24 +83,24 @@ public class InventoryManagerFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jRadioButton1.setText("Culture Boxes");
-        jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
+        cultureRadioButton.setText("Culture Boxes");
+        cultureRadioButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton1ActionPerformed(evt);
+                cultureRadioButtonActionPerformed(evt);
             }
         });
 
-        jRadioButton2.setText("Processing");
-        jRadioButton2.addActionListener(new java.awt.event.ActionListener() {
+        processingRadioButton.setText("Processing");
+        processingRadioButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton2ActionPerformed(evt);
+                processingRadioButtonActionPerformed(evt);
             }
         });
 
-        jRadioButton3.setText("Genomics");
-        jRadioButton3.addActionListener(new java.awt.event.ActionListener() {
+        genomicsRadioButton.setText("Genomics");
+        genomicsRadioButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton3ActionPerformed(evt);
+                genomicsRadioButtonActionPerformed(evt);
             }
         });
 
@@ -113,13 +111,6 @@ public class InventoryManagerFrame extends javax.swing.JFrame {
         jLabel3.setText("Retail Price Each");
 
         jLabel4.setText("Quantity");
-
-        jTextField1.setText("localhost");
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
-            }
-        });
 
         jButton1.setText("Add");
         jButton1.setActionCommand("jButton1");
@@ -135,8 +126,6 @@ public class InventoryManagerFrame extends javax.swing.JFrame {
 
         jLabel5.setText("Product Description");
 
-        jLabel6.setText("Database Server IP");
-
         jButton2.setText("List Table Contents");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -144,10 +133,10 @@ public class InventoryManagerFrame extends javax.swing.JFrame {
             }
         });
 
-        jRadioButton4.setText("Reference Materials");
-        jRadioButton4.addActionListener(new java.awt.event.ActionListener() {
+        referenceMaterialButton.setText("Reference Materials");
+        referenceMaterialButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton4ActionPerformed(evt);
+                referenceMaterialButtonActionPerformed(evt);
             }
         });
 
@@ -226,21 +215,17 @@ public class InventoryManagerFrame extends javax.swing.JFrame {
                                         .addGap(63, 63, 63)
                                         .addComponent(jLabel4)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel6)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jRadioButton1)
-                                            .addComponent(jRadioButton2))
+                                            .addComponent(cultureRadioButton)
+                                            .addComponent(processingRadioButton))
                                         .addGap(18, 18, 18)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jRadioButton4)
-                                            .addComponent(jRadioButton3)))
+                                            .addComponent(referenceMaterialButton)
+                                            .addComponent(genomicsRadioButton)))
                                     .addGroup(layout.createSequentialGroup()
                                         .addGap(83, 83, 83)
                                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -273,18 +258,13 @@ public class InventoryManagerFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jRadioButton1)
-                            .addComponent(jRadioButton3))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jRadioButton2)
-                            .addComponent(jRadioButton4)))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel6)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cultureRadioButton)
+                    .addComponent(genomicsRadioButton))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(processingRadioButton)
+                    .addComponent(referenceMaterialButton))
                 .addGap(12, 12, 12)
                 .addComponent(jLabel7)
                 .addGap(3, 3, 3)
@@ -325,40 +305,40 @@ public class InventoryManagerFrame extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel11)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 235, Short.MAX_VALUE)))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
-        jRadioButton1.setSelected(true);
-        jRadioButton2.setSelected(false);
-        jRadioButton3.setSelected(false);
-        jRadioButton4.setSelected(false);
-    }//GEN-LAST:event_jRadioButton1ActionPerformed
+    private void cultureRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cultureRadioButtonActionPerformed
+        cultureRadioButton.setSelected(true);
+        processingRadioButton.setSelected(false);
+        genomicsRadioButton.setSelected(false);
+        referenceMaterialButton.setSelected(false);
+    }//GEN-LAST:event_cultureRadioButtonActionPerformed
 
-    private void jRadioButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton3ActionPerformed
-        jRadioButton1.setSelected(false);
-        jRadioButton2.setSelected(false);
-        jRadioButton3.setSelected(true);
-        jRadioButton4.setSelected(false);
-    }//GEN-LAST:event_jRadioButton3ActionPerformed
+    private void genomicsRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_genomicsRadioButtonActionPerformed
+        cultureRadioButton.setSelected(false);
+        processingRadioButton.setSelected(false);
+        genomicsRadioButton.setSelected(true);
+        referenceMaterialButton.setSelected(false);
+    }//GEN-LAST:event_genomicsRadioButtonActionPerformed
 
-    private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
-        jRadioButton1.setSelected(false);
-        jRadioButton2.setSelected(true);
-        jRadioButton3.setSelected(false);
-        jRadioButton4.setSelected(false);
-    }//GEN-LAST:event_jRadioButton2ActionPerformed
+    private void processingRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_processingRadioButtonActionPerformed
+        cultureRadioButton.setSelected(false);
+        processingRadioButton.setSelected(true);
+        genomicsRadioButton.setSelected(false);
+        referenceMaterialButton.setSelected(false);
+    }//GEN-LAST:event_processingRadioButtonActionPerformed
 
-    private void jRadioButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton4ActionPerformed
-        jRadioButton1.setSelected(false);
-        jRadioButton2.setSelected(false);
-        jRadioButton3.setSelected(false);
-        jRadioButton4.setSelected(true);
-    }//GEN-LAST:event_jRadioButton4ActionPerformed
+    private void referenceMaterialButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_referenceMaterialButtonActionPerformed
+        cultureRadioButton.setSelected(false);
+        processingRadioButton.setSelected(false);
+        genomicsRadioButton.setSelected(false);
+        referenceMaterialButton.setSelected(true);
+    }//GEN-LAST:event_referenceMaterialButtonActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
@@ -382,7 +362,7 @@ public class InventoryManagerFrame extends javax.swing.JFrame {
         jTextArea1.setText("");
           
         // Check to make sure a radio button is selected   
-        if (!jRadioButton1.isSelected() && !jRadioButton2.isSelected() && !jRadioButton3.isSelected() && !jRadioButton4.isSelected())
+        if (!cultureRadioButton.isSelected() && !processingRadioButton.isSelected() && !genomicsRadioButton.isSelected() && !referenceMaterialButton.isSelected())
         {
             fieldError = true;
             msgString = "Must select a category radio button.";
@@ -451,7 +431,7 @@ public class InventoryManagerFrame extends javax.swing.JFrame {
                 // if culture boxes are selected then insert inventory into cultureboxes 
                 // table
 
-                if (jRadioButton1.isSelected())
+                if (cultureRadioButton.isSelected())
                 {
                     executeUpdateVal = securityImpl.insertInventory("cultureboxes",productID,description,quantity,perUnitCost,this.token);
 //                    SQLstatement = ( "INSERT INTO cultureboxes (productid, " +
@@ -465,7 +445,7 @@ public class InventoryManagerFrame extends javax.swing.JFrame {
                 // if processing equipment is selected then insert inventory into strubs
                 // table
 
-                if (jRadioButton2.isSelected())
+                if (processingRadioButton.isSelected())
                 {
                     executeUpdateVal = securityImpl.insertInventory("processing",productID,description,quantity,perUnitCost,this.token);
 //                    SQLstatement = ( "INSERT INTO processing (productid, " +
@@ -479,7 +459,7 @@ public class InventoryManagerFrame extends javax.swing.JFrame {
                 // if genomics are selected then insert inventory into the genomics
                 // table
 
-                if (jRadioButton3.isSelected())
+                if (genomicsRadioButton.isSelected())
                 {
                     executeUpdateVal = securityImpl.insertInventory("genomics",productID,description,quantity,perUnitCost,this.token);
 //                    SQLstatement = ( "INSERT INTO genomics (productid, " +
@@ -493,7 +473,7 @@ public class InventoryManagerFrame extends javax.swing.JFrame {
                 // if reference materials are selected then insert inventory into referencematerials
                 // table
 
-                if (jRadioButton4.isSelected())
+                if (referenceMaterialButton.isSelected())
                 {
                     executeUpdateVal = securityImpl.insertInventory("referencematerials",productID,description,quantity,perUnitCost,this.token);
 //                    SQLstatement = ( "INSERT INTO referencematerials (productid, " +
@@ -541,7 +521,7 @@ public class InventoryManagerFrame extends javax.swing.JFrame {
         java.sql.Statement s = null;    // SQL statement pointer
 
         // Check to make sure a radio button is selected
-        if (jRadioButton1.isSelected() || jRadioButton2.isSelected() || jRadioButton3.isSelected() || jRadioButton4.isSelected())
+        if (cultureRadioButton.isSelected() || processingRadioButton.isSelected() || genomicsRadioButton.isSelected() || referenceMaterialButton.isSelected())
         {
             fieldError = false;
             
@@ -569,28 +549,28 @@ public class InventoryManagerFrame extends javax.swing.JFrame {
                 // now we build a query to list the inventory table contents
                 // for the user
                 // ... here is the SQL for culture boxes
-                if (jRadioButton1.isSelected())
+                if (cultureRadioButton.isSelected())
                 {
                     res = securityImpl.select("cultureboxes",token);
                     //res = s.executeQuery( "Select * from cultureboxes" );
                     tableSelected = "CULTURE BOXES";
                 }
                 // ... here is the SQL for processing
-                if (jRadioButton2.isSelected())
+                if (processingRadioButton.isSelected())
                 {
                     res = securityImpl.select("processing",token);
                     //res = s.executeQuery( "Select * from processing" );
                     tableSelected = "PROCESSING";
                 }
                 // ... here is the SQL for genomics
-                if (jRadioButton3.isSelected())
+                if (genomicsRadioButton.isSelected())
                 {
                     res = securityImpl.select("genomics",token);
                     //res = s.executeQuery( "Select * from genomics" );
                     tableSelected = "GENOMICS";
                 }
                 // ... here is the SQL for genomics
-                if (jRadioButton4.isSelected())
+                if (referenceMaterialButton.isSelected())
                 {
                     res = securityImpl.select("referencematerials",token);
                     //res = s.executeQuery( "Select * from referencematerials" );
@@ -681,27 +661,27 @@ public class InventoryManagerFrame extends javax.swing.JFrame {
                         //s = DBConn.createStatement();
 
                         // if culture boxes inventory selected
-                        if (jRadioButton1.isSelected())
+                        if (cultureRadioButton.isSelected())
                         {
                             executeUpdateVal = securityImpl.delete("cultureboxes",productID,token);
                         }
 
                         // if processing equipment inventory selected
-                        if (jRadioButton2.isSelected())
+                        if (processingRadioButton.isSelected())
                         {
                             executeUpdateVal = securityImpl.delete("processing",productID,token);
                             //SQLstatement = ( "DELETE FROM processing WHERE productid = '" + productID + "';");
                         }
 
                         // if genomics inventory selected
-                        if (jRadioButton3.isSelected())
+                        if (genomicsRadioButton.isSelected())
                         {
                             executeUpdateVal = securityImpl.delete("genomics",productID,token);
                             //SQLstatement = ( "DELETE FROM genomics WHERE productid = '" + productID + "';");
                         }
 
                         // if reference materials  inventory selected
-                        if (jRadioButton4.isSelected())
+                        if (referenceMaterialButton.isSelected())
                         {
                             executeUpdateVal = securityImpl.delete("referencematerials",productID,token);
                             //SQLstatement = ( "DELETE FROM referencematerials WHERE productid = '" + productID + "';");
@@ -808,7 +788,7 @@ public class InventoryManagerFrame extends javax.swing.JFrame {
                         //s = DBConn.createStatement();
 
                         // if culture boxes inventory selected
-                        if (jRadioButton1.isSelected())
+                        if (cultureRadioButton.isSelected())
                         {
                             executeUpdateVal = securityImpl.reduceQuantityByOne("cultureboxes",productID,this.token);
                             res =  securityImpl.select("cultureboxes",productID,token);
@@ -818,7 +798,7 @@ public class InventoryManagerFrame extends javax.swing.JFrame {
                         }
 
                         // if processing equipment inventory selected
-                        if (jRadioButton2.isSelected())
+                        if (processingRadioButton.isSelected())
                         {
                             executeUpdateVal = securityImpl.reduceQuantityByOne("processing",productID,this.token);
                             res =  securityImpl.select("processing",productID,token);
@@ -828,7 +808,7 @@ public class InventoryManagerFrame extends javax.swing.JFrame {
                         }
 
                         // if genomics inventory selected
-                        if (jRadioButton3.isSelected())
+                        if (genomicsRadioButton.isSelected())
                         {
                             executeUpdateVal = securityImpl.reduceQuantityByOne("genomics",productID,this.token);
                             res =  securityImpl.select("genomics",productID,token);
@@ -838,7 +818,7 @@ public class InventoryManagerFrame extends javax.swing.JFrame {
                         }
 
                         // if reference materials  inventory selected
-                        if (jRadioButton4.isSelected())
+                        if (referenceMaterialButton.isSelected())
                         {
                             executeUpdateVal = securityImpl.reduceQuantityByOne("referencematerials",productID,this.token);
                             res =  securityImpl.select("referencematerials",productID,token); 
@@ -893,10 +873,6 @@ public class InventoryManagerFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField5ActionPerformed
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
-
     /**
     * @param args the command line arguments
     */
@@ -909,6 +885,8 @@ public class InventoryManagerFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JRadioButton cultureRadioButton;
+    private javax.swing.JRadioButton genomicsRadioButton;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -921,24 +899,20 @@ public class InventoryManagerFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
-    private javax.swing.JRadioButton jRadioButton3;
-    private javax.swing.JRadioButton jRadioButton4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
+    private javax.swing.JRadioButton processingRadioButton;
+    private javax.swing.JRadioButton referenceMaterialButton;
     // End of variables declaration//GEN-END:variables
 
 }
