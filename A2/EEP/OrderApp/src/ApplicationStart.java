@@ -172,7 +172,8 @@ public class ApplicationStart extends javax.swing.JFrame {
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
         String username = jTextField1.getText();
-        String pwd = jPasswordField1.getPassword().toString();
+        String pwd = new String(jPasswordField1.getPassword());
+        System.out.println(pwd);
         UserObject user = authmanager.login(username, pwd);
         if(user == null){
             jLabel4.setVisible(true);
