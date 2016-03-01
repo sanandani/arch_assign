@@ -321,6 +321,6 @@ CREATE TABLE `users` (
 --
 
 LOCK TABLES `users` WRITE;
-INSERT INTO `users` VALUES ('US001','trail1','1','ORDER'),('US002','trail2','2','ID'),('US003','trail3','3','SHIPPING');
+INSERT INTO `users` VALUES ('US001','trail1','1','ORDER'),('US002','trail2','2','IT'),('US003','trail3','3','SHIPPING');
 UNLOCK TABLES;
 
