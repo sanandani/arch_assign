@@ -368,7 +368,7 @@ public class ShippingNewJFrame extends JFrame {
 //                s = DBConn.createStatement();
 //                SQLStatement = "SELECT * FROM orders WHERE order_id = " + Integer.parseInt(orderID);
                   // Calling the authorization layer which will help to fetch data using data access layer
-                  res = securityImpl.select("orders",orderID,this.token);
+                  res = securityImpl.selectOrder("orders",orderID,this.token);
                 
                 // Get the information from the database. Display the
                 // first and last name, address, phone number, address, and
@@ -376,6 +376,10 @@ public class ShippingNewJFrame extends JFrame {
                 // the table that is created when an order is submitted that
                 // contains the list of order items.
 
+//               while (res.next()) {
+//                   System.out.println("res ob "+ res.getObject(1));
+//               }
+//               res = securityImpl.selectOrder("orders",orderID,this.token);
                 while (res.next()) {
                     
                   orderTable = res.getString(9);         // name of table with list of items
@@ -390,16 +394,21 @@ public class ShippingNewJFrame extends JFrame {
                 // get the order items from the related order table
                 //SQLStatement = "SELECT * FROM " + orderTable;
                 // Calling the authorization layer which will help to fetch data using data access layer
+                System.out.println("order:"+orderTable);
+                res=null;
                 res = securityImpl.select(orderTable,this.token);
-
-
+                if(res == null)
+                    System.out.println("mmmmmm");
                 // list the items on the form that comprise the order
                 jTextArea3.setText("");
+                
 
                 while (res.next())
                 {
+                    System.out.println("caaaaa");
                     msgString = res.getString(1) + ":  PRODUCT ID: " + res.getString(2) +
                          "  DESCRIPTION: "+ res.getString(3) + "  PRICE $" + res.getString(4);
+                    System.out.println("msgString"+msgString);
                     jTextArea3.append(msgString + "\n");
 
                 } // while
@@ -413,6 +422,7 @@ public class ShippingNewJFrame extends JFrame {
                 jTextArea4.setText(msgString);
                 
             } catch (Exception e) {
+
                 errString =  "\nProblem getting order items:: " + e;
                 jTextArea1.append(errString);
 

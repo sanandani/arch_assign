@@ -1,3 +1,8 @@
 user 1 is logging in to the system at 20160229_195253
 user 1 is logging in to the system at 20160229_195427
 user trail1 is logging in to the system at 20160229_200319
+user trail3 is logging in to the system at 20160229_215651
+user trail3 is logging in to the system at 20160229_215823
+user trail3 is logging in to the system at 20160229_220210
+user trail3 is logging in to the system at 20160229_220319
+user trail3 is logging in to the system at 20160229_220636

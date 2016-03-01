@@ -29,6 +29,9 @@ public class DBAccessManager implements DBAccessManagerInterface {
         tableMap.put("orders","orderinfo");
         tableMap.put("users","userinfo");
         String dbName = tableMap.get(table);
+        if(dbName==null) {
+            dbName = "orderinfo";
+        }
         String sourceURL = "jdbc:mysql://localhost:3306/"+dbName;
         try
         {
@@ -108,7 +111,7 @@ public class DBAccessManager implements DBAccessManagerInterface {
         
         Connection conn = getConnection(table);       // Connection
         Statement s = null;                 // SQL statement pointer
-        String SQLstatement = ("UPDATE "+table+" set quantity=(quantity-1) where product_code = '" + getParameterProductID(table) + "';");
+        String SQLstatement = ("UPDATE "+table+" set quantity=(quantity-1) where "+getParameterProductID(table)+" = '" + productId + "';");
 
         // If we are connected, then we get the list of "table" from the
         //  database
@@ -141,7 +144,7 @@ public class DBAccessManager implements DBAccessManagerInterface {
             try
             {
                 s = conn.createStatement();
-                res = s.executeQuery( "DELETE FROM "+table+" WHERE productid = '"+getParameterProductID(table)+"'");
+                res = s.executeQuery( "DELETE FROM "+table+" WHERE "+getParameterProductID(table)+" = '"+productId+"'");
                 return res.getFetchSize();
                 
             } catch (Exception e) {
@@ -166,15 +169,8 @@ public class DBAccessManager implements DBAccessManagerInterface {
         {
             try
             {
-                
                 s = conn.createStatement();
-                System.out.println("ss"+table);
                 res = s.executeQuery( "Select * from "+table );
-                System.out.println("res"+res);
-               while (res.next()) {
-                   System.out.println("res ob "+ res.getObject(1));
-               }
-               res = s.executeQuery( "Select * from "+table );
                 return res;
                 
             } catch (Exception e) {
@@ -198,7 +194,7 @@ public class DBAccessManager implements DBAccessManagerInterface {
             try
             {
                 s = conn.createStatement();
-                res = s.executeQuery( "Select * from "+table+" where productid= '"+getParameterProductID(table)+"'" );
+                res = s.executeQuery( "Select * from "+table+" where "+getParameterProductID(table)+"= '"+productId+"'" );
                 return res;
                 
             } catch (Exception e) {
@@ -239,6 +235,14 @@ public class DBAccessManager implements DBAccessManagerInterface {
     public int insertOrder(String dateTimeStamp, String firstName, String lastName, String customerAddress, String phoneNumber, float fCost, Boolean shipped, String orderTableName) {
         Connection conn = getConnection("orders");       // Connection
         Statement s = null;                 // SQL statement pointer
+        
+        //                    SQLstatement = ( "INSERT INTO orders (order_date, " + "first_name, " +
+//                        "last_name, address, phone, total_cost, shipped, " +
+//                        "ordertable) VALUES ( '" + dateTimeStamp + "', " +
+//                        "'" + firstName + "', " + "'" + lastName + "', " +
+//                        "'" + customerAddress + "', " + "'" + phoneNumber + "', " +
+//                        fCost + ", " + false + ", '" + orderTableName +"' );");
+        
         String SQLstatement = ( "INSERT INTO orders (order_date, " + "first_name, " +
                         "last_name, address, phone, total_cost, shipped, " +
                         "ordertable) VALUES ( '" + dateTimeStamp + "', " +
@@ -291,8 +295,8 @@ public class DBAccessManager implements DBAccessManagerInterface {
         Connection conn = getConnection(orderTableName);       // Connection
         Statement s = null;                 // SQL statement pointer
         String SQLstatement = ( "INSERT INTO " + orderTableName +
-                        " (product_id, description, item_price) " +
-                        "VALUES ( '" + getParameterProductID(orderTableName) + "', " + "'" +
+                        " ("+getParameterProductID(orderTableName)+", description, item_price) " +
+                        "VALUES ( '" + productId + "', " + "'" +
                         description + "', " + perUnitCost + " );");
 
         // If we are connected, then we get the list of "table" from the
@@ -345,7 +349,33 @@ public class DBAccessManager implements DBAccessManagerInterface {
         attributeMap.put("genomics","productid");
         attributeMap.put("processing","productid");
         attributeMap.put("referencematerials","productid");
-        return attributeMap.get(table);
+        String param = attributeMap.get(table);
+        if(param == null)
+            param = "product_id";
+        return param;
     }
+    
+    public ResultSet selectOrder(String table, String orderId) {
+        Connection conn = getConnection(table);       // Connection
+        ResultSet res = null;               // SQL query result set pointer
+        Statement s = null;                 // SQL statement pointer
+        // If we are connected, then we get the list of "table" from the
+        //  database
 
+        if (conn!=null)
+        {
+            try
+            {
+                s = conn.createStatement();
+                res = s.executeQuery( "Select * from "+table+" where order_id= "+orderId);
+                return res;
+                
+            } catch (Exception e) {
+                return null;
+                //Print error 
+
+            } // end try-catch
+        } // if connect check
+        return null;
+    }
 }
