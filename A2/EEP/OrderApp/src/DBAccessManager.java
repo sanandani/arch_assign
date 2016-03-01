@@ -19,9 +19,9 @@ public class DBAccessManager implements DBAccessManagerInterface {
     public Connection getConnection (String table) {
         Connection DBConn = null;           // MySQL connection handle
         HashMap <String,String> tableMap = new HashMap <String,String>();
-        tableMap.put("seeds","eep");
-        tableMap.put("shrubs","eep");
-        tableMap.put("trees","eep");
+        tableMap.put("seeds","inventory");
+        tableMap.put("shrubs","inventory");
+        tableMap.put("trees","inventory");
         tableMap.put("cultureboxes","leaftech");
         tableMap.put("genomics","leaftech");
         tableMap.put("processing","leaftech");
@@ -82,7 +82,7 @@ public class DBAccessManager implements DBAccessManagerInterface {
         Statement s = null;                 // SQL statement pointer
         String SQLstatement = ( "INSERT INTO " + table +
                         " (product_id, description, quantity, item_price) " +
-                        "VALUES ( '" + productId + "', " + "'" +
+                        "VALUES ( '" + getParameterProductID(table) + "', " + "'" +
                         description + "', " + "'" +
                         quantity + "', " + perUnitCost + " );");
 
@@ -108,7 +108,7 @@ public class DBAccessManager implements DBAccessManagerInterface {
         
         Connection conn = getConnection(table);       // Connection
         Statement s = null;                 // SQL statement pointer
-        String SQLstatement = ("UPDATE "+table+" set quantity=(quantity-1) where product_code = '" + productId + "';");
+        String SQLstatement = ("UPDATE "+table+" set quantity=(quantity-1) where product_code = '" + getParameterProductID(table) + "';");
 
         // If we are connected, then we get the list of "table" from the
         //  database
@@ -141,7 +141,7 @@ public class DBAccessManager implements DBAccessManagerInterface {
             try
             {
                 s = conn.createStatement();
-                res = s.executeQuery( "DELETE FROM "+table+" WHERE productid = '"+productId+"'");
+                res = s.executeQuery( "DELETE FROM "+table+" WHERE productid = '"+getParameterProductID(table)+"'");
                 return res.getFetchSize();
                 
             } catch (Exception e) {
@@ -191,7 +191,7 @@ public class DBAccessManager implements DBAccessManagerInterface {
             try
             {
                 s = conn.createStatement();
-                res = s.executeQuery( "Select * from "+table+" where productid= '"+productId+"'" );
+                res = s.executeQuery( "Select * from "+table+" where productid= '"+getParameterProductID(table)+"'" );
                 return res;
                 
             } catch (Exception e) {
@@ -285,7 +285,7 @@ public class DBAccessManager implements DBAccessManagerInterface {
         Statement s = null;                 // SQL statement pointer
         String SQLstatement = ( "INSERT INTO " + orderTableName +
                         " (product_id, description, item_price) " +
-                        "VALUES ( '" + productId + "', " + "'" +
+                        "VALUES ( '" + getParameterProductID(orderTableName) + "', " + "'" +
                         description + "', " + perUnitCost + " );");
 
         // If we are connected, then we get the list of "table" from the
@@ -328,5 +328,16 @@ public class DBAccessManager implements DBAccessManagerInterface {
             } // end try-catch
         } // if connect check
         return 0;
+    }
+    public String getParameterProductID (String table) {
+        HashMap <String,String> attributeMap = new HashMap <String,String>();
+        attributeMap.put("seeds","product_code");
+        attributeMap.put("shrubs","product_code");
+        attributeMap.put("trees","product_code");
+        attributeMap.put("cultureboxes","productid");
+        attributeMap.put("genomics","productid");
+        attributeMap.put("processing","productid");
+        attributeMap.put("referencematerials","productid");
+        return attributeMap.get(table);
     }
 }
