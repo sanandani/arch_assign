@@ -13,9 +13,10 @@ public class AuthManager implements AuthManagerInterface{
 
     public  UserObject login(String username, String pwd) {
         UserType ut = dbm.login(username, pwd);
+        System.out.println("DEBUG AuthManager:login userType="+ut);
         if (ut != null) {
             Logger.log("user " + username + " is logging in to the system at " + getTime());
-            return new UserObject(dbm.login(username, pwd), generateToken(username));
+            return new UserObject(ut, generateToken(username));
         } else {
             return new UserObject(null, null);
         }
