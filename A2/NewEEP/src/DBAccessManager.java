@@ -111,8 +111,8 @@ public class DBAccessManager implements DBAccessManagerInterface {
         
         Connection conn = getConnection(table);       // Connection
         Statement s = null;                 // SQL statement pointer
-        String SQLstatement = ("UPDATE "+table+" set quantity=(quantity-1) where "+getParameterProductID(table)+" = '" + productId + "';");
-
+        String SQLstatement = ("UPDATE "+table+" set "+getParameterQuantity(table)+"=("+getParameterQuantity(table)+"-1) where "+getParameterProductID(table)+" = '" + productId + "';");
+        System.out.println(SQLstatement);
         // If we are connected, then we get the list of "table" from the
         //  database
 
@@ -133,7 +133,7 @@ public class DBAccessManager implements DBAccessManagerInterface {
 
     public int delete(String table, String productId) {
         Connection conn = getConnection(table);       // Connection
-        ResultSet res = null;               // SQL query result set pointer
+        int res;               // SQL query result set pointer
         Statement s = null;                 // SQL statement pointer
 
         // If we are connected, then we get the list of "table" from the
@@ -144,8 +144,10 @@ public class DBAccessManager implements DBAccessManagerInterface {
             try
             {
                 s = conn.createStatement();
-                res = s.executeQuery( "DELETE FROM "+table+" WHERE "+getParameterProductID(table)+" = '"+productId+"'");
-                return res.getFetchSize();
+                
+                System.out.println("DELETE FROM "+table+" WHERE "+getParameterProductID(table)+" = '"+productId+"'");
+                res = s.executeUpdate("DELETE FROM "+table+" WHERE "+getParameterProductID(table)+" = '"+productId+"'");
+                return res;
                 
             } catch (Exception e) {
                 return -1;
@@ -355,7 +357,7 @@ public class DBAccessManager implements DBAccessManagerInterface {
         return param;
     }
     
-        public String getParametersInventory (String table) {
+    public String getParametersInventory (String table) {
         HashMap <String,String> attributeMap = new HashMap <String,String>();
         attributeMap.put("seeds","(product_code, description, quantity, price) ");
         attributeMap.put("shrubs","(product_code, description, quantity, price) ");
@@ -364,6 +366,21 @@ public class DBAccessManager implements DBAccessManagerInterface {
         attributeMap.put("genomics","(productid, productdescription, productquantity, productprice)");
         attributeMap.put("processing","(productid, productdescription, productquantity, productprice)");
         attributeMap.put("referencematerials","(productid, productdescription, productquantity, productprice)");
+        String param = attributeMap.get(table);
+        if(param == null)
+            param = "product_id";
+        return param;
+    }
+    
+    public String getParameterQuantity(String table) {
+        HashMap <String,String> attributeMap = new HashMap <String,String>();
+        attributeMap.put("seeds","quantity");
+        attributeMap.put("shrubs","quantity");
+        attributeMap.put("trees","quantity");
+        attributeMap.put("cultureboxes","productquantity");
+        attributeMap.put("genomics","productquantity");
+        attributeMap.put("processing","productquantity");
+        attributeMap.put("referencematerials","productquantity");
         String param = attributeMap.get(table);
         if(param == null)
             param = "product_id";
