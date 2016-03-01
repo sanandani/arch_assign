@@ -381,7 +381,6 @@ public class ShippingNewJFrame extends JFrame {
 //               }
 //               res = securityImpl.selectOrder("orders",orderID,this.token);
                 while (res.next()) {
-                    
                   orderTable = res.getString(9);         // name of table with list of items
                   jTextField2.setText(res.getString(3)); // first name
                   jTextField3.setText(res.getString(4)); // last name
@@ -394,21 +393,13 @@ public class ShippingNewJFrame extends JFrame {
                 // get the order items from the related order table
                 //SQLStatement = "SELECT * FROM " + orderTable;
                 // Calling the authorization layer which will help to fetch data using data access layer
-                System.out.println("order:"+orderTable);
-                res=null;
                 res = securityImpl.select(orderTable,this.token);
-                if(res == null)
-                    System.out.println("mmmmmm");
                 // list the items on the form that comprise the order
                 jTextArea3.setText("");
-                
-
                 while (res.next())
                 {
-                    System.out.println("caaaaa");
                     msgString = res.getString(1) + ":  PRODUCT ID: " + res.getString(2) +
                          "  DESCRIPTION: "+ res.getString(3) + "  PRICE $" + res.getString(4);
-                    System.out.println("msgString"+msgString);
                     jTextArea3.append(msgString + "\n");
 
                 } // while

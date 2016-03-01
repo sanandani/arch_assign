@@ -83,12 +83,12 @@ public class DBAccessManager implements DBAccessManagerInterface {
         
         Connection conn = getConnection(table);       // Connection
         Statement s = null;                 // SQL statement pointer
-        String SQLstatement = ( "INSERT INTO " + table +
-                        " (product_id, description, quantity, item_price) " +
-                        "VALUES ( '" + getParameterProductID(table) + "', " + "'" +
+        String SQLstatement = ( "INSERT INTO " + table + " "+
+                        getParametersInventory(table) +
+                        "VALUES ( '" + productId + "', " + "'" +
                         description + "', " + "'" +
                         quantity + "', " + perUnitCost + " );");
-
+        System.out.println("sss " +SQLstatement);
         // If we are connected, then we get the list of "table" from the
         //  database
 
@@ -349,6 +349,21 @@ public class DBAccessManager implements DBAccessManagerInterface {
         attributeMap.put("genomics","productid");
         attributeMap.put("processing","productid");
         attributeMap.put("referencematerials","productid");
+        String param = attributeMap.get(table);
+        if(param == null)
+            param = "product_id";
+        return param;
+    }
+    
+        public String getParametersInventory (String table) {
+        HashMap <String,String> attributeMap = new HashMap <String,String>();
+        attributeMap.put("seeds","(product_code, description, quantity, price) ");
+        attributeMap.put("shrubs","(product_code, description, quantity, price) ");
+        attributeMap.put("trees","(product_code, description, quantity, price) ");
+        attributeMap.put("cultureboxes","(productid, productdescription, productquantity, productprice)");
+        attributeMap.put("genomics","(productid, productdescription, productquantity, productprice)");
+        attributeMap.put("processing","(productid, productdescription, productquantity, productprice)");
+        attributeMap.put("referencematerials","(productid, productdescription, productquantity, productprice)");
         String param = attributeMap.get(table);
         if(param == null)
             param = "product_id";
