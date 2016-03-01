@@ -19,14 +19,14 @@ import java.util.Calendar;
  *
  * @author lattanze
  */
-public class NewJFrame extends javax.swing.JFrame {
+public class OrderNewJFrame extends javax.swing.JFrame {
 
     String versionID = "v2.10.10";
     private AuthManagerInterface securityImpl = new AuthManager();
     // Token needs to be set dynamically after the login has been completed
     String token = "User_Authenticated";
     /** Creates new form NewJFrame */
-    public NewJFrame() {
+    public OrderNewJFrame() {
         initComponents();
         jLabel1.setText("Order Management Application " + versionID);
     }
@@ -43,9 +43,9 @@ public class NewJFrame extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        treeButton = new javax.swing.JButton();
+        seedsButton = new javax.swing.JButton();
+        shrubsButton = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea2 = new javax.swing.JTextArea();
@@ -65,12 +65,14 @@ public class NewJFrame extends javax.swing.JFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         jTextArea3 = new javax.swing.JTextArea();
         jLabel3 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
         jTextArea4 = new javax.swing.JTextArea();
         jLabel13 = new javax.swing.JLabel();
+        processing = new javax.swing.JButton();
+        cultureBoxes = new javax.swing.JButton();
+        referenceMaterial = new javax.swing.JButton();
+        genomics = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -81,24 +83,24 @@ public class NewJFrame extends javax.swing.JFrame {
         jTextArea1.setRows(5);
         jScrollPane1.setViewportView(jTextArea1);
 
-        jButton1.setText("Trees");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        treeButton.setText("Trees");
+        treeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                treeButtonActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Seeds");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        seedsButton.setText("Seeds");
+        seedsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                seedsButtonActionPerformed(evt);
             }
         });
 
-        jButton3.setText("Shrubs");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        shrubsButton.setText("Shrubs");
+        shrubsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                shrubsButtonActionPerformed(evt);
             }
         });
 
@@ -161,10 +163,6 @@ public class NewJFrame extends javax.swing.JFrame {
 
         jLabel3.setText("Customer Information");
 
-        jLabel11.setText("Database IP:");
-
-        jTextField1.setText("localhost");
-
         jLabel12.setText("Address");
 
         jTextArea4.setColumns(20);
@@ -172,6 +170,34 @@ public class NewJFrame extends javax.swing.JFrame {
         jScrollPane4.setViewportView(jTextArea4);
 
         jLabel13.setText("SELECT ENTIRE INVENTORY LINE TO ADD ITEM TO ORDER (TRIPLE CLICK)");
+
+        processing.setText("Processing");
+        processing.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                processingActionPerformed(evt);
+            }
+        });
+
+        cultureBoxes.setText("Culture Boxes");
+        cultureBoxes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cultureBoxesActionPerformed(evt);
+            }
+        });
+
+        referenceMaterial.setText("Refernce Material");
+        referenceMaterial.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                referenceMaterialActionPerformed(evt);
+            }
+        });
+
+        genomics.setText("Genomics");
+        genomics.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                genomicsActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -187,7 +213,7 @@ public class NewJFrame extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jTextField4, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE)
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)
                             .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jTextField3, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING)
@@ -201,36 +227,39 @@ public class NewJFrame extends javax.swing.JFrame {
                                     .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jScrollPane1)
+                                            .addComponent(jScrollPane2)
+                                            .addComponent(jScrollPane3)
                                             .addGroup(layout.createSequentialGroup()
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                     .addComponent(jLabel4)
                                                     .addGroup(layout.createSequentialGroup()
-                                                        .addComponent(jButton1)
-                                                        .addGap(161, 161, 161)
-                                                        .addComponent(jButton2)))
-                                                .addGap(166, 166, 166)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(jButton3)
-                                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 96, Short.MAX_VALUE)
-                                                        .addComponent(jLabel11))))
-                                            .addComponent(jScrollPane2)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addGap(10, 10, 10)
-                                                .addComponent(jLabel2)
-                                                .addGap(0, 0, Short.MAX_VALUE))
-                                            .addComponent(jScrollPane3))
+                                                        .addGap(10, 10, 10)
+                                                        .addComponent(jLabel2))
+                                                    .addGroup(layout.createSequentialGroup()
+                                                        .addComponent(treeButton)
+                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                        .addComponent(seedsButton)
+                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                        .addComponent(shrubsButton)
+                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                        .addComponent(cultureBoxes)
+                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                        .addComponent(processing)
+                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                        .addComponent(genomics)
+                                                        .addGap(15, 15, 15)
+                                                        .addComponent(referenceMaterial)))
+                                                .addGap(0, 1, Short.MAX_VALUE)))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
                                     .addGroup(layout.createSequentialGroup()
                                         .addGap(9, 9, 9)
                                         .addComponent(jLabel5)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jTextField6))
-                                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(15, 15, 15)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jTextField6)))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel13)
@@ -246,19 +275,20 @@ public class NewJFrame extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jLabel1)
-                .addGap(25, 25, 25)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel11))
+                .addGap(28, 28, 28)
+                .addComponent(jLabel4)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(7, 7, 7)
                         .addComponent(jLabel3))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jButton1)
-                        .addComponent(jButton2)
-                        .addComponent(jButton3)))
+                        .addComponent(treeButton)
+                        .addComponent(seedsButton)
+                        .addComponent(shrubsButton)
+                        .addComponent(cultureBoxes)
+                        .addComponent(processing)
+                        .addComponent(referenceMaterial)
+                        .addComponent(genomics)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel13)
                 .addGap(3, 3, 3)
@@ -299,13 +329,13 @@ public class NewJFrame extends javax.swing.JFrame {
                         .addComponent(jLabel2)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(142, Short.MAX_VALUE))
+                .addContainerGap(145, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void treeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_treeButtonActionPerformed
         
         // jButton1 is responsible for querying the inventory database and
         // getting the tree inventory. Once retieved, the tree inventory is
@@ -351,7 +381,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
             } // end try-catch
         } // if connect check
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_treeButtonActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // This button gets the selected line of text from the
@@ -653,7 +683,7 @@ public class NewJFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField4ActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void seedsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seedsButtonActionPerformed
         // jButton2 is responsible for querying the inventory database and
         // getting the seed inventory. Once retieved, the seed inventory is
         // displayed in jTextArea1. From here the user can select an inventory
@@ -699,9 +729,9 @@ public class NewJFrame extends javax.swing.JFrame {
 
             } // end try-catch
         } // if connect check
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_seedsButtonActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void shrubsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_shrubsButtonActionPerformed
         // jButton3 is responsible for querying the inventory database and
         // getting the shrub inventory. Once retieved, the shrub inventory is
         // displayed in jTextArea1. From here the user can select an inventory
@@ -747,11 +777,203 @@ public class NewJFrame extends javax.swing.JFrame {
 
             } // end try-catch
         } // if connect check
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_shrubsButtonActionPerformed
 
     private void jTextField5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField5ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField5ActionPerformed
+
+    private void processingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_processingActionPerformed
+        // TODO add your handling code here:
+        // jButton1 is responsible for querying the inventory database and
+        // getting the tree inventory. Once retieved, the tree inventory is
+        // displayed in jTextArea1. From here the user can select an inventory
+        // item by triple clicking the item.
+
+        // Database parameters
+        Boolean connectError = false;       // Error flag
+        String errString = null;            // String for displaying errors
+        String msgString = null;            // String for displaying non-error messages
+        ResultSet res = null;               // SQL query result set pointer
+        Statement s = null;                 // SQL statement pointer
+        
+        // If we are connected, then we get the list of trees from the
+        // inventory database
+        
+        if ( !connectError )
+        {
+            try
+            {
+                // Calling the the data access layer through authentication layer
+                res = securityImpl.select("processing",this.token);
+                //s = DBConn.createStatement();
+                //res = s.executeQuery( "Select * from trees" );
+
+                //Display the data in the textarea
+                
+                jTextArea1.setText("");
+
+                while (res.next())
+                {
+                    msgString = res.getString(1) + " : " + res.getString(2) +
+                            " : $"+ res.getString(4) + " : " + res.getString(3)
+                            + " units in stock";
+                    jTextArea1.append(msgString+"\n");
+
+                } // while
+                
+            } catch (Exception e) {
+
+                errString =  "\nProblem getting processing inventory:: " + e;
+                jTextArea1.append(errString);
+
+            } // end try-catch
+        }
+    }//GEN-LAST:event_processingActionPerformed
+
+    private void cultureBoxesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cultureBoxesActionPerformed
+        // TODO add your handling code here:
+        // jButton1 is responsible for querying the inventory database and
+        // getting the tree inventory. Once retieved, the tree inventory is
+        // displayed in jTextArea1. From here the user can select an inventory
+        // item by triple clicking the item.
+
+        // Database parameters
+        Boolean connectError = false;       // Error flag
+        String errString = null;            // String for displaying errors
+        String msgString = null;            // String for displaying non-error messages
+        ResultSet res = null;               // SQL query result set pointer
+        Statement s = null;                 // SQL statement pointer
+        
+        // If we are connected, then we get the list of trees from the
+        // inventory database
+        
+        if ( !connectError )
+        {
+            try
+            {
+                // Calling the the data access layer through authentication layer
+                res = securityImpl.select("cultureboxes",this.token);
+                //s = DBConn.createStatement();
+                //res = s.executeQuery( "Select * from trees" );
+
+                //Display the data in the textarea
+                
+                jTextArea1.setText("");
+
+                while (res.next())
+                {
+                    msgString = res.getString(1) + " : " + res.getString(2) +
+                            " : $"+ res.getString(4) + " : " + res.getString(3)
+                            + " units in stock";
+                    jTextArea1.append(msgString+"\n");
+
+                } // while
+                
+            } catch (Exception e) {
+
+                errString =  "\nProblem getting culture boxes inventory:: " + e;
+                jTextArea1.append(errString);
+
+            } // end try-catch
+        }
+    }//GEN-LAST:event_cultureBoxesActionPerformed
+
+    private void referenceMaterialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_referenceMaterialActionPerformed
+        // TODO add your handling code here:
+        // jButton1 is responsible for querying the inventory database and
+        // getting the tree inventory. Once retieved, the tree inventory is
+        // displayed in jTextArea1. From here the user can select an inventory
+        // item by triple clicking the item.
+
+        // Database parameters
+        Boolean connectError = false;       // Error flag
+        String errString = null;            // String for displaying errors
+        String msgString = null;            // String for displaying non-error messages
+        ResultSet res = null;               // SQL query result set pointer
+        Statement s = null;                 // SQL statement pointer
+        
+        // If we are connected, then we get the list of trees from the
+        // inventory database
+        
+        if ( !connectError )
+        {
+            try
+            {
+                // Calling the the data access layer through authentication layer
+                res = securityImpl.select("referencematerials",this.token);
+                //s = DBConn.createStatement();
+                //res = s.executeQuery( "Select * from trees" );
+
+                //Display the data in the textarea
+                
+                jTextArea1.setText("");
+
+                while (res.next())
+                {
+                    msgString = res.getString(1) + " : " + res.getString(2) +
+                            " : $"+ res.getString(4) + " : " + res.getString(3)
+                            + " units in stock";
+                    jTextArea1.append(msgString+"\n");
+
+                } // while
+                
+            } catch (Exception e) {
+
+                errString =  "\nProblem getting reference material inventory:: " + e;
+                jTextArea1.append(errString);
+
+            } // end try-catch
+        }
+    }//GEN-LAST:event_referenceMaterialActionPerformed
+
+    private void genomicsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_genomicsActionPerformed
+        // TODO add your handling code here:
+        // jButton1 is responsible for querying the inventory database and
+        // getting the tree inventory. Once retieved, the tree inventory is
+        // displayed in jTextArea1. From here the user can select an inventory
+        // item by triple clicking the item.
+
+        // Database parameters
+        Boolean connectError = false;       // Error flag
+        String errString = null;            // String for displaying errors
+        String msgString = null;            // String for displaying non-error messages
+        ResultSet res = null;               // SQL query result set pointer
+        Statement s = null;                 // SQL statement pointer
+        
+        // If we are connected, then we get the list of trees from the
+        // inventory database
+        
+        if ( !connectError )
+        {
+            try
+            {
+                // Calling the the data access layer through authentication layer
+                res = securityImpl.select("genomics",this.token);
+                //s = DBConn.createStatement();
+                //res = s.executeQuery( "Select * from trees" );
+
+                //Display the data in the textarea
+                
+                jTextArea1.setText("");
+
+                while (res.next())
+                {
+                    msgString = res.getString(1) + " : " + res.getString(2) +
+                            " : $"+ res.getString(4) + " : " + res.getString(3)
+                            + " units in stock";
+                    jTextArea1.append(msgString+"\n");
+
+                } // while
+                
+            } catch (Exception e) {
+
+                errString =  "\nProblem getting tree inventory:: " + e;
+                jTextArea1.append(errString);
+
+            } // end try-catch
+        }
+    }//GEN-LAST:event_genomicsActionPerformed
 
     /**
     * @param args the command line arguments
@@ -759,20 +981,18 @@ public class NewJFrame extends javax.swing.JFrame {
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new NewJFrame().setVisible(true);
+                new OrderNewJFrame().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton cultureBoxes;
+    private javax.swing.JButton genomics;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
@@ -791,11 +1011,15 @@ public class NewJFrame extends javax.swing.JFrame {
     private javax.swing.JTextArea jTextArea2;
     private javax.swing.JTextArea jTextArea3;
     private javax.swing.JTextArea jTextArea4;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField6;
+    private javax.swing.JButton processing;
+    private javax.swing.JButton referenceMaterial;
+    private javax.swing.JButton seedsButton;
+    private javax.swing.JButton shrubsButton;
+    private javax.swing.JButton treeButton;
     // End of variables declaration//GEN-END:variables
 
 }
