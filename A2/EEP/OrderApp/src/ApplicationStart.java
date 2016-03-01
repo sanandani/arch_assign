@@ -105,7 +105,7 @@ public class ApplicationStart extends javax.swing.JFrame {
                 .addComponent(jLabel3)
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(118, Short.MAX_VALUE)
+                .addContainerGap(70, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(loginButton)
                     .addComponent(ErrorLabel)
@@ -136,7 +136,7 @@ public class ApplicationStart extends javax.swing.JFrame {
                 .addComponent(ErrorLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(loginButton)
-                .addContainerGap(134, Short.MAX_VALUE))
+                .addContainerGap(40, Short.MAX_VALUE))
         );
 
         pack();
