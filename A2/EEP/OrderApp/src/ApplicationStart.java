@@ -148,7 +148,7 @@ public class ApplicationStart extends javax.swing.JFrame {
         String pwd = new String(passwordField.getPassword());
         System.out.println(pwd);
         UserObject user = authmanager.login(username, pwd);
-        if(user == null){
+        if(user.getUserType() == null){
             ErrorLabel.setVisible(true);
         }
         else  {
