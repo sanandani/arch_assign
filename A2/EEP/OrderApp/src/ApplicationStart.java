@@ -147,7 +147,6 @@ public class ApplicationStart extends javax.swing.JFrame {
     private void loginButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginButtonMouseClicked
         String username = jTextField1.getText();
         String pwd = new String(passwordField.getPassword());
-        System.out.println(pwd);
         UserObject user = authmanager.login(username, pwd);
         String token = user.getToken();
         if(user.getUserType() == null){
