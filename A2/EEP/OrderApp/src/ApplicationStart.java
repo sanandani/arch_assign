@@ -1,5 +1,4 @@
 
-import javax.swing.JFrame;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -14,9 +13,11 @@ import javax.swing.JFrame;
 public class ApplicationStart extends javax.swing.JFrame {
 
         AuthManagerInterface authmanager = new AuthManager();
-        JFrame inventory = new InventoryMainFrame();
-        JFrame shipping = new ShippingNewJFrame();
-        JFrame order = new OrderNewJFrame();
+
+        InventoryMainFrame inventory = new InventoryMainFrame();
+        ShippingNewJFrame shipping = new ShippingNewJFrame();
+        OrderNewJFrame order = new OrderNewJFrame();
+
     /**
      * Creates new form Login
      */
@@ -148,6 +149,7 @@ public class ApplicationStart extends javax.swing.JFrame {
         String pwd = new String(passwordField.getPassword());
         System.out.println(pwd);
         UserObject user = authmanager.login(username, pwd);
+        String token = user.getToken();
         if(user.getUserType() == null){
             ErrorLabel.setVisible(true);
         }
@@ -157,12 +159,15 @@ public class ApplicationStart extends javax.swing.JFrame {
           this.setVisible(false);
           if(usertype == UserType.ORDER){
           order.setVisible(true);
+          order.setToken(token);
           }
           else if(usertype == UserType.IT){
           inventory.setVisible(true);
+          inventory.setToken(token);
           }
           else{
           shipping.setVisible(true);
+          shipping.setToken(token);
           }
         }
         

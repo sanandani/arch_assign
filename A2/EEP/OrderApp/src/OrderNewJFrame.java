@@ -24,11 +24,14 @@ public class OrderNewJFrame extends javax.swing.JFrame {
     String versionID = "v2.10.10";
     private AuthManagerInterface securityImpl = new AuthManager();
     // Token needs to be set dynamically after the login has been completed
-    String token = "User_Authenticated";
+    String token;
     /** Creates new form NewJFrame */
     public OrderNewJFrame() {
         initComponents();
         jLabel1.setText("Order Management Application " + versionID);
+    }
+    public void setToken(String token) {
+        this.token = token;
     }
 
     /** This method is called from within the constructor to

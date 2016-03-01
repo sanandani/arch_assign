@@ -39,7 +39,7 @@ public class AuthManager implements AuthManagerInterface{
     }
 
     private static boolean isValidToken(String token) {
-        /*try {
+        try {
             if (token.substring(5,12).equals("_signed")) {
                 return true;
             } else {
@@ -47,8 +47,8 @@ public class AuthManager implements AuthManagerInterface{
             }
         } catch (Exception e) {
             return false;
-        }*/
-        return true;
+        }
+        //return true;
     }
 
     private static String getTime() {
