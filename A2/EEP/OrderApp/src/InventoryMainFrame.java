@@ -2,6 +2,7 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import javax.swing.JFrame;
 
 /**
  * ****************************************************************************
@@ -24,12 +25,19 @@ import java.sql.ResultSet;
  *
  * @author lattanze
  */
-public class InventoryMainFrame extends javax.swing.JFrame {
+public class InventoryMainFrame extends JFrame {
 
     String versionID = "v2.10.10";
     private AuthManagerInterface securityImpl = new AuthManager();
     // Token needs to be set dynamically after the login has been completed
     private String token;
+    private JFrame mainform;
+    
+     public InventoryMainFrame(JFrame mainform) {
+        this.mainform = mainform;
+        initComponents();
+        jLabel1.setText("Inventory Management Application " + versionID);
+    }
             /**
              * Createsats new form AddInventoryMainFrame
              */
@@ -37,8 +45,9 @@ public class InventoryMainFrame extends javax.swing.JFrame {
     public InventoryMainFrame() {
         initComponents();
         jLabel1.setText("Inventory Management Application " + versionID);
-
     }
+    
+   
 
     public void setToken(String token) {
         this.token = token;
@@ -78,6 +87,7 @@ public class InventoryMainFrame extends javax.swing.JFrame {
         cultureRadioButton = new javax.swing.JRadioButton();
         genomicsRadioButton = new javax.swing.JRadioButton();
         referenceMaterialButton = new javax.swing.JRadioButton();
+        Logout = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -184,6 +194,13 @@ public class InventoryMainFrame extends javax.swing.JFrame {
             }
         });
 
+        Logout.setText("Logout");
+        Logout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                LogoutActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -245,14 +262,21 @@ public class InventoryMainFrame extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(324, 324, 324)
                 .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(Logout)
+                .addGap(20, 20, 20))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 72, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(Logout)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5))
@@ -928,6 +952,13 @@ public class InventoryMainFrame extends javax.swing.JFrame {
         referenceMaterialButton.setSelected(true);
     }//GEN-LAST:event_referenceMaterialButtonActionPerformed
 
+    private void LogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogoutActionPerformed
+        this.setVisible(false);
+        this.mainform.setVisible(true);
+        securityImpl.logout(token);
+       
+    }//GEN-LAST:event_LogoutActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -940,6 +971,7 @@ public class InventoryMainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Logout;
     private javax.swing.JRadioButton cultureRadioButton;
     private javax.swing.JRadioButton genomicsRadioButton;
     private javax.swing.JButton jButton1;

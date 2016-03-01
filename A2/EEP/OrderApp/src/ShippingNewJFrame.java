@@ -1,5 +1,6 @@
 
 import java.sql.*;
+import javax.swing.JFrame;
 
  /******************************************************************************
  * File:NewJFrame.java
@@ -18,7 +19,7 @@ import java.sql.*;
  *
  * @author lattanze
  */
-public class ShippingNewJFrame extends javax.swing.JFrame {
+public class ShippingNewJFrame extends JFrame {
     String updateOrderID;
     String versionID = "v2.10.10";
     private AuthManagerInterface securityImpl = new AuthManager();
@@ -26,6 +27,13 @@ public class ShippingNewJFrame extends javax.swing.JFrame {
     private String token ;
     
     /** Creates new form NewJFrame */
+    private JFrame mainform;
+    
+     public ShippingNewJFrame(JFrame mainform) {
+        this.mainform = mainform;
+        initComponents();
+        jLabel1.setText("Inventory Management Application " + versionID);
+    }
     public ShippingNewJFrame() {
         initComponents();
         jLabel1.setText("Shipping Application " + versionID);
@@ -70,6 +78,7 @@ public class ShippingNewJFrame extends javax.swing.JFrame {
         jTextArea4 = new javax.swing.JTextArea();
         jLabel2 = new javax.swing.JLabel();
         jTextField5 = new javax.swing.JTextField();
+        Logout = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -172,6 +181,13 @@ public class ShippingNewJFrame extends javax.swing.JFrame {
             }
         });
 
+        Logout.setText("Logout");
+        Logout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                LogoutActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -205,17 +221,17 @@ public class ShippingNewJFrame extends javax.swing.JFrame {
                                     .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(10, 10, 10)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel2)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(jLabel2)
                                     .addComponent(jTextField5)))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addComponent(jButton4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jButton2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                                .addGap(0, 706, Short.MAX_VALUE)))
+                                .addComponent(jLabel8)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(jButton4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jButton2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(609, 609, 609)
+                                .addComponent(Logout)))
                         .addGap(45, 45, 45))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -234,7 +250,9 @@ public class ShippingNewJFrame extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
-                .addComponent(jButton2)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton2)
+                    .addComponent(Logout))
                 .addGap(8, 8, 8)
                 .addComponent(jButton4)
                 .addGap(18, 18, 18)
@@ -486,6 +504,13 @@ public class ShippingNewJFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField5ActionPerformed
 
+    private void LogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogoutActionPerformed
+        this.setVisible(false);
+        this.mainform.setVisible(true);
+        securityImpl.logout(token);
+       
+    }//GEN-LAST:event_LogoutActionPerformed
+
     private void getPendingOrders() {
 
         // This method is responsible for querying the orders database and
@@ -657,6 +682,7 @@ public class ShippingNewJFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Logout;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
