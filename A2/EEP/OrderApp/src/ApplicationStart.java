@@ -17,7 +17,7 @@ public class ApplicationStart extends javax.swing.JFrame {
         JFrame inventory = new InventoryMainFrame();
         JFrame inventorymanager = new InventoryManagerFrame();
         JFrame shipping = new ShippingNewJFrame();
-        JFrame order = new NewJFrame();
+        JFrame order = new OrderNewJFrame();
     /**
      * Creates new form Login
      */
