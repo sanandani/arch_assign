@@ -23,12 +23,16 @@ public class ShippingNewJFrame extends javax.swing.JFrame {
     String versionID = "v2.10.10";
     private AuthManagerInterface securityImpl = new AuthManager();
     // Token needs to be set dynamically after the login has been completed
-    String token = "User_Authenticated";
+    private String token ;
     
     /** Creates new form NewJFrame */
     public ShippingNewJFrame() {
         initComponents();
         jLabel1.setText("Shipping Application " + versionID);
+    }
+    
+      public void setToken(String token) {
+        this.token = token;
     }
 
     /** This method is called from within the constructor to

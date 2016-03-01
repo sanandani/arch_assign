@@ -15,7 +15,6 @@ public class ApplicationStart extends javax.swing.JFrame {
 
         AuthManagerInterface authmanager = new AuthManager();
         JFrame inventory = new InventoryMainFrame();
-        JFrame inventorymanager = new InventoryManagerFrame();
         JFrame shipping = new ShippingNewJFrame();
         JFrame order = new OrderNewJFrame();
     /**
@@ -24,9 +23,7 @@ public class ApplicationStart extends javax.swing.JFrame {
     public ApplicationStart() {
         initComponents();
         ErrorLabel.setVisible(false);
-        
         inventory.setVisible(false);
-        inventorymanager.setVisible(false);
         shipping.setVisible(false);
         order.setVisible(false);
 
@@ -151,20 +148,21 @@ public class ApplicationStart extends javax.swing.JFrame {
         String pwd = new String(passwordField.getPassword());
         System.out.println(pwd);
         UserObject user = authmanager.login(username, pwd);
-        if(user == null){
+        if(user.getUserType() == null){
             ErrorLabel.setVisible(true);
         }
-        else {
+        else  {
           ErrorLabel.setVisible(false);
           Enum usertype = user.getUserType();
-          if(usertype == UserType.IT){
-          
+          this.setVisible(false);
+          if(usertype == UserType.ORDER){
+          order.setVisible(true);
           }
           else if(usertype == UserType.IT){
           inventory.setVisible(true);
           }
           else{
-          
+          shipping.setVisible(true);
           }
         }
         
