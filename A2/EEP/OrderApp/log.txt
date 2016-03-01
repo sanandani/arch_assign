@@ -1,0 +1,3 @@
+user 1 is logging in to the system at 20160229_195253
+user 1 is logging in to the system at 20160229_195427
+user trail1 is logging in to the system at 20160229_200319

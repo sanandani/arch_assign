@@ -312,7 +312,7 @@ CREATE TABLE `users` (
   `user_id` varchar(10) DEFAULT NULL,
   `username` varchar(30) NOT NULL UNIQUE,
   `password` varchar(20) DEFAULT NULL,
-  `user_type` varchar(10) NOT NULL,
+  `user_type` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -321,6 +321,6 @@ CREATE TABLE `users` (
 --
 
 LOCK TABLES `users` WRITE;
-INSERT INTO `users` VALUES ('US001','trailblazers','1','ORDER'),('US002','trailblazers2','2','ID'),('US003','trailblazers3','3','SHIPPING');
+INSERT INTO `users` VALUES ('US001','trail1','1','ORDER'),('US002','trail2','2','ID'),('US003','trail3','3','SHIPPING');
 UNLOCK TABLES;
 

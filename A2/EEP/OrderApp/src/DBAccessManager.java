@@ -54,11 +54,14 @@ public class DBAccessManager implements DBAccessManagerInterface {
         {
             try
             {
+                
                 s = conn.createStatement();
                 res = s.executeQuery( "Select * from users where username = '"+username+"' and password = '"+pwd+"'" );
                 System.out.println(res);
                 if (res.next()){
+                    
                     str = (String) res.getObject(4);//user type
+                    System.out.println("str"+str);
                     if(str.equalsIgnoreCase("IT"))
                         return UserType.IT;
                     else if(str.equalsIgnoreCase("SHIPPING"))
