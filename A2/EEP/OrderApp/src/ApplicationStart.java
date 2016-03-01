@@ -14,9 +14,9 @@ public class ApplicationStart extends javax.swing.JFrame {
 
         AuthManagerInterface authmanager = new AuthManager();
 
-        InventoryMainFrame inventory = new InventoryMainFrame();
-        ShippingNewJFrame shipping = new ShippingNewJFrame();
-        OrderNewJFrame order = new OrderNewJFrame();
+        InventoryMainFrame inventory = new InventoryMainFrame(this);
+        ShippingNewJFrame shipping = new ShippingNewJFrame(this);
+        OrderNewJFrame order = new OrderNewJFrame(this);
 
     /**
      * Creates new form Login
