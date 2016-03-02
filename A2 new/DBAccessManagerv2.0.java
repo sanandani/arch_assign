@@ -1,3 +1,4 @@
+package DataAccess;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -5,17 +6,10 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.HashMap;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- *
- * @author Shubham
- */
 public class DBAccessManager implements DBAccessManagerInterface {
+    private final String username = "remote";
+    private final String password = "remote_pass";
+
     public Connection getConnection (String table) {
         Connection DBConn = null;           // MySQL connection handle
         HashMap <String,String> tableMap = new HashMap <String,String>();
@@ -35,7 +29,8 @@ public class DBAccessManager implements DBAccessManagerInterface {
         String sourceURL = "jdbc:mysql://localhost:3306/"+dbName;
         try
         {
-            DBConn = DriverManager.getConnection(sourceURL,"root","");
+            
+            DBConn = DriverManager.getConnection(sourceURL, username, password);
         } catch (Exception e) {
             return DBConn;
         } // end try-catch
@@ -43,16 +38,12 @@ public class DBAccessManager implements DBAccessManagerInterface {
     }
     
     public UserType login(String username, String pwd) {
-        System.out.println(pwd);
         Connection conn = getConnection("users");       // Connection
         ResultSet res = null;               // SQL query result set pointer
         Statement s = null;                 // SQL statement pointer
         String str = null;
         // If we are connected, then we get the list of "table" from the
         //  database
-        if(conn==null){
-            System.out.println("null");
-        }
         if (conn!=null)
         {
             try
@@ -60,11 +51,10 @@ public class DBAccessManager implements DBAccessManagerInterface {
                 
                 s = conn.createStatement();
                 res = s.executeQuery( "Select * from users where username = '"+username+"' and password = '"+pwd+"'" );
-                System.out.println(res);
+                
                 if (res.next()){
                     
                     str = (String) res.getObject(4);//user type
-                    System.out.println("str"+str);
                     if(str.equalsIgnoreCase("IT"))
                         return UserType.IT;
                     else if(str.equalsIgnoreCase("SHIPPING"))
@@ -88,7 +78,6 @@ public class DBAccessManager implements DBAccessManagerInterface {
                         "VALUES ( '" + productId + "', " + "'" +
                         description + "', " + "'" +
                         quantity + "', " + perUnitCost + " );");
-        System.out.println("sss " +SQLstatement);
         // If we are connected, then we get the list of "table" from the
         //  database
 
@@ -112,7 +101,6 @@ public class DBAccessManager implements DBAccessManagerInterface {
         Connection conn = getConnection(table);       // Connection
         Statement s = null;                 // SQL statement pointer
         String SQLstatement = ("UPDATE "+table+" set "+getParameterQuantity(table)+"=("+getParameterQuantity(table)+"-1) where "+getParameterProductID(table)+" = '" + productId + "';");
-        System.out.println(SQLstatement);
         // If we are connected, then we get the list of "table" from the
         //  database
 
@@ -145,7 +133,6 @@ public class DBAccessManager implements DBAccessManagerInterface {
             {
                 s = conn.createStatement();
                 
-                System.out.println("DELETE FROM "+table+" WHERE "+getParameterProductID(table)+" = '"+productId+"'");
                 res = s.executeUpdate("DELETE FROM "+table+" WHERE "+getParameterProductID(table)+" = '"+productId+"'");
                 return res;
                 
