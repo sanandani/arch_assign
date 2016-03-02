@@ -1,3 +1,4 @@
+package DataAccess;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -5,17 +6,10 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.HashMap;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- *
- * @author Shubham
- */
 public class DBAccessManager implements DBAccessManagerInterface {
+    private final String username = "remote";
+    private final String password = "remote_pass";
+
     public Connection getConnection (String table) {
         Connection DBConn = null;           // MySQL connection handle
         HashMap <String,String> tableMap = new HashMap <String,String>();
@@ -35,7 +29,8 @@ public class DBAccessManager implements DBAccessManagerInterface {
         String sourceURL = "jdbc:mysql://localhost:3306/"+dbName;
         try
         {
-            DBConn = DriverManager.getConnection(sourceURL,"root","");
+            
+            DBConn = DriverManager.getConnection(sourceURL, username, password);
         } catch (Exception e) {
             return DBConn;
         } // end try-catch

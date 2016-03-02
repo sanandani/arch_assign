@@ -1,30 +1,18 @@
+package BusinessView;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
+
+import Security.AuthManager;
+import Security.AuthManagerInterface;
 import java.sql.ResultSet;
 import javax.swing.JFrame;
 
 /**
  * ****************************************************************************
- * File:NewJFrame.java Course: 17655 Project: Assignment 2 Copyright: Copyright
- * (c) 2009 Carnegie Mellon University Versions: 1.0 November 2009 - Initial
- * rewrite of original assignment 2 (ajl).
+ * File:NewJFrame.java 
+ * This class defines a GUI application that allows inventory from EEP and Leaf 
+ * to be added to the inventory databases.
  *
- * This class defines a GUI application that allows inventory to be added to the
- * inventory databases. There are tree tables in the inventory database: trees,
- * shrubs, and seeds.
- *
- *****************************************************************************
- */
-/*
- * AddInventoryMainFrame.java
- *
- * Created on Jan 29, 2010, 9:24:23 PM
- */
-/**
- *
- * @author lattanze
- */
+ *****************************************************************************/
 public class InventoryMainFrame extends JFrame {
 
     String versionID = "v2.10.10";
@@ -39,7 +27,7 @@ public class InventoryMainFrame extends JFrame {
         jLabel1.setText("Inventory Management Application " + versionID);
     }
             /**
-             * Createsats new form AddInventoryMainFrame
+             * Creates a new form AddInventoryMainFrame
              */
 
     public InventoryMainFrame() {
@@ -378,6 +366,7 @@ public class InventoryMainFrame extends JFrame {
         // Check to make sure a radio button is selected
         jTextArea1.setText("");
 
+        // Checks if any radio button is selected or not. If nothing is selected it shows an error
         if (!treeRadioButton.isSelected() && !shrubsRadioButton.isSelected() && !seedsRadioButton.isSelected() && !processingRadioButton.isSelected() && !cultureRadioButton.isSelected() && !genomicsRadioButton.isSelected() && !referenceMaterialButton.isSelected()) {
             fieldError = true;
             jTextArea1.append("\nMust select one of the radio buttons");
@@ -403,7 +392,7 @@ public class InventoryMainFrame extends JFrame {
 
         //Now, if there was no error in the data fields, we try to
         //connect to the database.
-        // Database connectivity code removed - Will done by calling data access layer
+        // Database connectivity code removed - Will done by calling DBManager
         //If there is not connection error, then we form the SQL statement
         //and then execute it.
         if (!connectError && !fieldError) {
@@ -414,41 +403,28 @@ public class InventoryMainFrame extends JFrame {
                 quantity = Integer.parseInt(jTextField4.getText());
                 perUnitCost = Float.parseFloat(jTextField3.getText());
 
-                // create an SQL statement variable and create the INSERT
-                // query to insert the new inventory into the database
-                //s = DBConn.createStatement();
-                // if trees are selected then insert inventory into trees
-                // table
+                // If the tree radio button is selected, use tree table to insert values
                 if (treeRadioButton.isSelected()) {
                     executeUpdateVal = securityImpl.insertInventory("trees", productID, description, quantity, perUnitCost, this.token);
-//                    SQLstatement = ( "INSERT INTO trees (product_code, " +
-//                            "description, quantity, price) VALUES ( '" +
-//                            productID + "', " + "'" + description + "', " +
-//                            quantity + ", " + perUnitCost + ");");
 
                     tableSelected = "TREES";
 
                 }
 
                 // if shrubs are selected then insert inventory into strubs
-                // table
+                // If the tree radio button is selected, use shrubs table to insert values
                 if (shrubsRadioButton.isSelected()) {
                     executeUpdateVal = securityImpl.insertInventory("shrubs", productID, description, quantity, perUnitCost, this.token);
                     tableSelected = "SHRUBS";
                 }
 
                 // if seeds are selected then insert inventory into seeds
-                // table
+                // If the seeds radio button is selected, use seeds table to insert values
                 if (seedsRadioButton.isSelected()) {
                     executeUpdateVal = securityImpl.insertInventory("seeds", productID, description, quantity, perUnitCost, this.token);
-//                    SQLstatement = ( "INSERT INTO seeds (product_code, " +
-//                            "description, quantity, price) VALUES ( '" +
-//                            productID + "', " + "'" + description + "', " +
-//                            quantity + ", " + perUnitCost + ");");
-
                     tableSelected = "SEEDS";
                 }
-
+                // If the culture radio button is selected, use culture table to insert values
                 if (cultureRadioButton.isSelected()) {
                     executeUpdateVal = securityImpl.insertInventory("cultureboxes", productID, description, quantity, perUnitCost, this.token);
 //                    SQLstatement = ( "INSERT INTO cultureboxes (productid, " +
@@ -460,7 +436,7 @@ public class InventoryMainFrame extends JFrame {
                 }
 
                 // if processing equipment is selected then insert inventory into strubs
-                // table
+                // If the processing radio button is selected, use processing table to insert values
                 if (processingRadioButton.isSelected()) {
                     executeUpdateVal = securityImpl.insertInventory("processing", productID, description, quantity, perUnitCost, this.token);
 //                    SQLstatement = ( "INSERT INTO processing (productid, " +
@@ -472,7 +448,7 @@ public class InventoryMainFrame extends JFrame {
                 }
 
                 // if genomics are selected then insert inventory into the genomics
-                // table
+                // If the genomics radio button is selected, use genmics table to insert values
                 if (genomicsRadioButton.isSelected()) {
                     executeUpdateVal = securityImpl.insertInventory("genomics", productID, description, quantity, perUnitCost, this.token);
 //                    SQLstatement = ( "INSERT INTO genomics (productid, " +
@@ -484,7 +460,7 @@ public class InventoryMainFrame extends JFrame {
                 }
 
                 // if reference materials are selected then insert inventory into referencematerials
-                // table
+                // If the processing radio button is selected, use processing table to insert values
                 if (processingRadioButton.isSelected()) {
                     executeUpdateVal = securityImpl.insertInventory("referencematerials", productID, description, quantity, perUnitCost, this.token);
 //                    SQLstatement = ( "INSERT INTO referencematerials (productid, " +
@@ -495,8 +471,7 @@ public class InventoryMainFrame extends JFrame {
                     tableSelected = "REFERENCE MATERIALS";
                 }
 
-                // execute the update
-                //executeUpdateVal = s.executeUpdate(SQLstatement);
+                
                 // let the user know all went well
                 jTextArea1.append("\nINVENTORY UPDATED... The following was added to the " + tableSelected + " inventory...\n");
                 jTextArea1.append("\nProduct Code:: " + productID);
@@ -561,41 +536,38 @@ public class InventoryMainFrame extends JFrame {
                 // for the user
                 // ... here is the SQL for trees
                 if (treeRadioButton.isSelected()) {
-                    // Calling select statement through authorization layer which will get the data using data access layer
+                    // Calling select statement on trees table through authorization layer which will get the data using DBManager
                     res = securityImpl.select("trees", token);
-                    //res = s.executeQuery( "Select * from trees" );
                     tableSelected = "TREE";
                 }
                 // ... here is the SQL for shrubs
                 if (shrubsRadioButton.isSelected()) {
-                    // Calling select statement through authorization layer which will get the data using data access layer
+                    // Calling select statement on trees table through authorization layer which will get the data using DBManager
                     res = securityImpl.select("shrubs", token);
-                    //res = s.executeQuery( "Select * from shrubs" );
                     tableSelected = "SHRUB";
                 }
                 // ... here is the SQL for seeds
                 if (seedsRadioButton.isSelected()) {
-                    // Calling select statement through authorization layer which will get the data using data access layer
+                    // Calling select statement on trees table through authorization layer which will get the data using DBManager
                     res = securityImpl.select("seeds", token);
-                    //res = s.executeQuery( "Select * from seeds" );
                     tableSelected = "SEED";
                 }
 
                 if (cultureRadioButton.isSelected()) {
+                    // Calling select statement on cultureboxes table through authorization layer which will get the data using DBManager
                     res = securityImpl.select("cultureboxes", token);
-                    //res = s.executeQuery( "Select * from cultureboxes" );
                     tableSelected = "CULTURE BOXES";
                 }
                 // ... here is the SQL for processing
                 if (processingRadioButton.isSelected()) {
+                    // Calling select statement on processing table through authorization layer which will get the data using DBManager
                     res = securityImpl.select("processing", token);
-                    //res = s.executeQuery( "Select * from processing" );
                     tableSelected = "PROCESSING";
                 }
                 // ... here is the SQL for genomics
                 if (genomicsRadioButton.isSelected()) {
+                    // Calling select statement on processing table through authorization layer which will get the data using DBManager
                     res = securityImpl.select("genomics", token);
-                    //res = s.executeQuery( "Select * from genomics" );
                     tableSelected = "GENOMICS";
                 }
                 // ... here is the SQL for genomics
@@ -679,45 +651,44 @@ public class InventoryMainFrame extends JFrame {
                     try {
                         // if trees inventory selected
                         if (treeRadioButton.isSelected()) {
-                            // Calling delete statement through authorization layer which will get the data using data access layer
+                            // Calling delete statement on trees table through authorization layer which will get the data using DBManager
                             executeUpdateVal = securityImpl.delete("trees", productID, token);
-                            //SQLstatement = ( "DELETE FROM trees WHERE product_code = '" + productID + "';");
                         }
 
                         // if shrubs inventory selected
                         if (shrubsRadioButton.isSelected()) {
-                            // Calling delete statement through authorization layer which will get the data using data access layer
+                            // Calling delete statement on shrubs table through authorization layer which will get the data using DBManager
                             executeUpdateVal = securityImpl.delete("shrubs", productID, token);
-                            //SQLstatement = ( "DELETE FROM shrubs WHERE product_code = '" + productID + "';");
                         }
 
                         // if seeds inventory selected
                         if (seedsRadioButton.isSelected()) {
-                            // Calling delete statement through authorization layer which will get the data using data access layer
+                            // Calling delete statement through authorization layer which will get the data using DBManager
                             executeUpdateVal = securityImpl.delete("seeds", productID, token);
                             //SQLstatement = ( "DELETE FROM seeds WHERE product_code = '" + productID + "';");
                         }
 
                         if (cultureRadioButton.isSelected()) {
+                            // Calling delete statement on shrubs table through authorization layer which will get the data using DBManager
                             executeUpdateVal = securityImpl.delete("cultureboxes", productID, token);
                         }
 
                         // if processing equipment inventory selected
                         if (processingRadioButton.isSelected()) {
+                            // Calling delete statement on shrubs table through authorization layer which will get the data using DBManager
                             executeUpdateVal = securityImpl.delete("processing", productID, token);
-                            //SQLstatement = ( "DELETE FROM processing WHERE productid = '" + productID + "';");
                         }
 
                         // if genomics inventory selected
                         if (genomicsRadioButton.isSelected()) {
+                            // Calling delete statement on genomics table through authorization layer which will get the data using DBManager
                             executeUpdateVal = securityImpl.delete("genomics", productID, token);
-                            //SQLstatement = ( "DELETE FROM genomics WHERE productid = '" + productID + "';");
                         }
 
                         // if reference materials  inventory selected
                         if (referenceMaterialButton.isSelected()) {
+                            // Calling delete statement on reference materials table through authorization layer which will get the data using DBManager
                             executeUpdateVal = securityImpl.delete("referencematerials", productID, token);
-                            //SQLstatement = ( "DELETE FROM referencematerials WHERE productid = '" + productID + "';");
                         }
                         // execute the delete query
 
@@ -812,15 +783,11 @@ public class InventoryMainFrame extends JFrame {
 
                             executeUpdateVal = securityImpl.reduceQuantityByOne("trees", productID, this.token);
                             res = securityImpl.select("trees", productID, token);
-//                            SQLstatement1 = ("UPDATE trees set quantity=(quantity-1) where product_code = '" + productID + "';");
-//                            SQLstatement2 = ("SELECT * from trees where product_code = '" + productID + "';");
                             tableSelected = "TREES";
                         }
 
                         // if strubs inventory selected
                         if (shrubsRadioButton.isSelected()) {
-                            //SQLstatement1 = ("UPDATE shrubs set quantity=(quantity-1) where product_code = '" + productID + "';");
-                            //SQLstatement2 = ("SELECT * from shrubs where product_code = '" + productID + "';");
                             executeUpdateVal = securityImpl.reduceQuantityByOne("shrubs", productID, this.token);
                             res = securityImpl.select("shrubs", productID, token);
                             tableSelected = "SHRUBS";
@@ -830,16 +797,12 @@ public class InventoryMainFrame extends JFrame {
                         if (seedsRadioButton.isSelected()) {
                             executeUpdateVal = securityImpl.reduceQuantityByOne("seeds", productID, this.token);
                             res = securityImpl.select("seeds", productID, token);
-                            //SQLstatement1 = ("UPDATE seeds set quantity=(quantity-1) where product_code = '" + productID + "';");
-                            //SQLstatement2 = ("SELECT * from seeds where product_code = '" + productID + "';");
                             tableSelected = "SEEDS";
                         }
 
                         if (cultureRadioButton.isSelected()) {
                             executeUpdateVal = securityImpl.reduceQuantityByOne("cultureboxes", productID, this.token);
                             res = securityImpl.select("cultureboxes", productID, token);
-                            //SQLstatement1 = ("UPDATE cultureboxes set productquantity=(productquantity-1) where productid = '" + productID + "';");
-                            //SQLstatement2 = ("SELECT * from cultureboxes where productid = '" + productID + "';");
                             tableSelected = "CULTURE BOXES";
                         }
 
@@ -847,8 +810,6 @@ public class InventoryMainFrame extends JFrame {
                         if (processingRadioButton.isSelected()) {
                             executeUpdateVal = securityImpl.reduceQuantityByOne("processing", productID, this.token);
                             res = securityImpl.select("processing", productID, token);
-                            //SQLstatement1 = ("UPDATE processing set productquantity=(productquantity-1) where productid = '" + productID + "';");
-                            //SQLstatement2 = ("SELECT * from processing where productid = '" + productID + "';");
                             tableSelected = "PROCESSING";
                         }
 
@@ -856,8 +817,6 @@ public class InventoryMainFrame extends JFrame {
                         if (genomicsRadioButton.isSelected()) {
                             executeUpdateVal = securityImpl.reduceQuantityByOne("genomics", productID, this.token);
                             res = securityImpl.select("genomics", productID, token);
-                            //SQLstatement1 = ("UPDATE genomics set productquantity=(productquantity-1) where productid = '" + productID + "';");
-                            //SQLstatement2 = ("SELECT * from genomics where productid = '" + productID + "';");
                             tableSelected = "GENOMICS";
                         }
 
@@ -865,15 +824,11 @@ public class InventoryMainFrame extends JFrame {
                         if (referenceMaterialButton.isSelected()) {
                             executeUpdateVal = securityImpl.reduceQuantityByOne("referencematerials", productID, this.token);
                             res = securityImpl.select("referencematerials", productID, token);
-                            //SQLstatement1 = ("UPDATE referencematerials set productquantity=(productquantity-1) where productid = '" + productID + "';");
-                            //SQLstatement2 = ("SELECT * from referencematerials where productid = '" + productID + "';");
                             tableSelected = "REFERENCE MATERIALS";
                         }
 
                         // execute the update, then query the BD for the table entry for the item just changed
                         // and display it for the user
-                        //executeUpdateVal = s.executeUpdate(SQLstatement1);
-                        //res = s.executeQuery(SQLstatement2);
                         jTextArea1.append("\n\n" + productID + " inventory decremented...");
 
                         while (res.next()) {

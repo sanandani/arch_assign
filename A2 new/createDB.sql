@@ -4,7 +4,7 @@ use inventory;
 --
 -- Host: localhost    Database: inventory
 -- ------------------------------------------------------
--- Server version	5.1.42-community
+-- Server version 5.1.42-community
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -103,13 +103,13 @@ UNLOCK TABLES;
 
 -- Dump completed on 2010-02-10 15:33:35
 
-create database orderinfo; 
+create database orderinfo;
 use orderinfo;
 -- MySQL dump 10.13  Distrib 5.1.42, for Win32 (ia32)
 --
 -- Host: localhost    Database: orderinfo
 -- ------------------------------------------------------
--- Server version	5.1.42-community
+-- Server version 5.1.42-community
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -169,7 +169,7 @@ use leaftech;
 --
 -- Host: localhost    Database: leaftech
 -- ------------------------------------------------------
--- Server version	5.6.15
+-- Server version 5.6.15
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -292,3 +292,35 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2014-02-13 15:49:42
+
+
+create database userinfo;
+use userinfo;
+-- MySQL dump 10.13  Distrib 5.1.42, for Win32 (ia32)
+--
+-- Host: localhost    Database: userinfo
+-- ------------------------------------------------------
+-- Server version 5.1.42-community
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `users` (
+  `user_id` varchar(10) DEFAULT NULL,
+  `username` varchar(30) NOT NULL UNIQUE,
+  `password` varchar(20) DEFAULT NULL,
+  `user_type` varchar(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `users`
+--
+
+LOCK TABLES `users` WRITE;
+INSERT INTO `users` VALUES ('US001','trail1','1','ORDER'),('US002','trail2','2','IT'),('US003','trail3','3','SHIPPING');
+UNLOCK TABLES;
+

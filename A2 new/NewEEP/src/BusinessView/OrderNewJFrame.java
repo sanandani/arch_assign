@@ -1,25 +1,18 @@
+package BusinessView;
 
+
+import Security.AuthManager;
+import Security.AuthManagerInterface;
 import java.sql.*;
 import java.util.Calendar;
 import javax.swing.JFrame;
 
-/******************************************************************************
-* File:NewJFrame.java
-* Course: 17655
-* Project: Assignment 2
-* Copyright: Copyright (c) 2009 Carnegie Mellon University
-* Versions:
-*	1.0 November 2009 - Initial rewrite of original assignment 2 (ajl).
-*
-* This class defines a GUI application that allows EEP order takers to enter
-* phone orders into the database. 
-*
-******************************************************************************/
 
 /**
+ * ****************************************************************************
+ * File:OrderNewJFrame.java
  *
- * @author lattanze
- */
+ *****************************************************************************/
 
 public class OrderNewJFrame extends JFrame {
 
@@ -379,11 +372,9 @@ public class OrderNewJFrame extends JFrame {
         {
             try
             {
-                // Calling the the data access layer through authentication layer
+                // Calling the the DBManager through authentication layer
                 res = securityImpl.select("trees",this.token);
-                //s = DBConn.createStatement();
-                //res = s.executeQuery( "Select * from trees" );
-
+                
                 //Display the data in the textarea
                 
                 jTextArea1.setText("");
@@ -572,12 +563,6 @@ public class OrderNewJFrame extends JFrame {
                 
             try
             {
-                //s = DBConn.createStatement();
-
-                //SQLstatement = ( "CREATE TABLE " + orderTableName +
-//                            "(item_id int unsigned not null auto_increment primary key, " +
-//                            "product_id varchar(20), description varchar(80), " +
-//                            "item_price float(7,2) );");
 
                 executeUpdateVal = securityImpl.createOrderTable(orderTableName, this.token);
 
@@ -593,13 +578,6 @@ public class OrderNewJFrame extends JFrame {
             {
                 try
                 {
-//                    SQLstatement = ( "INSERT INTO orders (order_date, " + "first_name, " +
-//                        "last_name, address, phone, total_cost, shipped, " +
-//                        "ordertable) VALUES ( '" + dateTimeStamp + "', " +
-//                        "'" + firstName + "', " + "'" + lastName + "', " +
-//                        "'" + customerAddress + "', " + "'" + phoneNumber + "', " +
-//                        fCost + ", " + false + ", '" + orderTableName +"' );");
-                    // Calling insert order through Authorization layer    
                     executeUpdateVal = securityImpl.insertOrder(dateTimeStamp,firstName,lastName,customerAddress,phoneNumber,fCost,false,orderTableName,this.token);
                     
                 } catch (Exception e1) {
@@ -666,10 +644,6 @@ public class OrderNewJFrame extends JFrame {
                     sPerUnitCost = orderItem.substring(beginIndex,orderItem.length());
                     perUnitCost = Float.parseFloat(sPerUnitCost);
 
-//                    SQLstatement = ( "INSERT INTO " + orderTableName +
-//                        " (product_id, description, item_price) " +
-//                        "VALUES ( '" + productID + "', " + "'" +
-//                        description + "', " + perUnitCost + " );");
                     try
                     {
                         executeUpdateVal = securityImpl.insertOrder(orderTableName, productID, description, perUnitCost, this.token);
@@ -728,8 +702,7 @@ public class OrderNewJFrame extends JFrame {
         {
             try
             {
-                //s = DBConn.createStatement();
-                //res = s.executeQuery( "Select * from seeds" );
+                // Executing the select query on seeds table
                 res = securityImpl.select("seeds", this.token);
 
                 //Display the data in the textarea
@@ -827,10 +800,9 @@ public class OrderNewJFrame extends JFrame {
         {
             try
             {
-                // Calling the the data access layer through authentication layer
+                // Calling the the DBManager to call processing table through authentication layer
                 res = securityImpl.select("processing",this.token);
-                //s = DBConn.createStatement();
-                //res = s.executeQuery( "Select * from trees" );
+                
 
                 //Display the data in the textarea
                 
@@ -875,10 +847,9 @@ public class OrderNewJFrame extends JFrame {
         {
             try
             {
-                // Calling the the data access layer through authentication layer
+                // Calling the the DBManager to call cultureboxes table through authentication layer
                 res = securityImpl.select("cultureboxes",this.token);
-                //s = DBConn.createStatement();
-                //res = s.executeQuery( "Select * from trees" );
+                
 
                 //Display the data in the textarea
                 
@@ -923,11 +894,9 @@ public class OrderNewJFrame extends JFrame {
         {
             try
             {
-                // Calling the the data access layer through authentication layer
+                // Calling the the DBManager to call reference materials table through authentication layer
                 res = securityImpl.select("referencematerials",this.token);
-                //s = DBConn.createStatement();
-                //res = s.executeQuery( "Select * from trees" );
-
+                
                 //Display the data in the textarea
                 
                 jTextArea1.setText("");
@@ -971,11 +940,9 @@ public class OrderNewJFrame extends JFrame {
         {
             try
             {
-                // Calling the the data access layer through authentication layer
+                // Calling the the DBManager to call genomics table through authentication layer
                 res = securityImpl.select("genomics",this.token);
-                //s = DBConn.createStatement();
-                //res = s.executeQuery( "Select * from trees" );
-
+                
                 //Display the data in the textarea
                 
                 jTextArea1.setText("");

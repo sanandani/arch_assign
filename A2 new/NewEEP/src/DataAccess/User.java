@@ -1,3 +1,5 @@
+package DataAccess;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -8,12 +10,12 @@
  *
  * @author Penny
  */
-public class UserObject {
+public class User {
 
     private Enum userType;
     private String token;
 
-    public UserObject(Enum userType, String token) {
+    public User(Enum userType, String token) {
         this.userType = userType;
         this.token = token;
     }

@@ -1,10 +1,18 @@
+package Security;
 
+
+import DataAccess.User;
 import java.sql.ResultSet;
 
-
+/*
+*AuthManagerInteface an interface where all actions call for authentication of user requests
+*/
 public interface AuthManagerInterface {
-    public UserObject login(String username, String pwd);
+    //login
+    public User login(String username, String pwd);
+    //logout
     public void logout(String token);
+    //insert record to inventory
     public int insertInventory(String table, String productId, String description, int quantity, float perUnitCost, String token) ;
 
     //inventory: reduce quantity by 1;
@@ -13,8 +21,11 @@ public interface AuthManagerInterface {
     //return numebers of items deleted
     public int delete(String table, String productId,String token);
 
+    // select query
     public ResultSet select(String table,String token);
+    // select order
     public ResultSet selectOrder(String table, String orderId,String token);
+    //select
     public ResultSet select(String table, String productId,String token);
 
    

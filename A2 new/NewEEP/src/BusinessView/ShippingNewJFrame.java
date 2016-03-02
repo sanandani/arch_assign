@@ -1,24 +1,12 @@
+package BusinessView;
 
+
+import Security.AuthManager;
+import Security.AuthManagerInterface;
 import java.sql.*;
 import javax.swing.JFrame;
 
- /******************************************************************************
- * File:NewJFrame.java
- * Course: 17655
- * Project: Assignment 2
- * Copyright: Copyright (c) 2009 Carnegie Mellon University
- * Versions:
- *	1.0 November 2009 - Initial rewrite of original assignment 2 (ajl).
- *
- * This class defines a GUI application that allows EEP shipping personnel to
- * mark orders as shipped.
- *
- ******************************************************************************/
-/*
- * Created on Feb 4, 2010, 7:40:03 PM
- *
- * @author lattanze
- */
+
 public class ShippingNewJFrame extends JFrame {
     String updateOrderID;
     String versionID = "v2.10.10";
@@ -365,9 +353,8 @@ public class ShippingNewJFrame extends JFrame {
         {
             try
             {
-//                s = DBConn.createStatement();
-//                SQLStatement = "SELECT * FROM orders WHERE order_id = " + Integer.parseInt(orderID);
-                  // Calling the authorization layer which will help to fetch data using data access layer
+
+                  // Calling the authorization layer which will help to fetch data using DBManager to call orders table
                   res = securityImpl.selectOrder("orders",orderID,this.token);
                 
                 // Get the information from the database. Display the
@@ -392,7 +379,7 @@ public class ShippingNewJFrame extends JFrame {
 
                 // get the order items from the related order table
                 //SQLStatement = "SELECT * FROM " + orderTable;
-                // Calling the authorization layer which will help to fetch data using data access layer
+                // Calling the authorization layer which will help to fetch data using DBManager
                 res = securityImpl.select(orderTable,this.token);
                 // list the items on the form that comprise the order
                 jTextArea3.setText("");
@@ -443,10 +430,7 @@ public class ShippingNewJFrame extends JFrame {
         {
             try
             {
-                // first we create the query
-                //s = DBConn.createStatement();
-                //SQLStatement = "UPDATE orders SET shipped=" + true + " WHERE order_id=" + updateOrderID;
-
+                
                 // execute the statement
                 rows = securityImpl.setOrderShipped(updateOrderID, true, this.token);
 
@@ -545,9 +529,7 @@ public class ShippingNewJFrame extends JFrame {
         {
             try
             {
-                // Create a query to get all the orders and execute the query
-                //s = DBConn.createStatement();
-                //res = s.executeQuery( "Select * from orders" );
+                // Calling the authorization layer which will help to fetch data using DBManager to call orders table
                 res = securityImpl.select("orders", this.token);
 
                 //Display the data in the textarea
@@ -626,7 +608,7 @@ public class ShippingNewJFrame extends JFrame {
                 // Create a query to get all the rows from the orders database
                 // and execute the query.
                 //s = DBConn.createStatement();
-                //res = s.executeQuery( "Select * from orders" );
+                // Calling the authorization layer which will help to fetch data using DBManager to call orders table
                 res = securityImpl.select("orders", this.token);
                 //Display the data in the textarea
                 jTextArea1.setText("");

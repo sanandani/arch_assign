@@ -57,4 +57,18 @@ user trail2 is logging in to the system at 20160301_011103
 user trail2 is logging in to the system at 20160301_011423
 user trail2 is logging out the system at 20160301_011553
 user trail3 is logging in to the system at 20160301_011557
-user trail2 is logging in to the system at 20160301_160938
+user trail1 is logging in to the system at 20160302_003039
+user trail1 is logging in to the system at 20160302_004512
+user trail1 is logging out the system at 20160302_004520
+user trail2 is logging in to the system at 20160302_004532
+user trail2 is logging out the system at 20160302_004547
+user trail3 is logging in to the system at 20160302_004655
+user trail1 is logging in to the system at 20160302_011717
+user trail1 is logging in to the system at 20160302_013948
+user trail1 is logging out the system at 20160302_014016
+user trail2 is logging in to the system at 20160302_014022
+user trail2 is logging out the system at 20160302_014038
+user trail1 is logging in to the system at 20160302_014043
+user trail1 is logging out the system at 20160302_014047
+user trail2 is logging in to the system at 20160302_014052
+user trail2 is logging out the system at 20160302_014056

@@ -1,30 +1,32 @@
+package BusinessView;
 
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+import DataAccess.User;
+import DataAccess.UserType;
+import Security.AuthManager;
+import Security.AuthManagerInterface;
 
 /**
+ * ****************************************************************************
+ * File:LoginFrame.java 
+ * This class contains the GUI  for login of users
  *
- * @author mewanbanjop
- */
-public class ApplicationStart extends javax.swing.JFrame {
+ *****************************************************************************/
+public class LoginFrame extends javax.swing.JFrame {
 
         AuthManagerInterface authmanager = new AuthManager();
-
-        InventoryMainFrame inventory = new InventoryMainFrame(this);
-        ShippingNewJFrame shipping = new ShippingNewJFrame(this);
-        OrderNewJFrame order = new OrderNewJFrame(this);
+       
+    InventoryMainFrame inventory = new InventoryMainFrame(this);
+    ShippingNewJFrame shipping = new ShippingNewJFrame(this);
+    OrderNewJFrame order = new OrderNewJFrame(this);
 
     /**
-     * Creates new form Login
+     * Creates new form Login Frame
      */
-    public ApplicationStart() {
+    public LoginFrame() {
         initComponents();
         ErrorLabel.setVisible(false);
-        inventory.setVisible(false);
+         inventory.setVisible(false);
         shipping.setVisible(false);
         order.setVisible(false);
 
@@ -47,7 +49,7 @@ public class ApplicationStart extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         ErrorLabel = new javax.swing.JLabel();
         usernameLabel = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        usernameTextField = new javax.swing.JTextField();
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -88,9 +90,9 @@ public class ApplicationStart extends javax.swing.JFrame {
 
         usernameLabel.setText("User Name");
 
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        usernameTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                usernameTextFieldActionPerformed(evt);
             }
         });
 
@@ -114,7 +116,7 @@ public class ApplicationStart extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(passwordField, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(usernameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(206, 206, 206))
         );
         layout.setVerticalGroup(
@@ -124,7 +126,7 @@ public class ApplicationStart extends javax.swing.JFrame {
                 .addComponent(jLabel3)
                 .addGap(39, 39, 39)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(usernameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(usernameLabel))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -140,22 +142,29 @@ public class ApplicationStart extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void usernameTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usernameTextFieldActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_usernameTextFieldActionPerformed
 
     private void loginButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginButtonMouseClicked
-        String username = jTextField1.getText();
+        String username = usernameTextField.getText();
         String pwd = new String(passwordField.getPassword());
-        UserObject user = authmanager.login(username, pwd);
+        User user = authmanager.login(username, pwd);
         String token = user.getToken();
         if(user.getUserType() == null){
             ErrorLabel.setVisible(true);
         }
         else  {
           ErrorLabel.setVisible(false);
-          Enum usertype = user.getUserType();
           this.setVisible(false);
+          showView(user);
+        }
+    }//GEN-LAST:event_loginButtonMouseClicked
+    
+    private void showView(User user){
+    
+          Enum usertype = user.getUserType();
+          String token = user.getToken();
           if(usertype == UserType.ORDER){
           order.setVisible(true);
           order.setToken(token);
@@ -168,10 +177,7 @@ public class ApplicationStart extends javax.swing.JFrame {
           shipping.setVisible(true);
           shipping.setToken(token);
           }
-        }
-        
-    }//GEN-LAST:event_loginButtonMouseClicked
-
+    }
     /**
      * @param args the command line arguments
      */
@@ -189,21 +195,23 @@ public class ApplicationStart extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ApplicationStart.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LoginFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ApplicationStart.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LoginFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ApplicationStart.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LoginFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ApplicationStart.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LoginFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ApplicationStart().setVisible(true);
+                new LoginFrame().setVisible(true);
             }
         });
     }
@@ -213,10 +221,11 @@ public class ApplicationStart extends javax.swing.JFrame {
     private javax.swing.JDialog jDialog1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JButton loginButton;
     private javax.swing.JPasswordField passwordField;
     private javax.swing.JLabel passwordLabel;
     private javax.swing.JLabel usernameLabel;
+    private javax.swing.JTextField usernameTextField;
     // End of variables declaration//GEN-END:variables
+
 }

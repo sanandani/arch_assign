@@ -1,28 +1,35 @@
+package Security;
 
+
+import DataAccess.User;
+import DataAccess.UserType;
+import DataAccess.DBAccessManager;
+import DataAccess.DBAccessManagerInterface;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-/**
- *
- * @author Penny
- */
+/*
+* Auth Manager authenticates users and also verifies if all request have valid token
+* All Data access must pass via the auth manager for verification
+*/
 public class AuthManager implements AuthManagerInterface{
 
     private static DBAccessManagerInterface dbm = new DBAccessManager();
+    Logger logger = new Logger();
 
-    public  UserObject login(String username, String pwd) {
+    public  User login(String username, String pwd) {
         UserType ut = dbm.login(username, pwd);
         if (ut != null) {
-            Logger.log("user " + username + " is logging in to the system at " + getTime());
-            return new UserObject(ut, generateToken(username));
+            logger.log("user " + username + " is logging in to the system at " + getTime());
+            return new User(ut, generateToken(username));
         } else {
-            return new UserObject(null, null);
+            return new User(null, null);
         }
     }
 
     public  void logout(String token) {
-        Logger.log("user " + decryptToken(token) + " is logging out the system at " + getTime());
+        logger.log("user " + decryptToken(token) + " is logging out the system at " + getTime());
 
     }
 
