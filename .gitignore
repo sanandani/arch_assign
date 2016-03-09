@@ -6,3 +6,6 @@ A2/EEP/OrderApp/log.txt
 /A2/EEP/OrderApp/dist/
 *.properties
 /A2/NewEEP/build/
+/NewEEP/nbproject/private/
+/A2 new/TrustedFamily_A2_2016/NewEEP/nbproject/private/
+/A2 new/TrustedFamily_A2_2016/NewEEP/build/
