@@ -49,7 +49,7 @@ public class SecurityConsole {
 			Option = UserInput.KeyboardReadString();
 	
 			//////////// option 1: Arm security system ////////////
-	
+			if (Option == null) continue;
 			if ( Option.equals( "1" ) )
 			{
 				armSecuritySystem();
