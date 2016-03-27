@@ -68,6 +68,8 @@ public class ECSSrvcMaintainConsole
 
                 System.out.println( "Select an Option: \n" );
                 System.out.println( "1: Show all the registered equipments" );
+                System.out.println( "2: Show last seen of all registered equipments" );
+                System.out.println( "3: Change the waiting time of heartbeat (Time after which device should be assumed not responding)" );
                 System.out.println( "X: Stop System\n" );
                 System.out.print( "\n>>>> " );
                 Option = UserInput.KeyboardReadString();
@@ -79,6 +81,36 @@ public class ECSSrvcMaintainConsole
                     SrvcMonitor.showRegisteredProcesses();
                     
                 } // if
+                
+                if ( Option.equals( "2" ) )
+                {
+                    SrvcMonitor.showLastSeenOfDevices();
+                    
+                } // if
+                
+                if ( Option.equals( "3" ) ){
+                    boolean Error = true;
+                    // Here we get the high humidity range
+
+                    while (Error)
+                    {
+                        System.out.print( "\nEnter the time in milliseconds>>>  " );
+                        Option = UserInput.KeyboardReadString();
+
+                        if (UserInput.IsNumber(Option))
+                        {
+                            Error = false;
+                            // Setting the new waiting time as overriden by the user
+                            ECSrvcMaintainMonitor.waitingTime = Long.valueOf(Option).longValue();;
+                        } else {
+
+                            System.out.println( "Not a number, please try again..." );
+
+                        } // if
+
+                    } // while
+                }
+                
 
                 //////////// option X ////////////
 

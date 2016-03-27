@@ -24,11 +24,15 @@
 ******************************************************************************************************************/
 import InstrumentationPackage.*;
 import MessagePackage.*;
+
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 class ECSrvcMaintainMonitor extends Thread
 {
     private static HashMap<String,String> registeredDevices = new HashMap<String,String>();
+    private static HashMap<String,Long> deviceslastSeenMap = new HashMap<String,Long>();
+    public static long waitingTime = 10000;    
     private MessageManagerInterface em = null;  // Interface object to the message manager
     private String MsgMgrIP = null;             // Message Manager IP address
     boolean Registered = true;                  // Signifies that this class is registered with an message manager.
@@ -149,19 +153,35 @@ class ECSrvcMaintainMonitor extends Thread
                 for ( int i = 0; i < qlen; i++ )
                 {
                     Msg = eq.GetMessage();
-
+                    Calendar TimeStamp = Calendar.getInstance();
+                    SimpleDateFormat TimeStampFormat = new SimpleDateFormat("yyyy MM dd::hh:mm:ss:SSS");
+                    Long currentTimeInMilliseconds =  (Long) System.currentTimeMillis();
                     if(Msg.GetMessageId() == 0){
                         String[] messageSplitter = Msg.GetMessage().split(":");
                         String deviceID = messageSplitter[0];
                         String deviceName = messageSplitter[1];
                         String deviceDescription = messageSplitter[2];
-                        ECSrvcMaintainMonitor.registeredDevices.put(deviceID,deviceName+":"+deviceDescription);
+                        if (registeredDevices.containsKey(deviceID)) {
+                            deviceslastSeenMap.put(deviceID,currentTimeInMilliseconds);
+                        } else {
+                            ECSrvcMaintainMonitor.registeredDevices.put(deviceID,deviceName+":"+deviceDescription);
+                        }
                     } // if
                     
+                    for (Map.Entry<String,Long> entry : deviceslastSeenMap.entrySet()) {
+                        if(currentTimeInMilliseconds > (entry.getValue() + waitingTime)){
+                            String[] messageSplitter = registeredDevices.get(entry.getKey()).split(":");
+                            String deviceName = messageSplitter[0];
+                            String deviceDescription = messageSplitter[1];
+                            mw.WriteMessage("Device ID - " + entry.getKey() + "-" + deviceName + " has not responded for more than " + waitingTime +" ms");
+                            mw.WriteMessage(deviceName + " : " + deviceDescription);
+                        }
+                    }
+                    
                     if(Msg.GetMessageId() == -99){
-                        ECSrvcMaintainMonitor.registeredDevices.remove(Msg.GetMessage());
+                        //ECSrvcMaintainMonitor.registeredDevices.remove(Msg.GetMessage());
                     } // if
-
+                    
                     // If the message ID == 99 then this is a signal that the simulation
                     // is to end. At this point, the loop termination flag is set to
                     // true and this process unregisters from the message manager.
@@ -291,5 +311,18 @@ class ECSrvcMaintainMonitor extends Thread
             // do stuff
          }
         
+    }
+    
+    public void showLastSeenOfDevices() {
+     // TODO Auto-generated method stub
+        Calendar TimeStamp = Calendar.getInstance();
+        SimpleDateFormat TimeStampFormat = new SimpleDateFormat("yyyy MM dd::hh:mm:ss:SSS");
+        System.out.println("===================================");
+        for (Map.Entry<String,Long> entry : deviceslastSeenMap.entrySet()) {
+            Calendar cal = Calendar.getInstance();
+            TimeStamp.setTimeInMillis(entry.getValue());
+            System.out.println("  Equipment ID  : " + entry.getKey() + "  Last seen  : " + TimeStampFormat.format(TimeStamp.getTime()) );
+        }
+        System.out.println("===================================");
     }
 } // ECSServiceMonitor
