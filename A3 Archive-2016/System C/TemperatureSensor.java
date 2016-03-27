@@ -158,6 +158,8 @@ class TemperatureSensor
 				try
 				{
 					eq = em.GetMessageQueue();
+					//Registering the device so that it is  tracked by the Service maintenance control
+					registerDevice(em,"1","Temperature sensor","This device is a simulator getting the temperature of the room");
 
 				} // try
 
@@ -219,7 +221,9 @@ class TemperatureSensor
 
 						try
 						{
-							em.UnRegister();
+						    // DeRegistering the device so that it is not tracked by the Service maintenance control
+                            deRegisterDevice(em,"1");
+						    em.UnRegister();
 
 				    	} // try
 
@@ -368,5 +372,45 @@ class TemperatureSensor
 		} // catch
 
 	} // PostTemperature
+	
+	static private void registerDevice(MessageManagerInterface ei, String ID,String DeviceName, String DeviceDescription){
+        // Here we create the message.
+
+        Message msg = new Message( (int) 0, ID + ":" + DeviceName + ":" + DeviceDescription);
+
+        // Here we send the message to the message manager.
+
+        try
+        {
+            ei.SendMessage( msg );
+
+        } // try
+
+        catch (Exception e)
+        {
+            System.out.println("Error Confirming Message:: " + e);
+
+        } // catch
+    }
+    
+    static private void deRegisterDevice(MessageManagerInterface ei, String ID){
+        // Here we create the message.
+
+        Message msg = new Message( (int) -99, ID);
+
+        // Here we send the message to the message manager.
+
+        try
+        {
+            ei.SendMessage( msg );
+
+        } // try
+
+        catch (Exception e)
+        {
+            System.out.println("Error Confirming Message:: " + e);
+
+        } // catch
+    }
 
 } // TemperatureSensor

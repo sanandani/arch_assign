@@ -45,7 +45,7 @@ class TemperatureController
 		boolean ChillerState = false;		// Chiller state: false == off, true == on
 		int	Delay = 2500;					// The loop delay (2.5 seconds)
 		boolean Done = false;				// Loop termination flag
-
+		
 		/////////////////////////////////////////////////////////////////////////////////
 		// Get the IP address of the message manager
 		/////////////////////////////////////////////////////////////////////////////////
@@ -143,7 +143,8 @@ class TemperatureController
 				try
 				{
 					eq = em.GetMessageQueue();
-
+					//Registering the device so that it is  tracked by the Service maintenance control
+					registerDevice(em,"5","Temperature controller","This is a temperature controller which controls heather and chiller which increases the Temp of the room");
 				} // try
 
 				catch( Exception e )
@@ -224,7 +225,9 @@ class TemperatureController
 
 						try
 						{
-							em.UnRegister();
+						    // DeRegistering the device so that it is not tracked by the Service maintenance control
+                            deRegisterDevice(em,"5");
+						    em.UnRegister();
 
 				    	} // try
 
@@ -335,5 +338,45 @@ class TemperatureController
 		} // catch
 
 	} // PostMessage
+	
+	static private void registerDevice(MessageManagerInterface ei, String ID,String DeviceName, String DeviceDescription){
+        // Here we create the message.
+
+        Message msg = new Message( (int) 0, ID+":"+DeviceName+":"+DeviceDescription);
+
+        // Here we send the message to the message manager.
+
+        try
+        {
+            ei.SendMessage( msg );
+
+        } // try
+
+        catch (Exception e)
+        {
+            System.out.println("Error Registering the devices :: " + e);
+
+        } // catch
+    }
+	
+	static private void deRegisterDevice(MessageManagerInterface ei, String ID){
+        // Here we create the message.
+
+        Message msg = new Message( (int) -99, ID);
+
+        // Here we send the message to the message manager.
+
+        try
+        {
+            ei.SendMessage( msg );
+
+        } // try
+
+        catch (Exception e)
+        {
+            System.out.println("Error Deregistering the device Message:: " + e);
+
+        } // catch
+    }
 
 } // TemperatureController

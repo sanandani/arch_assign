@@ -45,6 +45,7 @@ class HumidityController
 		boolean DehumidifierState = false;	// Dehumidifier state: false == off, true == on
 		int	Delay = 2500;					// The loop delay (2.5 seconds)
 		boolean Done = false;				// Loop termination flag
+				
 
 		/////////////////////////////////////////////////////////////////////////////////
 		// Get the IP address of the message manager
@@ -117,6 +118,7 @@ class HumidityController
 
 			Indicator hi = new Indicator ("Humid OFF", mw.GetX(), mw.GetY()+mw.Height());
 			Indicator di = new Indicator ("DeHumid OFF", mw.GetX()+(hi.Width()*2), mw.GetY()+mw.Height());
+						
 
 			mw.WriteMessage("Registered with the message manager." );
 
@@ -142,7 +144,8 @@ class HumidityController
 				try
 				{
 					eq = em.GetMessageQueue();
-
+					//Registering the device so that it is  tracked by the Service maintenance control
+					registerDevice(em,"4","Humidity controller","This is a humidity controller which controls humidifier and dehumidifier which increases the Temp of the room");
 				} // try
 
 				catch( Exception e )
@@ -223,7 +226,9 @@ class HumidityController
 
 						try
 						{
-							em.UnRegister();
+						    // DeRegistering the device so that it is not tracked by the Service maintenance control
+						    deRegisterDevice(em,"4");
+						    em.UnRegister();
 
 				    	} // try
 
@@ -334,5 +339,45 @@ class HumidityController
 		} // catch
 
 	} // PostMessage
+	
+	static private void registerDevice(MessageManagerInterface ei, String ID,String DeviceName, String DeviceDescription){
+	    // Here we create the message.
+
+        Message msg = new Message( (int) 0, ID + ":" + DeviceName + ":" + DeviceDescription);
+
+        // Here we send the message to the message manager.
+
+        try
+        {
+            ei.SendMessage( msg );
+
+        } // try
+
+        catch (Exception e)
+        {
+            System.out.println("Error Registering the device :: " + e);
+
+        } // catch
+	}
+	
+	static private void deRegisterDevice(MessageManagerInterface ei, String ID){
+        // Here we create the message.
+
+        Message msg = new Message( (int) -99, ID);
+
+        // Here we send the message to the message manager.
+
+        try
+        {
+            ei.SendMessage( msg );
+
+        } // try
+
+        catch (Exception e)
+        {
+            System.out.println("Error Deregistering the device :: " + e);
+
+        } // catch
+    }
 
 } // HumidityControllers

@@ -160,6 +160,8 @@ class HumiditySensor
 				try
 				{
 					eq = em.GetMessageQueue();
+					//Registering the device so that it is  tracked by the Service maintenance control
+					registerDevice(em,"2","Humidity sensor","This device is a simulator getting the humidity of the room");
 
 				} // try
 
@@ -221,7 +223,9 @@ class HumiditySensor
 
 						try
 						{
-							em.UnRegister();
+						    // DeRegistering the device so that it is not tracked by the Service maintenance control
+                            deRegisterDevice(em,"2");
+						    em.UnRegister();
 
 				    	} // try
 
@@ -370,5 +374,45 @@ class HumiditySensor
 		} // catch
 
 	} // PostHumidity
+	
+	static private void registerDevice(MessageManagerInterface ei, String ID,String DeviceName, String DeviceDescription){
+        // Here we create the message.
+
+        Message msg = new Message( (int) 0, ID + ":" + DeviceName + ":" + DeviceDescription);
+
+        // Here we send the message to the message manager.
+
+        try
+        {
+            ei.SendMessage( msg );
+
+        } // try
+
+        catch (Exception e)
+        {
+            System.out.println("Error Registering the Message:: " + e);
+
+        } // catch
+    }
+    
+    static private void deRegisterDevice(MessageManagerInterface ei, String ID){
+        // Here we create the message.
+
+        Message msg = new Message( (int) -99, ID);
+
+        // Here we send the message to the message manager.
+
+        try
+        {
+            ei.SendMessage( msg );
+
+        } // try
+
+        catch (Exception e)
+        {
+            System.out.println("Error Deregistering the device Message:: " + e);
+
+        } // catch
+    }
 
 } // Humidity Sensor
