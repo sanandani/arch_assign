@@ -24,8 +24,6 @@ public class MotionSensor {
 	private static final int MOTION_SENSOR_ID = -110;
 	private static final String MOTION_SENSOR_ON = "M1";
 	private static final String MOTION_SENSOR_OFF = "M0";
-	private static final int ARM_ID = 100;
-	private static final int DISARM_ID = 101;
 	private static final int HALT_SECURITY_ID = 199;
 	private static final int MOTION_SENSOR_MSG_ID = 120;
 
@@ -78,16 +76,6 @@ public class MotionSensor {
 			{	
 				Msg = queue.GetMessage();
 				
-				if ( Msg.GetMessageId() == ARM_ID )
-				{
-					WindowBreakSensorState = true;
-				}
-				
-				if ( Msg.GetMessageId() == DISARM_ID )
-				{
-					WindowBreakSensorState = false;
-				}
-				
 				if ( Msg.GetMessageId() == MOTION_SENSOR_ID)
 				{
 					handleMotionSensorControllerMessage(Msg);
@@ -115,7 +103,6 @@ public class MotionSensor {
 			} 
 		}
 	}
-
 
 	private static void handleExitMessage() {
 		Done = true;
@@ -234,6 +221,7 @@ public class MotionSensor {
 		
 		try
 		{
+			messageWindow.WriteMessage(msg);
 			messageManager.SendMessage( message ); // Here we send the message to the message manager.
 
 		}

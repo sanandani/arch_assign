@@ -27,7 +27,7 @@ public class AlarmController {
 	private static final int WINDOW_BREAK_SENSOR_ID = -112;
 	private static final String WINDOW_BREAK_SENSOR_ON = "W1";
 	private static final String WINDOW_BREAK_SENSOR_OFF = "W0";
-		private static final String DOOR_BREAK_SENSOR_ON = "DB1";
+	private static final String DOOR_BREAK_SENSOR_ON = "DB1";
 	private static final String DOOR_BREAK_SENSOR_OFF = "DB0";
 	private static final String MOTION_SENSOR_ON = "M1";
 	private static final String MOTION_SENSOR_OFF = "M0";

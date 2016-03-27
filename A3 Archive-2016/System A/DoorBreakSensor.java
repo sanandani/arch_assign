@@ -25,8 +25,6 @@ public class DoorBreakSensor {
 	private static final int DOOR_BREAK_SENSOR_ID = -111;
 	private static final String DOOR_BREAK_SENSOR_ON = "DB1";
 	private static final String DOOR_BREAK_SENSOR_OFF = "DB0";
-	private static final int ARM_ID = 100;
-	private static final int DISARM_ID = 101;
 	private static final int HALT_SECURITY_ID = 199;
 	private static final int DOOR_BREAK_MSG_ID = 121;
 
@@ -43,7 +41,7 @@ public class DoorBreakSensor {
 		if (messageManager != null)
 		{
 			initializeDisplays();
-			performSensorprocess(); 
+			performSensorProcess(); 
 
 		} else {
 
@@ -53,7 +51,7 @@ public class DoorBreakSensor {
 
 	}
 
-	private static void performSensorprocess() {
+	private static void performSensorProcess() {
 		/**************************************************
 		*  Here we start the main simulation loop that 
 		*  will continuously look for control messages
@@ -78,16 +76,6 @@ public class DoorBreakSensor {
 			for ( int i = 0; i < qlen; i++ )
 			{	
 				Msg = queue.GetMessage();
-				
-				if ( Msg.GetMessageId() == ARM_ID )
-				{
-					DoorBreakSensorState = true;
-				}
-				
-				if ( Msg.GetMessageId() == DISARM_ID )
-				{
-					DoorBreakSensorState = false;
-				}
 				
 				if ( Msg.GetMessageId() == DOOR_BREAK_SENSOR_ID )
 				{
@@ -116,7 +104,6 @@ public class DoorBreakSensor {
 			} 
 		}
 	}
-
 
 	private static void handleExitMessage() {
 		Done = true;
@@ -151,9 +138,6 @@ public class DoorBreakSensor {
 			DoorBreakSensorState = false;
 		}
 	}
-
-
-	
 
 	private static void initializeDisplays() {
 		
@@ -238,6 +222,7 @@ public class DoorBreakSensor {
 		
 		try
 		{
+			messageWindow.WriteMessage(msg);
 			messageManager.SendMessage( message ); // Here we send the message to the message manager.
 
 		}

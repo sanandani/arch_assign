@@ -24,8 +24,6 @@ public class WindowBreakSensor {
 	private static final int WINDOW_BREAK_SENSOR_ID = -112;
 	private static final String WINDOW_BREAK_SENSOR_ON = "W1";
 	private static final String WINDOW_BREAK_SENSOR_OFF = "W0";
-	private static final int ARM_ID = 100;
-	private static final int DISARM_ID = 101;
 	private static final int HALT_SECURITY_ID = 199;
 	private static final int WINDOW_BREAK_MSG_ID = 122;
 
@@ -77,16 +75,6 @@ public class WindowBreakSensor {
 			for ( int i = 0; i < qlen; i++ )
 			{	
 				Msg = queue.GetMessage();
-				
-				if ( Msg.GetMessageId() == ARM_ID )
-				{
-					WindowBreakSensorState = true;
-				}
-				
-				if ( Msg.GetMessageId() == DISARM_ID )
-				{
-					WindowBreakSensorState = false;
-				}
 				
 				if ( Msg.GetMessageId() == WINDOW_BREAK_SENSOR_ID)
 				{
@@ -237,6 +225,7 @@ public class WindowBreakSensor {
 		
 		try
 		{
+			messageWindow.WriteMessage(msg);
 			messageManager.SendMessage( message ); // Here we send the message to the message manager.
 
 		}
