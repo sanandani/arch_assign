@@ -55,6 +55,7 @@ public class MotionSensor {
 		*  Here we start the main simulation loop that 
 		*  will continuously look for control messages
 		***************************************************/
+		messageWindow.WriteMessage("Motion Sensor off" );
 		
 		while ( !Done )
 		{
@@ -128,12 +129,14 @@ public class MotionSensor {
 		
 		if (Msg.GetMessage().equalsIgnoreCase(MOTION_SENSOR_ON)) // window break Sensor on
 		{
+			messageWindow.WriteMessage("Motion Sensor on" );
 			WindowBreakSensorState = true;
 			
 		} 
 		
 		if (Msg.GetMessage().equalsIgnoreCase(MOTION_SENSOR_OFF)) // window break Sensor off
 		{
+			messageWindow.WriteMessage("Motion Sensor off" );
 			WindowBreakSensorState = false;
 		}
 	}

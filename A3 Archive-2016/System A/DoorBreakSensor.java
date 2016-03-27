@@ -56,7 +56,7 @@ public class DoorBreakSensor {
 		*  Here we start the main simulation loop that 
 		*  will continuously look for control messages
 		***************************************************/
-		
+		messageWindow.WriteMessage("Door Break Sensor off" );
 		while ( !Done )
 		{
 			//postArmStatus
@@ -129,12 +129,14 @@ public class DoorBreakSensor {
 		
 		if (Msg.GetMessage().equalsIgnoreCase(DOOR_BREAK_SENSOR_ON)) // doorBreakSensor on
 		{
+			messageWindow.WriteMessage("Door Break Sensor on" );
 			DoorBreakSensorState = true;
 			
 		} 
 		
 		if (Msg.GetMessage().equalsIgnoreCase(DOOR_BREAK_SENSOR_OFF)) // doorBreakSensor off
 		{
+			messageWindow.WriteMessage("Door Break Sensor off" );
 			DoorBreakSensorState = false;
 		}
 	}

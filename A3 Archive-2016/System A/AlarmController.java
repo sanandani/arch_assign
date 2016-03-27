@@ -12,9 +12,9 @@ public class AlarmController {
 	private static MessageWindow messageWindow;
 	private static MessageQueue queue;				// Message Queue
 	private static Message Msg;					// Message object
-	private static boolean MotionAlarmSensorState = false;	// Motion Sensor State : false == off, true == on
+	private static boolean MotionAlarmState = false;	// Motion Sensor State : false == off, true == on
 	private static boolean WindowBreakAlarmState = false;	// Window Break Sensor State : false == off, true == on
-	private static boolean DoorBreakSensorState = false;	// Door Break Sensor State : false == off, true == on
+	private static boolean DoorBreakAlarmState = false;	// Door Break Sensor State : false == off, true == on
 	private static int	Delay = 2500;					// The loop delay (2.5 seconds)
 	private static boolean Done = false;				// Loop termination flag
 	private static boolean ArmState = false;				// Loop termination flag
@@ -65,7 +65,7 @@ public class AlarmController {
 		*  Here we start the main simulation loop that 
 		*  will continuously look for control messages
 		***************************************************/
-		
+		messageWindow.WriteMessage("Alarm Controller disarmed." );
 		while ( !Done )
 		{
 			try
@@ -162,30 +162,37 @@ public class AlarmController {
 	private static void handleArm() {
 			
 			ArmState = true;
-			MotionAlarmSensorState = true;
-			DoorBreakSensorState = true;
+			messageWindow.WriteMessage("Received arm message. Arming alarms." );
+			MotionAlarmState = true;
+			messageWindow.WriteMessage("Motion Alarm Armed" );
+			DoorBreakAlarmState = true;
+			messageWindow.WriteMessage("Door Break Alarm Armed" );
 			WindowBreakAlarmState = true;
-			messageWindow.WriteMessage("Received arm message. Alarms arm." );
+			messageWindow.WriteMessage(" Break Alarm Armed" );
 
 			// Send arm message to sensors
 			sendMessageToMessageManager( messageManager, MOTION_SENSOR_ON, MOTION_SENSOR_ID );
 			sendMessageToMessageManager( messageManager, DOOR_BREAK_SENSOR_ON, DOOR_BREAK_SENSOR_ID );
 			sendMessageToMessageManager( messageManager, WINDOW_BREAK_SENSOR_ON, WINDOW_BREAK_SENSOR_ID );
+			messageWindow.WriteMessage(" All Sensors Armed" );
 	}
 	
 	private static void handleDisarm() {
 		
 		ArmState = false;
-		MotionAlarmSensorState = false;
-		DoorBreakSensorState = false;
+		messageWindow.WriteMessage("Received arm message. Disarming alarms." );
+		MotionAlarmState = false;
+		messageWindow.WriteMessage("Motion Alarm Disarmed" );
+		DoorBreakAlarmState = false;
+		messageWindow.WriteMessage("Door Break Alarm Disarmed" );
 		WindowBreakAlarmState = false;
-		
-		messageWindow.WriteMessage("Received disarm message. Alarms disarm." );
+		messageWindow.WriteMessage(" Break Alarm Disarmed" );
 
 		// Confirm that the message was received and acted on
 		sendMessageToMessageManager( messageManager, MOTION_SENSOR_OFF, MOTION_SENSOR_ID );
 		sendMessageToMessageManager( messageManager, DOOR_BREAK_SENSOR_OFF, DOOR_BREAK_SENSOR_ID );
 		sendMessageToMessageManager( messageManager, WINDOW_BREAK_SENSOR_OFF, WINDOW_BREAK_SENSOR_ID );
+		messageWindow.WriteMessage(" All Sensors Disarmed" );
 }
 
 	private static void initializeDisplays() {

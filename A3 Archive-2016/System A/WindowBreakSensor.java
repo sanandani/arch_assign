@@ -51,6 +51,7 @@ public class WindowBreakSensor {
 	}
 
 	private static void performSensorprocess() {
+		messageWindow.WriteMessage("Window Break Sensor off" );
 		/**************************************************
 		*  Here we start the main simulation loop that 
 		*  will continuously look for control messages
@@ -129,12 +130,14 @@ public class WindowBreakSensor {
 		
 		if (Msg.GetMessage().equalsIgnoreCase(WINDOW_BREAK_SENSOR_ON)) // window break Sensor on
 		{
+			messageWindow.WriteMessage("Window Break Sensor on" );
 			WindowBreakSensorState = true;
 			
 		} 
 		
 		if (Msg.GetMessage().equalsIgnoreCase(WINDOW_BREAK_SENSOR_OFF)) // window break Sensor off
 		{
+			messageWindow.WriteMessage("Window Break Sensor off" );
 			WindowBreakSensorState = false;
 		}
 	}
