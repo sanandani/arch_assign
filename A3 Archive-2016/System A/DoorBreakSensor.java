@@ -22,10 +22,16 @@ public class DoorBreakSensor {
 	 * Constants
 	 ************/
 	
-	private static final int DOOR_BREAK_SENSOR_ID = -101;
+	private static final int DOOR_BREAK_SENSOR_ID = -111;
 	private static final String DOOR_BREAK_SENSOR_ON = "DB1";
 	private static final String DOOR_BREAK_SENSOR_OFF = "DB0";
-	private static final int HALT_ID = 99;
+	private static final int ARM_ID = 100;
+	private static final int DISARM_ID = 101;
+	private static final int HALT_SECURITY_ID = 199;
+	private static final int DOOR_BREAK_MSG_ID = 121;
+
+
+
 	
 	public static void main(String args[])
 	{
@@ -73,22 +79,33 @@ public class DoorBreakSensor {
 			{	
 				Msg = queue.GetMessage();
 				
-				if ( Msg.GetMessageId() == DOOR_BREAK_SENSOR_ID )
+				if ( Msg.GetMessageId() == ARM_ID )
 				{
-					handleDoorBreakMessage(Msg);
+					DoorBreakSensorState = true;
 				}
 				
-				if ( Msg.GetMessageId() == HALT_ID )
+				if ( Msg.GetMessageId() == DISARM_ID )
+				{
+					DoorBreakSensorState = false;
+				}
+				
+				if ( Msg.GetMessageId() == DOOR_BREAK_SENSOR_ID )
+				{
+					handleDoorBreakControllerMessage(Msg);
+				}
+				
+				if ( Msg.GetMessageId() == HALT_SECURITY_ID )
 				{
 					handleExitMessage();
-				} 
+				}
+				
 			} 
 
 			try
 			{
 				Thread.sleep( Delay );
 				if(DoorBreakSensorState && CoinToss()){
-					sendMessageToMessageManager("BREAK_IN",101);
+					sendMessageToMessageManager("DOOR BREAK IN",DOOR_BREAK_MSG_ID);
 				}
 			} 
 
@@ -120,7 +137,7 @@ public class DoorBreakSensor {
 
 	}
 
-	private static void handleDoorBreakMessage(Message Msg) {
+	private static void handleDoorBreakControllerMessage(Message Msg) {
 		
 		
 		if (Msg.GetMessage().equalsIgnoreCase(DOOR_BREAK_SENSOR_ON)) // doorBreakSensor on
@@ -162,7 +179,6 @@ public class DoorBreakSensor {
 		catch (Exception e)
 		{
 			System.out.println("Error:: " + e);
-
 		} 
 	}
 

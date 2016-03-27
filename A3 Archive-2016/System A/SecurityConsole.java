@@ -18,7 +18,6 @@ public class SecurityConsole {
 	private static final int DISARM_ID = 101;
 	private static final int HALT_SECURITY_ID = 199;
 	
-	
 	public static void main(String args[])
 	{
 		instantiateMessageManager(args);
@@ -196,5 +195,4 @@ public class SecurityConsole {
 		} 
 
 	} 
-
 }

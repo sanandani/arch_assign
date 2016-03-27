@@ -1,10 +1,11 @@
+import java.util.Random;
+
 import InstrumentationPackage.MessageWindow;
 import MessagePackage.Message;
 import MessagePackage.MessageManagerInterface;
 import MessagePackage.MessageQueue;
 
-public class AlarmController {
-	
+public class WindowBreakSensor {
 	/***********************
 	 * Private class fields
 	 ***********************/
@@ -12,33 +13,24 @@ public class AlarmController {
 	private static MessageWindow messageWindow;
 	private static MessageQueue queue;				// Message Queue
 	private static Message Msg;					// Message object
-	private static boolean MotionAlarmSensorState = false;	// Motion Sensor State : false == off, true == on
-	private static boolean WindowBreakAlarmState = false;	// Window Break Sensor State : false == off, true == on
-	private static boolean DoorBreakSensorState = false;	// Door Break Sensor State : false == off, true == on
+	private static boolean WindowBreakSensorState = false;	// Door Break Sensor State : false == off, true == on
 	private static int	Delay = 2500;					// The loop delay (2.5 seconds)
 	private static boolean Done = false;				// Loop termination flag
-	private static boolean ArmState = false;				// Loop termination flag
 	
 	/************
 	 * Constants
 	 ************/
-	private static final int MOTION_SENSOR_ID = -110;
-	private static final int DOOR_BREAK_SENSOR_ID = -111;
+	
 	private static final int WINDOW_BREAK_SENSOR_ID = -112;
 	private static final String WINDOW_BREAK_SENSOR_ON = "W1";
 	private static final String WINDOW_BREAK_SENSOR_OFF = "W0";
-		private static final String DOOR_BREAK_SENSOR_ON = "DB1";
-	private static final String DOOR_BREAK_SENSOR_OFF = "DB0";
-	private static final String MOTION_SENSOR_ON = "M1";
-	private static final String MOTION_SENSOR_OFF = "M0";
-	
 	private static final int ARM_ID = 100;
 	private static final int DISARM_ID = 101;
 	private static final int HALT_SECURITY_ID = 199;
-	private static final int MOTION_SENSE_MSG_ID = 120;
-	private static final int DOOR_BREAK_MSG_ID = 121;
 	private static final int WINDOW_BREAK_MSG_ID = 122;
-	
+
+
+
 	
 	public static void main(String args[])
 	{
@@ -50,7 +42,7 @@ public class AlarmController {
 		if (messageManager != null)
 		{
 			initializeDisplays();
-			processControllerMessages(); 
+			performSensorprocess(); 
 
 		} else {
 
@@ -60,7 +52,7 @@ public class AlarmController {
 
 	}
 
-	private static void processControllerMessages() {
+	private static void performSensorprocess() {
 		/**************************************************
 		*  Here we start the main simulation loop that 
 		*  will continuously look for control messages
@@ -68,6 +60,8 @@ public class AlarmController {
 		
 		while ( !Done )
 		{
+			//postArmStatus
+			
 			try
 			{
 				queue = messageManager.GetMessageQueue(); //get messages from message manager
@@ -81,53 +75,47 @@ public class AlarmController {
 			int qlen = queue.GetSize();
 
 			for ( int i = 0; i < qlen; i++ )
-			{
+			{	
 				Msg = queue.GetMessage();
 				
 				if ( Msg.GetMessageId() == ARM_ID )
 				{
-					handleArm(); 
+					WindowBreakSensorState = true;
 				}
 				
 				if ( Msg.GetMessageId() == DISARM_ID )
 				{
-					handleDisarm(); 
+					WindowBreakSensorState = false;
+				}
+				
+				if ( Msg.GetMessageId() == WINDOW_BREAK_SENSOR_ID)
+				{
+					handleWindowBreakControllerMessage(Msg);
 				}
 				
 				if ( Msg.GetMessageId() == HALT_SECURITY_ID )
 				{
 					handleExitMessage();
 				}
-
-				if ( Msg.GetMessageId() == MOTION_SENSE_MSG_ID )
-				{
-					handleMotionSensorMessage(Msg); 
-				}
 				
-				if ( Msg.GetMessageId() == WINDOW_BREAK_MSG_ID )
-				{
-					handleWindowBreakMessage(Msg);
-				}
-				
-				if ( Msg.GetMessageId() == DOOR_BREAK_MSG_ID )
-				{
-					handleDoorBreakMessage(Msg);
-				}
-
 			} 
 
 			try
 			{
 				Thread.sleep( Delay );
+				if(WindowBreakSensorState && CoinToss()){
+					sendMessageToMessageManager("WINDOW BREAK IN",WINDOW_BREAK_MSG_ID);
+				}
 			} 
 
 			catch( Exception e )
 			{
 				System.out.println( "Sleep error:: " + e );
-			} 
 
+			} 
 		}
 	}
+
 
 	private static void handleExitMessage() {
 		Done = true;
@@ -145,60 +133,40 @@ public class AlarmController {
 		} 
 
 		messageWindow.WriteMessage( "\n\nSimulation Stopped. \n");
+
 	}
 
-	private static void handleMotionSensorMessage(Message Msg) {
-		messageWindow.WriteMessage(Msg.GetMessage());
-	}
-
-	private static void handleDoorBreakMessage(Message Msg) {
-		messageWindow.WriteMessage(Msg.GetMessage());
-	}
-
-	private static void handleWindowBreakMessage(Message Msg) {
-			messageWindow.WriteMessage(Msg.GetMessage());
-	}
-
-	private static void handleArm() {
+	private static void handleWindowBreakControllerMessage(Message Msg) {
+		
+		
+		if (Msg.GetMessage().equalsIgnoreCase(WINDOW_BREAK_SENSOR_ON)) // window break Sensor on
+		{
+			WindowBreakSensorState = true;
 			
-			ArmState = true;
-			MotionAlarmSensorState = true;
-			DoorBreakSensorState = true;
-			WindowBreakAlarmState = true;
-			messageWindow.WriteMessage("Received arm message. Alarms arm." );
-
-			// Send arm message to sensors
-			sendMessageToMessageManager( messageManager, MOTION_SENSOR_ON, MOTION_SENSOR_ID );
-			sendMessageToMessageManager( messageManager, DOOR_BREAK_SENSOR_ON, DOOR_BREAK_SENSOR_ID );
-			sendMessageToMessageManager( messageManager, WINDOW_BREAK_SENSOR_ON, WINDOW_BREAK_SENSOR_ID );
+		} 
+		
+		if (Msg.GetMessage().equalsIgnoreCase(WINDOW_BREAK_SENSOR_OFF)) // window break Sensor off
+		{
+			WindowBreakSensorState = false;
+		}
 	}
-	
-	private static void handleDisarm() {
-		
-		ArmState = false;
-		MotionAlarmSensorState = false;
-		DoorBreakSensorState = false;
-		WindowBreakAlarmState = false;
-		
-		messageWindow.WriteMessage("Received disarm message. Alarms disarm." );
 
-		// Confirm that the message was received and acted on
-		sendMessageToMessageManager( messageManager, MOTION_SENSOR_OFF, MOTION_SENSOR_ID );
-		sendMessageToMessageManager( messageManager, DOOR_BREAK_SENSOR_OFF, DOOR_BREAK_SENSOR_ID );
-		sendMessageToMessageManager( messageManager, WINDOW_BREAK_SENSOR_OFF, WINDOW_BREAK_SENSOR_ID );
-}
+
+	
 
 	private static void initializeDisplays() {
 		
 		System.out.println("Registered with the message manager." );
 		
-		// Now we create the motionDetector, windowBreakDetector and doorBreakDetector status and message panel
+		// Now we create the window break Sensor status and message panel
 
-		float WinPosX = 0.0f; 	//This is the X position of the message window in term of a percentage of the screen height
+		float WinPosX = 0.10f; 	//This is the X position of the message window in term of a percentage of the screen height
 		float WinPosY = 0.90f;	//This is the Y position of the message window in terms of a percentage of the screen height
 
-		messageWindow = new MessageWindow("Alarm Controller Status Console", WinPosX, WinPosY);
+		messageWindow = new MessageWindow("Window Break Sensor", WinPosX, WinPosY);
 
+		// Now we put the indicators directly under the panel
+		
 		messageWindow.WriteMessage("Registered with the message manager." );
 
 		try
@@ -210,7 +178,6 @@ public class AlarmController {
 		catch (Exception e)
 		{
 			System.out.println("Error:: " + e);
-
 		} 
 	}
 
@@ -263,23 +230,32 @@ public class AlarmController {
 		}
 	}
 
-	static private void sendMessageToMessageManager(MessageManagerInterface mi, String msg, int id)
+	static private void sendMessageToMessageManager(String msg, int id)
 	{
 
 		Message message = new Message( id, msg); // Here we create the message.
 		
 		try
 		{
-			mi.SendMessage( message ); // Here we send the message to the message manager.
+			messageManager.SendMessage( message ); // Here we send the message to the message manager.
 
 		}
 
 		catch (Exception e)
 		{
-			System.out.println("Error Confirming Message:: " + e);
+			System.out.println("Error Sending Message:: " + e);
 
 		} 
 
 	} 
+	
+	static private boolean CoinToss()
+	{
+		Random r = new Random();
+
+		return(r.nextBoolean());
+
+	}
+
 
 }
