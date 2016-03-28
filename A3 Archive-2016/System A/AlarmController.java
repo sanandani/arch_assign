@@ -30,6 +30,9 @@ public class AlarmController {
 	private static final int MOTION_ALARM_ACK_ID = -150;
 	private static final int DOOR_BREAK_ACK_ID = -151;
 	private static final int WINDOW_BREAK_ACK_ID = -152;
+	private static final int MOTION_SENSOR_ID = -110;
+	private static final int WINDOW_BREAK_SENSOR_ID = -112;
+	private static final int DOOR_BREAK_SENSOR_ID = -111;
 	private static final String WINDOW_BREAK_SENSOR_ON = "W1";
 	private static final String WINDOW_BREAK_SENSOR_OFF = "W0";
 	private static final String DOOR_BREAK_SENSOR_ON = "DB1";
@@ -234,9 +237,9 @@ public class AlarmController {
 			wa.SetLampColorAndMessage("Window Alarm On", 1);
 
 			// Send arm message to sensors
-			sendMessageToMessageManager( MOTION_SENSOR_ON, MOTION_ALARM_ACK_ID );
-			sendMessageToMessageManager( DOOR_BREAK_SENSOR_ON, DOOR_BREAK_ACK_ID );
-			sendMessageToMessageManager( WINDOW_BREAK_SENSOR_ON, WINDOW_BREAK_ACK_ID );
+			sendMessageToMessageManager( MOTION_SENSOR_ON, MOTION_SENSOR_ID );
+			sendMessageToMessageManager( DOOR_BREAK_SENSOR_ON, DOOR_BREAK_SENSOR_ID );
+			sendMessageToMessageManager( WINDOW_BREAK_SENSOR_ON, WINDOW_BREAK_SENSOR_ID );
 			messageWindow.WriteMessage(" All Sensors Armed" );
 			
 			
@@ -260,9 +263,9 @@ public class AlarmController {
 		messageWindow.WriteMessage(" Break Alarm Disarmed" );
 
 		// Confirm that the message was received and acted on
-		sendMessageToMessageManager(MOTION_SENSOR_OFF, MOTION_ALARM_ACK_ID );
-		sendMessageToMessageManager(DOOR_BREAK_SENSOR_OFF, DOOR_BREAK_ACK_ID );
-		sendMessageToMessageManager(WINDOW_BREAK_SENSOR_OFF, WINDOW_BREAK_ACK_ID );
+		sendMessageToMessageManager(MOTION_SENSOR_OFF, MOTION_SENSOR_ID );
+		sendMessageToMessageManager(DOOR_BREAK_SENSOR_OFF, DOOR_BREAK_SENSOR_ID );
+		sendMessageToMessageManager(WINDOW_BREAK_SENSOR_OFF, WINDOW_BREAK_SENSOR_ID );
 		messageWindow.WriteMessage(" All Sensors Disarmed" );
 	
 }
