@@ -144,7 +144,7 @@ public class MessageManagerInterface
 
 		   	try
 		   	{
-				ParticipantId = em.Register();
+				                        ParticipantId = em.Register();
 
 			} // try
 
