@@ -26,7 +26,8 @@ public class WindowBreakSensor {
 	private static final String WINDOW_BREAK_SENSOR_OFF = "W0";
 	private static final int HALT_SECURITY_ID = 199;
 	private static final int WINDOW_BREAK_MSG_ID = 122;
-
+	private static final String WINDOW_BREAK_DETECTED = "WINDOW BREAK DETECTED";
+	private static final String OK = "OK";
 
 
 	
@@ -92,9 +93,16 @@ public class WindowBreakSensor {
 			try
 			{
 				Thread.sleep( Delay );
-				if(WindowBreakSensorState && CoinToss()){
-					sendMessageToMessageManager("WINDOW BREAK IN",WINDOW_BREAK_MSG_ID);
+				if(WindowBreakSensorState){
+					if(CoinToss()){
+				
+					sendMessageToMessageManager(WINDOW_BREAK_DETECTED,WINDOW_BREAK_MSG_ID);
 				}
+					else{
+						sendMessageToMessageManager(OK,WINDOW_BREAK_MSG_ID);
+					}
+				}
+			
 			} 
 
 			catch( Exception e )

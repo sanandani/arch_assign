@@ -1,11 +1,10 @@
-import java.util.Random;
-
 import InstrumentationPackage.MessageWindow;
 import MessagePackage.Message;
 import MessagePackage.MessageManagerInterface;
 import MessagePackage.MessageQueue;
 
-public class MotionSensor {
+public class SecurityMonitor {
+	
 	/***********************
 	 * Private class fields
 	 ***********************/
@@ -13,22 +12,35 @@ public class MotionSensor {
 	private static MessageWindow messageWindow;
 	private static MessageQueue queue;				// Message Queue
 	private static Message Msg;					// Message object
-	private static boolean WindowBreakSensorState = false;	// Door Break Sensor State : false == off, true == on
 	private static int	Delay = 2500;					// The loop delay (2.5 seconds)
 	private static boolean Done = false;				// Loop termination flag
+	private static boolean ArmState = false;				// Loop termination flag
+
 	
 	/************
 	 * Constants
 	 ************/
+	private static final int MOTION_ALARM_ID = 150;
+	private static final int DOOR_ALARM_ID = 151;
+	private static final int WINDOW_ALARM_ID = 152;
 	
-	private static final int MOTION_SENSOR_ID = -110;
-	private static final String MOTION_SENSOR_ON = "M1";
-	private static final String MOTION_SENSOR_OFF = "M0";
-	private static final int HALT_SECURITY_ID = 199;
-	private static final int MOTION_SENSOR_MSG_ID = 120;
+	private static final String SOUND_WINDOW_ALARM = "SOUND WINDOW ALARM";
+	private static final String SOUND_DOOR_ALARM = "SOUND DOOR ALARM";
+	private static final String SOUND_MOTION_ALARM = "SOUND MOTION ALARM";
+	private static final String STOP_WINDOW_ALARM = "STOP WINDOW ALARM";
+	private static final String STOP_DOOR_ALARM = "STOP WINDOW ALARM";
+	private static final String STOP_MOTION_ALARM = "STOP MOTION ALARM";
 	private static final String MOTION_DETECTED = "MOTION DETECTED";
-	private static final String OK = "OK";
-
+	private static final String DOOR_BREAK_DETECTED = "DOOR BREAK DETECTED";
+	private static final String WINDOW_BREAK_DETECTED = "WINDOW BREAK DETECTED";
+	
+	private static final int ARM_ID = 100;
+	private static final int DISARM_ID = 101;
+	private static final int HALT_SECURITY_ID = 199;
+	private static final int MOTION_SENSE_MSG_ID = 120;
+	private static final int DOOR_BREAK_MSG_ID = 121;
+	private static final int WINDOW_BREAK_MSG_ID = 122;
+	
 	
 	public static void main(String args[])
 	{
@@ -40,7 +52,7 @@ public class MotionSensor {
 		if (messageManager != null)
 		{
 			initializeDisplays();
-			performSensorprocess(); 
+			processControllerMessages(); 
 
 		} else {
 
@@ -50,17 +62,14 @@ public class MotionSensor {
 
 	}
 
-	private static void performSensorprocess() {
+	private static void processControllerMessages() {
 		/**************************************************
 		*  Here we start the main simulation loop that 
 		*  will continuously look for control messages
 		***************************************************/
-		messageWindow.WriteMessage("Motion Sensor off" );
-		
+		messageWindow.WriteMessage("Alarm Controller disarmed." );
 		while ( !Done )
 		{
-			//postArmStatus
-			
 			try
 			{
 				queue = messageManager.GetMessageQueue(); //get messages from message manager
@@ -74,40 +83,51 @@ public class MotionSensor {
 			int qlen = queue.GetSize();
 
 			for ( int i = 0; i < qlen; i++ )
-			{	
+			{
 				Msg = queue.GetMessage();
 				
-				if ( Msg.GetMessageId() == MOTION_SENSOR_ID)
+				if ( Msg.GetMessageId() == ARM_ID )
 				{
-					handleMotionSensorControllerMessage(Msg);
+					handleArm(); 
 				}
 				
+				if ( Msg.GetMessageId() == DISARM_ID )
+				{
+					handleDisarm(); 
+				}
 				if ( Msg.GetMessageId() == HALT_SECURITY_ID )
 				{
 					handleExitMessage();
 				}
-				
+				if(ArmState)
+				{
+					if ( Msg.GetMessageId() == MOTION_SENSE_MSG_ID )
+					{
+						handleMotionSensorMessage(Msg); 
+					}
+					
+					if ( Msg.GetMessageId() == WINDOW_BREAK_MSG_ID )
+					{
+						handleWindowBreakMessage(Msg);
+					}
+					
+					if ( Msg.GetMessageId() == DOOR_BREAK_MSG_ID )
+					{
+						handleDoorBreakMessage(Msg);
+					}
+				}
 			} 
 
 			try
 			{
-				
-				if(WindowBreakSensorState){
-					if(CoinToss()){
-				
-					sendMessageToMessageManager(MOTION_DETECTED,MOTION_SENSOR_MSG_ID);
-				}
-					else{
-						sendMessageToMessageManager(OK,MOTION_SENSOR_MSG_ID);
-					}
-				}
+				Thread.sleep( Delay );
 			} 
 
 			catch( Exception e )
 			{
 				System.out.println( "Sleep error:: " + e );
-
 			} 
+
 		}
 	}
 
@@ -127,39 +147,69 @@ public class MotionSensor {
 		} 
 
 		messageWindow.WriteMessage( "\n\nSimulation Stopped. \n");
-
+		
 	}
 
-	private static void handleMotionSensorControllerMessage(Message Msg) {
-		
-		
-		if (Msg.GetMessage().equalsIgnoreCase(MOTION_SENSOR_ON)) // window break Sensor on
+	private static void handleMotionSensorMessage(Message Msg) {
+		if(MOTION_DETECTED.equals(Msg.GetMessage()))
 		{
-			messageWindow.WriteMessage("Motion Sensor on" );
-			WindowBreakSensorState = true;
+			messageWindow.WriteMessage(Msg.GetMessage());
+			sendMessageToMessageManager(SOUND_MOTION_ALARM,MOTION_ALARM_ID);
+		}
+		else{
+				messageWindow.WriteMessage(Msg.GetMessage());
+				sendMessageToMessageManager(STOP_MOTION_ALARM,MOTION_ALARM_ID);
 			
-		} 
-		
-		if (Msg.GetMessage().equalsIgnoreCase(MOTION_SENSOR_OFF)) // window break Sensor off
-		{
-			messageWindow.WriteMessage("Motion Sensor off" );
-			WindowBreakSensorState = false;
 		}
 	}
+
+	private static void handleDoorBreakMessage(Message Msg) {
+		if(DOOR_BREAK_DETECTED.equals(Msg.GetMessage()))
+		{
+			messageWindow.WriteMessage(Msg.GetMessage());
+			sendMessageToMessageManager(SOUND_DOOR_ALARM,DOOR_ALARM_ID);
+		}
+		else{
+				messageWindow.WriteMessage(Msg.GetMessage());
+				sendMessageToMessageManager(STOP_DOOR_ALARM,DOOR_ALARM_ID);
+			
+		}
+	}
+
+	private static void handleWindowBreakMessage(Message Msg) {
+			if(WINDOW_BREAK_DETECTED.equals(Msg.GetMessage()))
+			{
+				messageWindow.WriteMessage(Msg.GetMessage());
+				sendMessageToMessageManager(SOUND_WINDOW_ALARM,WINDOW_ALARM_ID);
+			}
+			else{
+					messageWindow.WriteMessage(Msg.GetMessage());
+					sendMessageToMessageManager(STOP_WINDOW_ALARM,WINDOW_ALARM_ID);
+				
+			}
+	}
+
+	private static void handleArm() {
+			ArmState = true;
+			messageWindow.WriteMessage("Received arm message. Arming." );
+	}
+	
+	private static void handleDisarm() {
+		ArmState = false;
+		messageWindow.WriteMessage("Received disarm message. Disarming." );		
+}
 
 	private static void initializeDisplays() {
 		
 		System.out.println("Registered with the message manager." );
 		
-		// Now we create the window break Sensor status and message panel
+		// Now we create the motionDetector, windowBreakDetector and doorBreakDetector status and message panel
 
-		float WinPosX = 0.10f; 	//This is the X position of the message window in term of a percentage of the screen height
-		float WinPosY = 0.90f;	//This is the Y position of the message window in terms of a percentage of the screen height
+		float WinPosX = 0.0f; 	//This is the X position of the message window in term of a percentage of the screen height
+		float WinPosY = 0.80f;	//This is the Y position of the message window in terms of a percentage of the screen height
 
-		messageWindow = new MessageWindow("Motion Sensor", WinPosX, WinPosY);
+		messageWindow = new MessageWindow("Security Monitor Status Console", WinPosX, WinPosY);
 
-		// Now we put the indicators directly under the panel
-		
 		messageWindow.WriteMessage("Registered with the message manager." );
 
 		try
@@ -171,6 +221,7 @@ public class MotionSensor {
 		catch (Exception e)
 		{
 			System.out.println("Error:: " + e);
+
 		} 
 	}
 
@@ -230,25 +281,16 @@ public class MotionSensor {
 		
 		try
 		{
-			messageWindow.WriteMessage(msg);
 			messageManager.SendMessage( message ); // Here we send the message to the message manager.
 
 		}
 
 		catch (Exception e)
 		{
-			System.out.println("Error Sending Message:: " + e);
+			System.out.println("Error Confirming Message:: " + e);
 
 		} 
 
 	} 
-	
-	static private boolean CoinToss()
-	{
-		Random r = new Random();
-
-		return(r.nextBoolean());
-
-	}
 
 }

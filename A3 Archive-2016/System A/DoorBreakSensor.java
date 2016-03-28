@@ -27,8 +27,8 @@ public class DoorBreakSensor {
 	private static final String DOOR_BREAK_SENSOR_OFF = "DB0";
 	private static final int HALT_SECURITY_ID = 199;
 	private static final int DOOR_BREAK_MSG_ID = 121;
-
-
+	private static final String DOOR_BREAK_DETECTED = "DOOR BREAK DETECTED";
+	private static final String OK = "OK";
 
 	
 	public static void main(String args[])
@@ -92,8 +92,15 @@ public class DoorBreakSensor {
 			try
 			{
 				Thread.sleep( Delay );
-				if(DoorBreakSensorState && CoinToss()){
-					sendMessageToMessageManager("DOOR BREAK IN",DOOR_BREAK_MSG_ID);
+				
+				if(DoorBreakSensorState){
+					if(CoinToss()){
+				
+					sendMessageToMessageManager(DOOR_BREAK_DETECTED,DOOR_BREAK_MSG_ID);
+				}
+					else{
+						sendMessageToMessageManager(OK,DOOR_BREAK_MSG_ID);
+					}
 				}
 			} 
 
