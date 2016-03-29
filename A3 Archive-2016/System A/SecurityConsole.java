@@ -17,6 +17,11 @@ public class SecurityConsole {
 	private static final int ARM_ID = 100;
 	private static final int DISARM_ID = 101;
 	private static final int HALT_SECURITY_ID = 199;
+	private static final int MOTION_SIMULATE_ID = 160;
+	private static final int DOOR_SIMULATE_ID = 161;
+	private static final int WINDOW_SIMULATE_ID = 162;
+	private static final String SIMULATE_ON = "On";
+	private static final String SIMULATE_OFF = "Off";
 	
 	public static void main(String args[])
 	{
@@ -59,8 +64,24 @@ public class SecurityConsole {
 			{
 				disarmSecuritySystem();
 			} 
-			////////////option 3: Exit security system ////////////
+			////////////option 3: Simulate Door Break ////////////
+			
 			else if ( Option.equals( "3" ) )
+			{
+				simulateDoorBreak();
+			} 
+			////////////option 4: Simulate Window Break ////////////
+			else if ( Option.equals( "4" ) )
+			{
+				simulateWindowBreak();
+			}
+			////////////option 5: Simulate Motion detected ////////////
+			else if ( Option.equals( "5" ) )
+			{
+				simulateMotion();
+			}
+			////////////option 6: Exit security system ////////////
+			else if ( Option.equals( "6" ) )
 			{
 				haltSecuritySystem();
 			} 
@@ -81,7 +102,10 @@ public class SecurityConsole {
 		System.out.println( "Select an Option: \n" );
 		System.out.println( "1: Arm security system" );
 		System.out.println( "2: Disarm security system" );
-		System.out.println( "3: Exit security system" );
+		System.out.println( "3: Simulate Door Break" );
+		System.out.println( "4: Simulate Window Break" );
+		System.out.println( "5: Simulate Motion detected" );
+		System.out.println( "6: Exit security system" );
 		System.out.print( "\n>>>> " );
 	}
 
@@ -97,6 +121,68 @@ public class SecurityConsole {
 		catch (Exception e)
 		{
 			System.out.println("Error unregistering: " + e);
+
+		} 
+	}
+	
+	private static void simulateDoorBreak() {
+		try
+		{
+			sendMessageToMessageManager("On", DOOR_SIMULATE_ID );
+			while(true){
+			System.out.println( "Stop simulation:(y/n) \n" );
+			if(UserInput.KeyboardReadString().equalsIgnoreCase("y")){
+				sendMessageToMessageManager("Off", DOOR_SIMULATE_ID );
+				break;
+			}
+			}
+		} 
+
+		catch (Exception e)
+		{
+			System.out.println("Error sending message: " + e);
+
+		} 
+	}
+	
+	private static void simulateWindowBreak() {
+		try
+		{
+			
+			sendMessageToMessageManager(SIMULATE_ON, WINDOW_SIMULATE_ID );
+			while(true){
+			System.out.println( "Stop simulation:(y/n) \n" );
+			if(UserInput.KeyboardReadString().equalsIgnoreCase("y")){
+				
+				sendMessageToMessageManager(SIMULATE_OFF, WINDOW_SIMULATE_ID );
+				break;
+			}
+			}
+		} 
+
+		catch (Exception e)
+		{
+			System.out.println("Error sending message: " + e);
+
+		} 
+	}
+	
+	private static void simulateMotion() {
+		try
+		{
+			sendMessageToMessageManager("On", MOTION_SIMULATE_ID );
+			while(true){
+			System.out.println( "Stop simulation:(y/n) \n" );
+			if(UserInput.KeyboardReadString().equalsIgnoreCase("y")){
+				sendMessageToMessageManager("Off", MOTION_SIMULATE_ID );
+				break;
+			}
+			}
+		} 
+
+		catch (Exception e)
+		{
+			System.out.println("Error sending message: " + e);
 
 		} 
 	}

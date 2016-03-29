@@ -1,5 +1,3 @@
-import java.util.Random;
-
 import InstrumentationPackage.MessageWindow;
 import MessagePackage.Message;
 import MessagePackage.MessageManagerInterface;
@@ -13,7 +11,7 @@ public class MotionSensor {
 	private static MessageWindow messageWindow;
 	private static MessageQueue queue;				// Message Queue
 	private static Message Msg;					// Message object
-	private static boolean WindowBreakSensorState = false;	// Door Break Sensor State : false == off, true == on
+	private static boolean MotionSensorState = false;	// Door Break Sensor State : false == off, true == on
 	private static int	Delay = 2500;					// The loop delay (2.5 seconds)
 	private static boolean Done = false;				// Loop termination flag
 	
@@ -28,6 +26,8 @@ public class MotionSensor {
 	private static final int MOTION_SENSOR_MSG_ID = 120;
 	private static final String MOTION_DETECTED = "MOTION DETECTED";
 	private static final String OK = "OK";
+	private static final int MOTION_SIMULATE_ID = 160;
+	private static final String SIMULATE_ON = "On";
 
 	
 	public static void main(String args[])
@@ -86,21 +86,20 @@ public class MotionSensor {
 				{
 					handleExitMessage();
 				}
-				
-			} 
-
-			try
-			{
-				
-				if(WindowBreakSensorState){
-					if(CoinToss()){
-				
-					sendMessageToMessageManager(MOTION_DETECTED,MOTION_SENSOR_MSG_ID);
-				}
+				if ( MotionSensorState && Msg.GetMessageId() == MOTION_SIMULATE_ID )
+				{
+					if(SIMULATE_ON.equals(Msg.GetMessage())){
+						sendMessageToMessageManager(MOTION_DETECTED,MOTION_SENSOR_MSG_ID);
+					}
 					else{
 						sendMessageToMessageManager(OK,MOTION_SENSOR_MSG_ID);
 					}
 				}
+			} 
+
+			try
+			{
+				Thread.sleep( Delay );
 			} 
 
 			catch( Exception e )
@@ -136,14 +135,14 @@ public class MotionSensor {
 		if (Msg.GetMessage().equalsIgnoreCase(MOTION_SENSOR_ON)) // window break Sensor on
 		{
 			messageWindow.WriteMessage("Motion Sensor on" );
-			WindowBreakSensorState = true;
+			MotionSensorState = true;
 			
 		} 
 		
 		if (Msg.GetMessage().equalsIgnoreCase(MOTION_SENSOR_OFF)) // window break Sensor off
 		{
 			messageWindow.WriteMessage("Motion Sensor off" );
-			WindowBreakSensorState = false;
+			MotionSensorState = false;
 		}
 	}
 
@@ -242,13 +241,5 @@ public class MotionSensor {
 		} 
 
 	} 
-	
-	static private boolean CoinToss()
-	{
-		Random r = new Random();
-
-		return(r.nextBoolean());
-
-	}
 
 }

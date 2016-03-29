@@ -1,5 +1,3 @@
-import java.util.Random;
-
 import InstrumentationPackage.MessageWindow;
 import MessagePackage.Message;
 import MessagePackage.MessageManagerInterface;
@@ -28,6 +26,8 @@ public class WindowBreakSensor {
 	private static final int WINDOW_BREAK_MSG_ID = 122;
 	private static final String WINDOW_BREAK_DETECTED = "WINDOW BREAK DETECTED";
 	private static final String OK = "OK";
+	private static final int WINDOW_SIMULATE_ID = 162;
+	private static final String SIMULATE_ON = "On";
 
 
 	
@@ -87,22 +87,21 @@ public class WindowBreakSensor {
 				{
 					handleExitMessage();
 				}
+				if ( WindowBreakSensorState && Msg.GetMessageId() == WINDOW_SIMULATE_ID )
+				{
+					if(SIMULATE_ON.equals(Msg.GetMessage())){
+						sendMessageToMessageManager(WINDOW_BREAK_DETECTED,WINDOW_BREAK_MSG_ID);
+					}
+					else{
+						sendMessageToMessageManager(OK,WINDOW_BREAK_MSG_ID);
+					}
+				}
 				
 			} 
 
 			try
 			{
 				Thread.sleep( Delay );
-				if(WindowBreakSensorState){
-					if(CoinToss()){
-				
-					sendMessageToMessageManager(WINDOW_BREAK_DETECTED,WINDOW_BREAK_MSG_ID);
-				}
-					else{
-						sendMessageToMessageManager(OK,WINDOW_BREAK_MSG_ID);
-					}
-				}
-			
 			} 
 
 			catch( Exception e )
@@ -248,14 +247,4 @@ public class WindowBreakSensor {
 		} 
 
 	} 
-	
-	static private boolean CoinToss()
-	{
-		Random r = new Random();
-
-		return(r.nextBoolean());
-
-	}
-
-
 }

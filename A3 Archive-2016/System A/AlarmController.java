@@ -138,7 +138,6 @@ public class AlarmController {
 					da.SetLampColorAndMessage("Door Alarm Off", 0);
 					ma.SetLampColorAndMessage("Motion Alarm Off", 0);
 				}
-
 			} 
 
 			try

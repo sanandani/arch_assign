@@ -1,5 +1,3 @@
-import java.util.Random;
-
 import InstrumentationPackage.MessageWindow;
 import MessagePackage.Message;
 import MessagePackage.MessageManagerInterface;
@@ -29,6 +27,9 @@ public class DoorBreakSensor {
 	private static final int DOOR_BREAK_MSG_ID = 121;
 	private static final String DOOR_BREAK_DETECTED = "DOOR BREAK DETECTED";
 	private static final String OK = "OK";
+	private static final int DOOR_SIMULATE_ID = 161;
+	private static final String SIMULATE_ON = "On";
+	
 
 	
 	public static void main(String args[])
@@ -86,22 +87,21 @@ public class DoorBreakSensor {
 				{
 					handleExitMessage();
 				}
+				if ( DoorBreakSensorState && Msg.GetMessageId() == DOOR_SIMULATE_ID )
+				{
+					if(SIMULATE_ON.equals(Msg.GetMessage())){
+						sendMessageToMessageManager(DOOR_BREAK_DETECTED,DOOR_BREAK_MSG_ID);
+					}
+					else{
+						sendMessageToMessageManager(OK,DOOR_BREAK_MSG_ID);
+					}
+				}
 				
 			} 
 
 			try
 			{
 				Thread.sleep( Delay );
-				
-				if(DoorBreakSensorState){
-					if(CoinToss()){
-				
-					sendMessageToMessageManager(DOOR_BREAK_DETECTED,DOOR_BREAK_MSG_ID);
-				}
-					else{
-						sendMessageToMessageManager(OK,DOOR_BREAK_MSG_ID);
-					}
-				}
 			} 
 
 			catch( Exception e )
@@ -243,13 +243,4 @@ public class DoorBreakSensor {
 		} 
 
 	} 
-	
-	static private boolean CoinToss()
-	{
-		Random r = new Random();
-
-		return(r.nextBoolean());
-
-	}
-
 }
