@@ -95,9 +95,9 @@ public class SecurityConsole {
 		System.out.println( "\n\n\n\n" );
 		System.out.println( "Security Console: \n" );
 		if (args.length != 0)
-			System.out.println( "Using message manger at: " + args[0] + "\n" );
+			System.out.println( "Using message manager at: " + args[0] + "\n" );
 		else
-			System.out.println( "Using local message manger \n" );
+			System.out.println( "Using local message manager \n" );
 
 		System.out.println( "Select an Option: \n" );
 		System.out.println( "1: Arm security system" );
