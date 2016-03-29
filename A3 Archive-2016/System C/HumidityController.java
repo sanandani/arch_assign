@@ -145,7 +145,7 @@ class HumidityController
 				{
 					eq = em.GetMessageQueue();
 					//Registering the device so that it is  tracked by the Service maintenance control
-					registerDevice(em,"4","Humidity controller","This is a humidity controller which controls humidifier and dehumidifier which increases the Temp of the room");
+					sendHeartBeat(em,"4","Humidity controller","This is a humidity controller which controls humidifier and dehumidifier which increases the Temp of the room");
 				} // try
 
 				catch( Exception e )
@@ -227,7 +227,6 @@ class HumidityController
 						try
 						{
 						    // DeRegistering the device so that it is not tracked by the Service maintenance control
-						    deRegisterDevice(em,"4");
 						    em.UnRegister();
 
 				    	} // try
@@ -340,7 +339,22 @@ class HumidityController
 
 	} // PostMessage
 	
-	static private void registerDevice(MessageManagerInterface ei, String ID,String DeviceName, String DeviceDescription){
+	/***************************************************************************
+	    * CONCRETE METHOD:: sendHeartBeat
+	    * Purpose: This method posts the specified message to the specified message
+	    * manager. This method assumes an message ID of 0 which indicates a heartbeat message
+	    *
+	    * Arguments: MessageManagerInterface ei - this is the messagemanger interface
+	    *            where the message will be posted.
+	    *
+	    *            string m - this is the received command.
+	    *
+	    * Returns: none
+	    *
+	    * Exceptions: None
+	    *
+	    ***************************************************************************/
+	static private void sendHeartBeat(MessageManagerInterface ei, String ID,String DeviceName, String DeviceDescription){
 	    // Here we create the message.
 
         Message msg = new Message( (int) 0, ID + ":" + DeviceName + ":" + DeviceDescription);
@@ -360,24 +374,5 @@ class HumidityController
         } // catch
 	}
 	
-	static private void deRegisterDevice(MessageManagerInterface ei, String ID){
-        // Here we create the message.
-
-        Message msg = new Message( (int) -99, ID);
-
-        // Here we send the message to the message manager.
-
-        try
-        {
-            ei.SendMessage( msg );
-
-        } // try
-
-        catch (Exception e)
-        {
-            System.out.println("Error Deregistering the device :: " + e);
-
-        } // catch
-    }
-
+	
 } // HumidityControllers

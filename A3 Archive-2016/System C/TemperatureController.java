@@ -144,7 +144,7 @@ class TemperatureController
 				{
 					eq = em.GetMessageQueue();
 					//Registering the device so that it is  tracked by the Service maintenance control
-					registerDevice(em,"5","Temperature controller","This is a temperature controller which controls heather and chiller which increases the Temp of the room");
+					sendHeartBeat(em,"5","Temperature controller","This is a temperature controller which controls heather and chiller which increases the Temp of the room");
 				} // try
 
 				catch( Exception e )
@@ -226,8 +226,7 @@ class TemperatureController
 						try
 						{
 						    // DeRegistering the device so that it is not tracked by the Service maintenance control
-                            deRegisterDevice(em,"5");
-						    em.UnRegister();
+                            em.UnRegister();
 
 				    	} // try
 
@@ -339,7 +338,22 @@ class TemperatureController
 
 	} // PostMessage
 	
-	static private void registerDevice(MessageManagerInterface ei, String ID,String DeviceName, String DeviceDescription){
+	/***************************************************************************
+     * CONCRETE METHOD:: sendHeartBeat
+     * Purpose: This method posts the specified message to the specified message
+     * manager. This method assumes an message ID of 0 which indicates a heartbeat message
+     *
+     * Arguments: MessageManagerInterface ei - this is the messagemanger interface
+     *            where the message will be posted.
+     *
+     *            string m - this is the received command.
+     *
+     * Returns: none
+     *
+     * Exceptions: None
+     *
+     ***************************************************************************/
+	static private void sendHeartBeat(MessageManagerInterface ei, String ID,String DeviceName, String DeviceDescription){
         // Here we create the message.
 
         Message msg = new Message( (int) 0, ID+":"+DeviceName+":"+DeviceDescription);
@@ -358,25 +372,4 @@ class TemperatureController
 
         } // catch
     }
-	
-	static private void deRegisterDevice(MessageManagerInterface ei, String ID){
-        // Here we create the message.
-
-        Message msg = new Message( (int) -99, ID);
-
-        // Here we send the message to the message manager.
-
-        try
-        {
-            ei.SendMessage( msg );
-
-        } // try
-
-        catch (Exception e)
-        {
-            System.out.println("Error Deregistering the device Message:: " + e);
-
-        } // catch
-    }
-
 } // TemperatureController

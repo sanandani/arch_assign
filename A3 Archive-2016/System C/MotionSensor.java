@@ -63,7 +63,7 @@ public class MotionSensor {
 			try
 			{
 				queue = messageManager.GetMessageQueue(); //get messages from message manager
-				sendHeartBeat(em,"174","Motion Sensor","This is a motion sensor.");
+				sendHeartBeat(messageManager,"174","Motion Sensor","This is a motion sensor.");
 
 			}
 
@@ -242,5 +242,40 @@ public class MotionSensor {
 		}
 
 	}
+
+	/***************************************************************************
+	    * CONCRETE METHOD:: sendHeartBeat
+	    * Purpose: This method posts the specified message to the specified message
+	    * manager. This method assumes an message ID of 0 which indicates a heartbeat message
+	    *
+	    * Arguments: MessageManagerInterface ei - this is the messagemanger interface
+	    *            where the message will be posted.
+	    *
+	    *            string m - this is the received command.
+	    *
+	    * Returns: none
+	    *
+	    * Exceptions: None
+	    *
+	    ***************************************************************************/
+	static private void sendHeartBeat(MessageManagerInterface ei, String ID,String DeviceName, String DeviceDescription){
+           // Here we create the message.
+
+        Message msg = new Message( (int) 0, ID + ":" + DeviceName + ":" + DeviceDescription);
+
+        // Here we send the message to the message manager.
+
+        try
+        {
+            ei.SendMessage( msg );
+
+        } // try
+
+        catch (Exception e)
+        {
+            System.out.println("Error Registering the device :: " + e);
+
+        } // catch
+    }
 
 }

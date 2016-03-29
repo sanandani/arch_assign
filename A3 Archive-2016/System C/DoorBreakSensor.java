@@ -65,7 +65,7 @@ public class DoorBreakSensor {
 			try
 			{
 				queue = messageManager.GetMessageQueue(); //get messages from message manager
-				sendHeartBeat(em,"172","Door Break Sensor","This is a Door Break Sensor");
+				sendHeartBeat(messageManager,"172","Door Break Sensor","This is a Door Break Sensor");
 
 			}
 
@@ -245,6 +245,21 @@ public class DoorBreakSensor {
 		}
 
 	}
+	/***************************************************************************
+	    * CONCRETE METHOD:: sendHeartBeat
+	    * Purpose: This method posts the specified message to the specified message
+	    * manager. This method assumes an message ID of 0 which indicates a heartbeat message
+	    *
+	    * Arguments: MessageManagerInterface ei - this is the messagemanger interface
+	    *            where the message will be posted.
+	    *
+	    *            string m - this is the received command.
+	    *
+	    * Returns: none
+	    *
+	    * Exceptions: None
+	    *
+	    ***************************************************************************/
 	static private void sendHeartBeat(MessageManagerInterface ei, String ID,String DeviceName, String DeviceDescription){
            // Here we create the message.
 

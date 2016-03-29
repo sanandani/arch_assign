@@ -73,7 +73,7 @@ public class SecurityMonitor {
 			try
 			{
 				queue = messageManager.GetMessageQueue(); //get messages from message manager
-				sendHeartBeat(em,"171","Security Monitor","This is a the security controller which monitors the security messages");
+				sendHeartBeat(messageManager,"171","Security Monitor","This is a the security controller which monitors the security messages");
 
 			}
 
@@ -294,6 +294,21 @@ public class SecurityMonitor {
 		}
 
 	}
+	/***************************************************************************
+	    * CONCRETE METHOD:: sendHeartBeat
+	    * Purpose: This method posts the specified message to the specified message
+	    * manager. This method assumes an message ID of 0 which indicates a heartbeat message
+	    *
+	    * Arguments: MessageManagerInterface ei - this is the messagemanger interface
+	    *            where the message will be posted.
+	    *
+	    *            string m - this is the received command.
+	    *
+	    * Returns: none
+	    *
+	    * Exceptions: None
+	    *
+	    ***************************************************************************/
 	static private void sendHeartBeat(MessageManagerInterface ei, String ID,String DeviceName, String DeviceDescription){
            // Here we create the message.
 
