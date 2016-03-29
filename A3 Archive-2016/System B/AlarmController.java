@@ -16,6 +16,9 @@ public class AlarmController {
 	private static boolean MotionAlarmState = false;	// Motion Sensor State : false == off, true == on
 	private static boolean WindowBreakAlarmState = false;	// Window Break Sensor State : false == off, true == on
 	private static boolean DoorBreakAlarmState = false;	// Door Break Sensor State : false == off, true == on
+	private static boolean SoundMotionAlarm = false;	// Motion Sensor State : false == off, true == on
+	private static boolean SoundWindowBreakAlarm = false;	// Window Break Sensor State : false == off, true == on
+	private static boolean SoundDoorBreakAlarm = false;	// Door Break Sensor State : false == off, true == on
 	private static int	Delay = 2500;					// The loop delay (2.5 seconds)
 	private static boolean Done = false;				// Loop termination flag
 	private static boolean ArmState = false;				// Loop termination flag
@@ -49,9 +52,9 @@ public class AlarmController {
 	private static final int DOOR_ALARM_ID = 151;
 	private static final int WINDOW_ALARM_ID = 152;
 	
-	private static final String SOUND_WINDOW_ALARM = "Sound Window Alarm";
-	private static final String SOUND_DOOR_ALARM = "Sound Door Alarm";
-	private static final String SOUND_MOTION_ALARM = "Sound Motion Alarm";
+	private static final String SOUND_WINDOW_ALARM = "SOUND WINDOW ALARM";
+	private static final String SOUND_DOOR_ALARM = "SOUND DOOR ALARM";
+	private static final String SOUND_MOTION_ALARM = "SOUND MOTION ALARM";
 	private static final String MOTION_DETECTED = "MOTION DETECTED";
 	private static final String DOOR_BREAK_DETECTED = "DOOR BREAK DETECTED";
 	private static final String WINDOW_BREAK_DETECTED = "WINDOW BREAK DETECTED";
@@ -134,7 +137,9 @@ public class AlarmController {
 				}
 				}
 			} 
-
+			if(ArmState){
+				handleLampColors();
+			}
 			try
 			{
 				Thread.sleep( Delay );
@@ -146,6 +151,43 @@ public class AlarmController {
 			} 
 
 		}
+	}
+	private static void handleLampColors(){
+		if (SoundMotionAlarm)
+		{
+			// Set to red, motion detected
+			ma.SetLampColorAndMessage(MOTION_DETECTED, 3);
+		} 
+		else{
+			ma.SetLampColorAndMessage("No Motion", 1);
+		}
+
+		if (SoundDoorBreakAlarm)
+		{
+			// Set to red, door break detected
+
+			da.SetLampColorAndMessage(DOOR_BREAK_DETECTED, 3);
+
+		} else {
+
+			// Set to green, alarm on
+
+			da.SetLampColorAndMessage("No Door Break", 1);
+
+		} 
+		if (SoundWindowBreakAlarm)
+		{
+			// Set to red, window break detected
+
+			wa.SetLampColorAndMessage(WINDOW_BREAK_DETECTED, 3);
+
+		} else {
+
+			// Set to green, alarm on
+
+			wa.SetLampColorAndMessage("No Door Break", 1);
+
+		} 
 	}
 
 	private static void handleExitMessage() {
@@ -171,29 +213,29 @@ public class AlarmController {
 	private static void handleMotionSensorMessage(Message Msg) {
 		if(SOUND_MOTION_ALARM.equals(Msg.GetMessage()))
 		{
+			SoundMotionAlarm = true;
 			messageWindow.WriteMessage(Msg.GetMessage());
-			wa.SetLampColorAndMessage(MOTION_DETECTED, 3);
 			sendMessageToMessageManager(Msg.GetMessage(),MOTION_ALARM_ACK_ID);
 		}
 		else{
+				SoundMotionAlarm = false;
 				messageWindow.WriteMessage(Msg.GetMessage());
-				wa.SetLampColorAndMessage(SOUND_MOTION_ALARM, 1);
 				sendMessageToMessageManager(Msg.GetMessage(),MOTION_ALARM_ACK_ID);
-			
 		}
 	}
 
 	private static void handleDoorBreakMessage(Message Msg) {
 		if(SOUND_DOOR_ALARM.equals(Msg.GetMessage()))
-		{
+		{	SoundDoorBreakAlarm = true;
 			messageWindow.WriteMessage(Msg.GetMessage());
-			wa.SetLampColorAndMessage(DOOR_BREAK_DETECTED, 3);
 			sendMessageToMessageManager(Msg.GetMessage(),DOOR_BREAK_ACK_ID);
+			
 		}
 		else{
+				SoundDoorBreakAlarm = false;
 				messageWindow.WriteMessage(Msg.GetMessage());
-				wa.SetLampColorAndMessage(SOUND_DOOR_ALARM, 1);
 				sendMessageToMessageManager(Msg.GetMessage(),DOOR_BREAK_ACK_ID);
+				
 			
 		}
 	}
@@ -201,15 +243,15 @@ public class AlarmController {
 	private static void handleWindowBreakMessage(Message Msg) {
 		if(SOUND_WINDOW_ALARM.equals(Msg.GetMessage()))
 		{
+			SoundWindowBreakAlarm = true;
 			messageWindow.WriteMessage(Msg.GetMessage());
-			wa.SetLampColorAndMessage(WINDOW_BREAK_DETECTED, 3);
 			sendMessageToMessageManager(Msg.GetMessage(),WINDOW_BREAK_ACK_ID);
+			
 		}
 		else{
+				SoundWindowBreakAlarm = false;
 				messageWindow.WriteMessage(Msg.GetMessage());
-				wa.SetLampColorAndMessage(SOUND_WINDOW_ALARM, 1);
 				sendMessageToMessageManager(Msg.GetMessage(),WINDOW_BREAK_ACK_ID);
-			
 		}
 	}
 
@@ -276,9 +318,9 @@ public class AlarmController {
 		messageWindow = new MessageWindow("Alarm Controller Status Console", WinPosX, WinPosY);
 
 		messageWindow.WriteMessage("Registered with the message manager." );
-		da = new Indicator ("Door Alarm UNK", messageWindow.GetX()+ messageWindow.Width(), 0);
-		wa = new Indicator ("Window Alarm UNK", messageWindow.GetX()+ messageWindow.Width(), (int)(messageWindow.Height()/2));
-		ma = new Indicator ("Motion Alarm UNK", messageWindow.GetX()+ messageWindow.Width(), (int)(messageWindow.Height()));
+		da = new Indicator ("Door Alarm UNK", messageWindow.GetX()+ messageWindow.Width(), 0,0);
+		wa = new Indicator ("Window Alarm UNK", messageWindow.GetX()+ messageWindow.Width(), (int)(messageWindow.Height()/2),0);
+		ma = new Indicator ("Motion Alarm UNK", messageWindow.GetX()+ messageWindow.Width(), (int)(messageWindow.Height()),0);
 
 		try
 		{
