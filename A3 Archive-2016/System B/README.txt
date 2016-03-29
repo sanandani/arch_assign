@@ -16,3 +16,9 @@ When shutting down a MessageManager, exit the MessageManager command window and 
 
 
 System B
+1. How to control the system?
+a) After starting up the system, the Fire is simulated randomly in atleast 2.5 seconds.
+b) Once the fire is sensed, user can turn off both Fire Alarm* and Sprinkler (before it starts wihtin 10 seconds) or ignore the Sprinkler action from the Console.
+c) After 10 seconds are passed from the time Fire was sensed, the sprinklers turn ON automatically and the user can anytime turn Off the Fire Alarm* and Sprinkler.
+
+*We assume that the at the times of Fake Fire Alarm, the user would want to turn off the Fire Alarm as well. This also makes it explicit that if the User turns off the fire alarm, it would mean that the Sprinklers should also go off.
