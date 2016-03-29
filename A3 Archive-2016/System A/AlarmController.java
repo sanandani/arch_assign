@@ -133,11 +133,6 @@ public class AlarmController {
 					handleDoorBreakMessage(Msg);
 				}
 				}
-				else{
-					wa.SetLampColorAndMessage("Window Alarm Off", 0);
-					da.SetLampColorAndMessage("Door Alarm Off", 0);
-					ma.SetLampColorAndMessage("Motion Alarm Off", 0);
-				}
 			} 
 
 			try
