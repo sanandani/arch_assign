@@ -54,7 +54,7 @@ public class FireAlarmController {
 		*  Here we start the main simulation loop that 
 		*  will continuously look for control messages
 		***************************************************/
-		messageWindow.WriteMessage("Fire Alarm Controller armed." );
+		messageWindow.WriteMessage("Fire Alarm Controller active." );
 		while ( !Done )
 		{
 			try

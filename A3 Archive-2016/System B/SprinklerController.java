@@ -55,7 +55,7 @@ public class SprinklerController {
 		*  Here we start the main simulation loop that 
 		*  will continuously look for control messages
 		***************************************************/
-		messageWindow.WriteMessage("Sprinkler Controller armed." );
+		messageWindow.WriteMessage("Sprinkler Controller active." );
 		while ( !Done )
 		{
 			try
@@ -159,7 +159,7 @@ public class SprinklerController {
         
 	private static void handleSprinklerStart() {
 			
-			messageWindow.WriteMessage("Received sprinkler stop message. Stopping sprinkler.");
+			messageWindow.WriteMessage("Received sprinkler start message. Starting sprinkler.");
 			SprinklerState = true;
 
                         sp.SetLampColorAndMessage("Sprinkler On", 1);

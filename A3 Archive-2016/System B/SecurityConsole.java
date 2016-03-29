@@ -113,7 +113,7 @@ public class SecurityConsole {
 		System.out.println( "4: Simulate Window Break" );
 		System.out.println( "5: Simulate Motion detected" );
 		System.out.println( "6: Exit security system" );
-		System.out.println( "7: Turn off Alarm");
+		System.out.println( "7: Turn off Fire Alarm");
 		System.out.print( "\n>>>> " );
 	}
 
@@ -122,8 +122,6 @@ public class SecurityConsole {
 		{
 			sendMessageToMessageManager("F0", FIRE_ALARM_MSG_ID ); // turn off fire alarm
                         sendMessageToMessageManager("S0", FIRE_ALARM_MSG_ID ); // turn off sprinkler
-//                        sendMessageToMessageManager("F0", FIRE_ALARM_ACK_ID ); // turn off fire alarm
-//                        sendMessageToMessageManager("S0", FIRE_ALARM_ACK_ID ); // turn off sprinkler
 		} 
 
 		catch (Exception e)
