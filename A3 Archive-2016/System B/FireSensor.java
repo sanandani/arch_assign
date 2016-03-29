@@ -108,7 +108,7 @@ public class FireSensor {
                                     FireAlarmState = true;
 				}
                                 timeWait = new Date();
-                                if(timeStart!=null) {
+                                if(timeStart!=null && !SprinklerState) {
                                     if(FireAlarmState && ((timeWait.getTime() - timeStart.getTime() )/1000 % 60) > 10 && !SprinklerState) {
 //                                        sendMessageToMessageManager("S1", FIRE_ALARM_ACK_ID ); // turn off sprinkler
                                         sendMessageToMessageManager("S1", FIRE_ALARM_MSG_ID ); // turn on fire alarm
@@ -130,26 +130,26 @@ public class FireSensor {
 		
 		if (Msg.GetMessage().equalsIgnoreCase(FIRE_ALARM_ON)) // doorBreakSensor on
 		{
-			messageWindow.WriteMessage("Fire Alarm on" );
+			messageWindow.WriteMessage("Fire Sensed - Fire Alarm on" );
 //			FireAlarmState = true;
 			
 		} 
 		
 		if (Msg.GetMessage().equalsIgnoreCase(FIRE_ALARM_OFF)) // doorBreakSensor off
 		{
-			messageWindow.WriteMessage("Fire Alarm off" );
+			messageWindow.WriteMessage("No Fire - Fire Alarm off" );
 			FireAlarmState = false;
 		}
                 
                 if (Msg.GetMessage().equalsIgnoreCase(SPRINKLER_ON)) // doorBreakSensor on
 		{
-			messageWindow.WriteMessage("Sprinkler on" );
+			messageWindow.WriteMessage("Fire Sensed - Sprinkler on" );
 //			SprinklerState = true;
 		} 
 		
 		if (Msg.GetMessage().equalsIgnoreCase(SPRINKLER_OFF)) // doorBreakSensor off
 		{
-			messageWindow.WriteMessage("Sprinkler off" );
+			messageWindow.WriteMessage("No Fire - Sprinkler off" );
                         timeStart = null;
                         SprinklerState = false;
 		}

@@ -87,10 +87,15 @@ public class SecurityConsole {
 			{
 				haltSecuritySystem();
 			} 
-                        ////////////option 7: Turn off alarm ////////////
+                        ////////////option 7: Turn off alarm and sprinkler////////////
 			else if ( Option.equals( "7" ) )
 			{
 				turnOffAlarm();
+			} 
+                        ////////////option 8: Turn on sprinkler ////////////
+			else if ( Option.equals( "8" ) )
+			{
+				turnOnSprinkler();
 			} 
 			else{
 				System.out.println( "Wrong Option" );
@@ -113,11 +118,26 @@ public class SecurityConsole {
 		System.out.println( "4: Simulate Window Break" );
 		System.out.println( "5: Simulate Motion detected" );
 		System.out.println( "6: Exit security system" );
-		System.out.println( "7: Turn off Fire Alarm");
+		System.out.println( "7: Turn off Fire Alarm and Sprinkler");
+                System.out.println( "8: Turn on Sprinkler");
 		System.out.print( "\n>>>> " );
 	}
 
-	private static void turnOffAlarm() {
+        
+	private static void turnOnSprinkler() {
+		try
+		{
+                        sendMessageToMessageManager("S1", FIRE_ALARM_MSG_ID ); // turn on sprinkler
+		} 
+
+		catch (Exception e)
+		{
+			System.out.println("Error unregistering: " + e);
+
+		} 
+	}
+
+        private static void turnOffAlarm() {
 		try
 		{
 			sendMessageToMessageManager("F0", FIRE_ALARM_MSG_ID ); // turn off fire alarm
