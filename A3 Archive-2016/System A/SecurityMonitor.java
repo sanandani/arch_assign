@@ -52,7 +52,7 @@ public class SecurityMonitor {
 		if (messageManager != null)
 		{
 			initializeDisplays();
-			processControllerMessages(); 
+			processMonitorMessages(); 
 
 		} else {
 
@@ -62,12 +62,12 @@ public class SecurityMonitor {
 
 	}
 
-	private static void processControllerMessages() {
+	private static void processMonitorMessages() {
 		/**************************************************
 		*  Here we start the main simulation loop that 
 		*  will continuously look for control messages
 		***************************************************/
-		messageWindow.WriteMessage("Alarm Controller disarmed." );
+		messageWindow.WriteMessage("Security Monitor disarmed." );
 		while ( !Done )
 		{
 			try

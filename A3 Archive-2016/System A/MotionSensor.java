@@ -23,12 +23,11 @@ public class MotionSensor {
 	private static final String MOTION_SENSOR_ON = "M1";
 	private static final String MOTION_SENSOR_OFF = "M0";
 	private static final int HALT_SECURITY_ID = 199;
-	private static final int MOTION_SENSOR_MSG_ID = 120;
 	private static final String MOTION_DETECTED = "MOTION DETECTED";
 	private static final String OK = "OK";
 	private static final int MOTION_SIMULATE_ID = 160;
 	private static final String SIMULATE_ON = "On";
-
+	private static final int MOTION_SENSE_MSG_ID = 120;
 	
 	public static void main(String args[])
 	{
@@ -89,10 +88,10 @@ public class MotionSensor {
 				if ( MotionSensorState && Msg.GetMessageId() == MOTION_SIMULATE_ID )
 				{
 					if(SIMULATE_ON.equals(Msg.GetMessage())){
-						sendMessageToMessageManager(MOTION_DETECTED,MOTION_SENSOR_MSG_ID);
+						sendMessageToMessageManager(MOTION_DETECTED,MOTION_SENSE_MSG_ID);
 					}
 					else{
-						sendMessageToMessageManager(OK,MOTION_SENSOR_MSG_ID);
+						sendMessageToMessageManager(OK,MOTION_SENSE_MSG_ID);
 					}
 				}
 			} 
