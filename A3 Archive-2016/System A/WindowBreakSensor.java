@@ -13,6 +13,7 @@ public class WindowBreakSensor {
 	private static Message Msg;					// Message object
 	private static boolean WindowBreakSensorState = false;	// Door Break Sensor State : false == off, true == on
 	private static int	Delay = 2500;					// The loop delay (2.5 seconds)
+	private static boolean simulate = false;	// Simulate break in  : false == off, true == on
 	private static boolean Done = false;				// Loop termination flag
 	
 	/************
@@ -87,12 +88,23 @@ public class WindowBreakSensor {
 				{
 					handleExitMessage();
 				}
-				if ( WindowBreakSensorState && Msg.GetMessageId() == WINDOW_SIMULATE_ID )
-				{
-					if(SIMULATE_ON.equals(Msg.GetMessage())){
+				
+				if ( WindowBreakSensorState){
+					if(Msg.GetMessageId() == WINDOW_SIMULATE_ID )
+					{
+						if(SIMULATE_ON.equals(Msg.GetMessage())){
+							simulate = true;
+						}
+						else{
+							simulate = false;
+						}
+					}
+					if(simulate)
+					{
 						sendMessageToMessageManager(WINDOW_BREAK_DETECTED,WINDOW_BREAK_MSG_ID);
 					}
-					else{
+					else
+					{
 						sendMessageToMessageManager(OK,WINDOW_BREAK_MSG_ID);
 					}
 				}

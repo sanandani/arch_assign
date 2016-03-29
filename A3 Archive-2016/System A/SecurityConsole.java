@@ -80,8 +80,24 @@ public class SecurityConsole {
 			{
 				simulateMotion();
 			}
-			////////////option 6: Exit security system ////////////
+			////////////option 6: Stop Simulate Door Break ////////////
+			
 			else if ( Option.equals( "6" ) )
+			{
+				stopSimulateDoorBreak();
+			} 
+			////////////option 7:  Stop Simulate Window Break ////////////
+			else if ( Option.equals( "7" ) )
+			{
+				stopSimulateWindowBreak();
+			}
+			////////////option 8: Stop Simulate Motion detected ////////////
+			else if ( Option.equals( "8" ) )
+			{
+				stopSimulateMotion();
+			}
+			////////////option 9: Exit security system ////////////
+			else if ( Option.equals( "9" ) )
 			{
 				haltSecuritySystem();
 			} 
@@ -95,9 +111,9 @@ public class SecurityConsole {
 		System.out.println( "\n\n\n\n" );
 		System.out.println( "Security Console: \n" );
 		if (args.length != 0)
-			System.out.println( "Using message manager at: " + args[0] + "\n" );
+			System.out.println( "Using message manger at: " + args[0] + "\n" );
 		else
-			System.out.println( "Using local message manager \n" );
+			System.out.println( "Using local message manger \n" );
 
 		System.out.println( "Select an Option: \n" );
 		System.out.println( "1: Arm security system" );
@@ -105,7 +121,10 @@ public class SecurityConsole {
 		System.out.println( "3: Simulate Door Break" );
 		System.out.println( "4: Simulate Window Break" );
 		System.out.println( "5: Simulate Motion detected" );
-		System.out.println( "6: Exit security system" );
+		System.out.println( "6: Stop Simulate Door Break" );
+		System.out.println( "7: Stop Simulate Window Break" );
+		System.out.println( "8: Stop Simulate Motion detected" );
+		System.out.println( "9: Exit security system" );
 		System.out.print( "\n>>>> " );
 	}
 
@@ -128,14 +147,7 @@ public class SecurityConsole {
 	private static void simulateDoorBreak() {
 		try
 		{
-			sendMessageToMessageManager("On", DOOR_SIMULATE_ID );
-			while(true){
-			System.out.println( "Stop simulation:(y/n) \n" );
-			if(UserInput.KeyboardReadString().equalsIgnoreCase("y")){
-				sendMessageToMessageManager("Off", DOOR_SIMULATE_ID );
-				break;
-			}
-			}
+			sendMessageToMessageManager(SIMULATE_ON, DOOR_SIMULATE_ID );
 		} 
 
 		catch (Exception e)
@@ -148,16 +160,7 @@ public class SecurityConsole {
 	private static void simulateWindowBreak() {
 		try
 		{
-			
 			sendMessageToMessageManager(SIMULATE_ON, WINDOW_SIMULATE_ID );
-			while(true){
-			System.out.println( "Stop simulation:(y/n) \n" );
-			if(UserInput.KeyboardReadString().equalsIgnoreCase("y")){
-				
-				sendMessageToMessageManager(SIMULATE_OFF, WINDOW_SIMULATE_ID );
-				break;
-			}
-			}
 		} 
 
 		catch (Exception e)
@@ -170,14 +173,20 @@ public class SecurityConsole {
 	private static void simulateMotion() {
 		try
 		{
-			sendMessageToMessageManager("On", MOTION_SIMULATE_ID );
-			while(true){
-			System.out.println( "Stop simulation:(y/n) \n" );
-			if(UserInput.KeyboardReadString().equalsIgnoreCase("y")){
-				sendMessageToMessageManager("Off", MOTION_SIMULATE_ID );
-				break;
-			}
-			}
+			sendMessageToMessageManager(SIMULATE_ON, MOTION_SIMULATE_ID );
+		} 
+
+		catch (Exception e)
+		{
+			System.out.println("Error sending message: " + e);
+
+		} 
+	}
+
+	private static void stopSimulateDoorBreak() {
+		try
+		{
+				sendMessageToMessageManager(SIMULATE_OFF, DOOR_SIMULATE_ID );
 		} 
 
 		catch (Exception e)
@@ -187,6 +196,32 @@ public class SecurityConsole {
 		} 
 	}
 	
+	private static void stopSimulateWindowBreak() {
+		try
+		{
+				sendMessageToMessageManager(SIMULATE_OFF, WINDOW_SIMULATE_ID );
+		} 
+
+		catch (Exception e)
+		{
+			System.out.println("Error sending message: " + e);
+
+		} 
+	}
+	
+	private static void stopSimulateMotion() {
+		try
+		{
+				sendMessageToMessageManager(SIMULATE_OFF, MOTION_SIMULATE_ID );
+		} 
+
+		catch (Exception e)
+		{
+			System.out.println("Error sending message: " + e);
+
+		} 
+	}
+
 	private static void armSecuritySystem() {
 		try
 		{

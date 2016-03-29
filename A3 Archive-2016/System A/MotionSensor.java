@@ -13,6 +13,7 @@ public class MotionSensor {
 	private static Message Msg;					// Message object
 	private static boolean MotionSensorState = false;	// Door Break Sensor State : false == off, true == on
 	private static int	Delay = 2500;					// The loop delay (2.5 seconds)
+	private static boolean simulate = false;	// Simulate break in  : false == off, true == on
 	private static boolean Done = false;				// Loop termination flag
 	
 	/************
@@ -85,12 +86,22 @@ public class MotionSensor {
 				{
 					handleExitMessage();
 				}
-				if ( MotionSensorState && Msg.GetMessageId() == MOTION_SIMULATE_ID )
-				{
-					if(SIMULATE_ON.equals(Msg.GetMessage())){
+				if ( MotionSensorState){
+					if(Msg.GetMessageId() == MOTION_SIMULATE_ID )
+					{
+						if(SIMULATE_ON.equals(Msg.GetMessage())){
+							simulate = true;
+						}
+						else{
+							simulate = false;
+						}
+					}
+					if(simulate)
+					{
 						sendMessageToMessageManager(MOTION_DETECTED,MOTION_SENSE_MSG_ID);
 					}
-					else{
+					else
+					{
 						sendMessageToMessageManager(OK,MOTION_SENSE_MSG_ID);
 					}
 				}

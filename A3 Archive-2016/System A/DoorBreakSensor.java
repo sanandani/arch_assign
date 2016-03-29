@@ -13,6 +13,7 @@ public class DoorBreakSensor {
 	private static MessageQueue queue;				// Message Queue
 	private static Message Msg;					// Message object
 	private static boolean DoorBreakSensorState = false;	// Door Break Sensor State : false == off, true == on
+	private static boolean simulate = false;	// Simulate break in  : false == off, true == on
 	private static int	Delay = 2500;					// The loop delay (2.5 seconds)
 	private static boolean Done = false;				// Loop termination flag
 	
@@ -87,16 +88,27 @@ public class DoorBreakSensor {
 				{
 					handleExitMessage();
 				}
-				if ( DoorBreakSensorState && Msg.GetMessageId() == DOOR_SIMULATE_ID )
-				{
-					if(SIMULATE_ON.equals(Msg.GetMessage())){
+				
+				
+				if ( DoorBreakSensorState){
+					if(Msg.GetMessageId() == DOOR_SIMULATE_ID )
+					{
+						if(SIMULATE_ON.equals(Msg.GetMessage())){
+							simulate = true;
+						}
+						else{
+							simulate = false;
+						}
+					}
+					if(simulate)
+					{
 						sendMessageToMessageManager(DOOR_BREAK_DETECTED,DOOR_BREAK_MSG_ID);
 					}
-					else{
+					else
+					{
 						sendMessageToMessageManager(OK,DOOR_BREAK_MSG_ID);
 					}
 				}
-				
 			} 
 
 			try
