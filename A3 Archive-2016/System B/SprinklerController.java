@@ -1,3 +1,4 @@
+import InstrumentationPackage.Indicator;
 import InstrumentationPackage.MessageWindow;
 import MessagePackage.Message;
 import MessagePackage.MessageManagerInterface;
@@ -14,18 +15,19 @@ public class SprinklerController {
 	private static Message Msg;					// Message object
 	private static int	Delay = 2500;					// The loop delay (2.5 seconds)
 	private static boolean Done = false;				// Loop termination flag
-        private static boolean SprinklerState = false;
+        private static boolean SprinklerState = false;							// fire alarm
+	private static Indicator sp;	
 	
 	/************
 	 * Constants
 	 ************/
-        private static final int FIRE_ALARM_SENSOR_ID = -113;
+//        private static final int FIRE_ALARM_SENSOR_ID = -113;
+//        
+        private static final int FIRE_ALARM_MSG_ID = 9;
+        private static final int FIRE_ALARM_ACK_ID = -9;
         
         private static final String SPRINKLER_ON = "S1";
 	private static final String SPRINKLER_OFF = "S0";
-        
-        private static final int FIRE_ALARM_STOP_ID = 102;
-        private static final int SPRINKLER_MSG_ID = 10;
       
 	
 	public static void main(String args[])
@@ -72,11 +74,73 @@ public class SprinklerController {
 			{
 				Msg = queue.GetMessage();
                                 
-                                if ( Msg.GetMessageId() == FIRE_ALARM_STOP_ID )
+                                if ( Msg.GetMessageId() == FIRE_ALARM_MSG_ID )
 				{
+                                    if (Msg.GetMessage().equalsIgnoreCase("S0")) // humidifier on
+                                    {
 					handleSprinklerStop();
+                                    } // if 
+                                    
+                                    if (Msg.GetMessage().equalsIgnoreCase("S1")) // humidifier on
+                                    {
+					handleSprinklerStart();
+                                    } // if 
 				}
+                                // If the message ID == 99 then this is a signal that the simulation
+                                // is to end. At this point, the loop termination flag is set to
+                                // true and this process unregisters from the message manager.
 
+                                if ( Msg.GetMessageId() == 99 )
+                                {
+                                        Done = true;
+
+                                        try
+                                        {
+                                                messageManager.UnRegister();
+
+                                } // try
+
+                                catch (Exception e)
+                                {
+                                                messageWindow.WriteMessage("Error unregistering: " + e);
+
+                                } // catch
+
+                                messageWindow.WriteMessage( "\n\nSimulation Stopped. \n");
+
+                                        // Get rid of the indicators. The message panel is left for the
+                                        // user to exit so they can see the last message posted.
+
+                                        sp.dispose();
+
+                                } // if
+			} 
+                        
+                        
+
+                        // Update the lamp status
+
+                        if (SprinklerState)
+                        {
+                                // Set to green, humidifier is on
+
+                                sp.SetLampColorAndMessage("SPRINKLER ON", 1);
+
+                        } else {
+
+                                // Set to black, humidifier is off
+                                sp.SetLampColorAndMessage("SPRINKLER OFF", 0);
+
+                        } // if
+                        
+			try
+			{
+				Thread.sleep( Delay );
+			} 
+
+			catch( Exception e )
+			{
+				System.out.println( "Sleep error:: " + e );
 			} 
 
 			try
@@ -92,14 +156,27 @@ public class SprinklerController {
 		}
 	}
 
+        
+	private static void handleSprinklerStart() {
+			
+			messageWindow.WriteMessage("Received sprinkler stop message. Stopping sprinkler.");
+			SprinklerState = true;
+
+                        sp.SetLampColorAndMessage("Sprinkler On", 1);
+			// Send arm message to sensors
+			sendMessageToMessageManager( messageManager, SPRINKLER_ON, FIRE_ALARM_ACK_ID);
+			messageWindow.WriteMessage(" SPRINKLER ON" );
+	}
+        
 	private static void handleSprinklerStop() {
 			
 			messageWindow.WriteMessage("Received sprinkler stop message. Stopping sprinkler.");
 			SprinklerState = false;
 
+                        sp.SetLampColorAndMessage("Sprinkler Off", 0);
 			// Send arm message to sensors
-			sendMessageToMessageManager( messageManager, SPRINKLER_OFF, FIRE_ALARM_SENSOR_ID );
-			messageWindow.WriteMessage(" SPRINKLER TURNED OFF" );
+			sendMessageToMessageManager( messageManager, SPRINKLER_OFF, FIRE_ALARM_ACK_ID );
+			messageWindow.WriteMessage(" SPRINKLER OFF" );
 	}
         
 	private static void initializeDisplays() {
@@ -115,6 +192,7 @@ public class SprinklerController {
 
 		messageWindow.WriteMessage("Registered with the message manager." );
 
+		sp = new Indicator ("Sprinkler UNK", messageWindow.GetX()+ messageWindow.Width(), (int)(messageWindow.Height()/2));
 		try
 		{
 			messageWindow.WriteMessage("   Participant id: " + messageManager.GetMyId() );

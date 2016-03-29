@@ -1,3 +1,4 @@
+import InstrumentationPackage.Indicator;
 import InstrumentationPackage.MessageWindow;
 import MessagePackage.Message;
 import MessagePackage.MessageManagerInterface;
@@ -15,18 +16,17 @@ public class FireAlarmController {
 	private static int	Delay = 2500;					// The loop delay (2.5 seconds)
 	private static boolean Done = false;				// Loop termination flag
 	private static boolean FireAlarmState = false; 
+        private static Indicator fa;								// fire alarm 
 	
 	/************
 	 * Constants
 	 ************/
-        private static final int FIRE_ALARM_SENSOR_ID = -113;
-        
+
         private static final String FIRE_ALARM_ON = "F1";
 	private static final String FIRE_ALARM_OFF = "F0";
         
-        private static final int FIRE_ALARM_STOP_ID = 102;
         private static final int FIRE_ALARM_MSG_ID = 9;
-      
+        private static final int FIRE_ALARM_ACK_ID = -9;
 	
 	public static void main(String args[])
 	{
@@ -47,6 +47,7 @@ public class FireAlarmController {
 		} 
 
 	}
+        
 
 	private static void processControllerMessages() {
 		/**************************************************
@@ -72,13 +73,69 @@ public class FireAlarmController {
 			{
 				Msg = queue.GetMessage();
                                 
-                                if ( Msg.GetMessageId() == FIRE_ALARM_STOP_ID )
-				{
-					handleFireAlarmStop();
-				}
+                                if ( Msg.GetMessageId() == FIRE_ALARM_MSG_ID )
+                                {   
+                                    if (Msg.GetMessage().equalsIgnoreCase("F1")) // humidifier on
+                                    {
+                                        handleFireAlarmOn();
 
+                                    } // if    
+                                    
+                                    if (Msg.GetMessage().equalsIgnoreCase("F0")) // humidifier on
+                                    {
+                                        handleFireAlarmStop();
+
+                                    } // if 
+                                    
+                                }
+
+
+                                // If the message ID == 99 then this is a signal that the simulation
+                                // is to end. At this point, the loop termination flag is set to
+                                // true and this process unregisters from the message manager.
+
+                                if ( Msg.GetMessageId() == 99 )
+                                {
+                                        Done = true;
+
+                                        try
+                                        {
+                                                messageManager.UnRegister();
+
+                                } // try
+
+                                catch (Exception e)
+                                {
+                                                messageWindow.WriteMessage("Error unregistering: " + e);
+
+                                } // catch
+
+                                messageWindow.WriteMessage( "\n\nSimulation Stopped. \n");
+
+                                        // Get rid of the indicators. The message panel is left for the
+                                        // user to exit so they can see the last message posted.
+
+                                        fa.dispose();
+
+                                } // if
 			} 
 
+
+                        // Update the lamp status
+
+                        if (FireAlarmState)
+                        {
+                                // Set to green, humidifier is on
+
+                                fa.SetLampColorAndMessage("FIRE ALARM ON", 1);
+
+                        } else {
+
+                                // Set to black, humidifier is off
+                                fa.SetLampColorAndMessage("FIRE ALARM OFF", 0);
+
+                        } // if
+                        
 			try
 			{
 				Thread.sleep( Delay );
@@ -92,14 +149,25 @@ public class FireAlarmController {
 		}
 	}
 
+        
+	private static void handleFireAlarmOn() {
+			
+			messageWindow.WriteMessage("Received fire alarm start message. Starting fire alarm." );
+			FireAlarmState = true;
+                        fa.SetLampColorAndMessage("Fire Alarm On", 1);
+			// Send arm message to sensors
+			sendMessageToMessageManager( messageManager, FIRE_ALARM_ON, FIRE_ALARM_ACK_ID );
+			messageWindow.WriteMessage(" FIRE ALARM ON");
+	}
+        
 	private static void handleFireAlarmStop() {
 			
 			messageWindow.WriteMessage("Received fire alarm stop message. Stopping fire alarm." );
 			FireAlarmState = false;
-
+                        fa.SetLampColorAndMessage("Fire Alarm Off", 0);
 			// Send arm message to sensors
-			sendMessageToMessageManager( messageManager, FIRE_ALARM_OFF, FIRE_ALARM_SENSOR_ID );
-			messageWindow.WriteMessage(" FIRE ALARM TURNED OFF");
+			sendMessageToMessageManager( messageManager, FIRE_ALARM_OFF, FIRE_ALARM_ACK_ID);
+			messageWindow.WriteMessage(" FIRE ALARM OFF");
 	}
         
 	private static void initializeDisplays() {
@@ -115,6 +183,7 @@ public class FireAlarmController {
 
 		messageWindow.WriteMessage("Registered with the message manager." );
 
+		fa = new Indicator ("Fire Alarm UNK", messageWindow.GetX()+ messageWindow.Width(), 0);
 		try
 		{
 			messageWindow.WriteMessage("   Participant id: " + messageManager.GetMyId() );

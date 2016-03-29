@@ -27,21 +27,13 @@ public class FireSensor {
 	 * Constants
 	 ************/
 	
-	private static final int FIRE_ALARM_SENSOR_ID = -113;
-//        private static final int SPRINKLER_ID = -10;
 	private static final String FIRE_ALARM_ON = "F1";
 	private static final String FIRE_ALARM_OFF = "F0";
         private static final String SPRINKLER_ON = "S1";
 	private static final String SPRINKLER_OFF = "S0";
-//	private static final int HALT_SECURITY_ID = 199;
 	private static final int FIRE_ALARM_MSG_ID = 9;
-        private static final int SPRINKLER_MSG_ID = 10;
+        private static final int FIRE_ALARM_ACK_ID = -9;
         private static Date timeStart = null, timeWait = null;
-        private static SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-        private static final int FIRE_ALARM_STOP_ID = 102;
-
-
-
 	
 	public static void main(String args[])
 	{
@@ -68,7 +60,7 @@ public class FireSensor {
 		*  Here we start the main simulation loop that 
 		*  will continuously look for control messages
 		***************************************************/
-		messageWindow.WriteMessage("Fire Alarm Sensor on" );
+		messageWindow.WriteMessage("Fire Sensor Active" );
 		while ( !Done )
 		{
 			//postArmStatus
@@ -89,28 +81,38 @@ public class FireSensor {
 			{	
 				Msg = queue.GetMessage();
 				
-				if ( Msg.GetMessageId() == FIRE_ALARM_SENSOR_ID )
+				if ( Msg.GetMessageId() == FIRE_ALARM_ACK_ID )
 				{
 					handleFireAlarmControllerMessage(Msg);
 				}
+                                
+                                
 			} 
 
+                        
+                                if (FireAlarmState) {
+                                    sendMessageToMessageManager("F1",FIRE_ALARM_ACK_ID);
+                                }
+                                if (SprinklerState) {
+                                    sendMessageToMessageManager("S1",FIRE_ALARM_ACK_ID);
+                                }
+                        
 			try
 			{
 				Thread.sleep( Delay );
-                                if (FireAlarmState) {
-                                    sendMessageToMessageManager("FIRE ALARM ON",FIRE_ALARM_MSG_ID);
-                                }
-                                
                                 if(!FireAlarmState && CoinToss()){
-                                    sendMessageToMessageManager("FIRE ALARM ON",FIRE_ALARM_MSG_ID);
+//                                    sendMessageToMessageManager("F1", FIRE_ALARM_ACK_ID ); // turn on fire alarm
+                                    sendMessageToMessageManager("F1", FIRE_ALARM_MSG_ID ); // turn on fire alarm
+                                    
                                     timeStart = new Date();
                                     FireAlarmState = true;
 				}
                                 timeWait = new Date();
                                 if(timeStart!=null) {
-                                    if(FireAlarmState && ((timeWait.getTime() - timeStart.getTime() )/1000 % 60) > 10) {
-                                        sendMessageToMessageManager("SPRINKLER ON",SPRINKLER_MSG_ID);
+                                    if(FireAlarmState && ((timeWait.getTime() - timeStart.getTime() )/1000 % 60) > 10 && !SprinklerState) {
+//                                        sendMessageToMessageManager("S1", FIRE_ALARM_ACK_ID ); // turn off sprinkler
+                                        sendMessageToMessageManager("S1", FIRE_ALARM_MSG_ID ); // turn on fire alarm
+                                        SprinklerState = true;
                                     }
                                 }
 			} 
@@ -129,7 +131,7 @@ public class FireSensor {
 		if (Msg.GetMessage().equalsIgnoreCase(FIRE_ALARM_ON)) // doorBreakSensor on
 		{
 			messageWindow.WriteMessage("Fire Alarm on" );
-			FireAlarmState = true;
+//			FireAlarmState = true;
 			
 		} 
 		
@@ -142,15 +144,14 @@ public class FireSensor {
                 if (Msg.GetMessage().equalsIgnoreCase(SPRINKLER_ON)) // doorBreakSensor on
 		{
 			messageWindow.WriteMessage("Sprinkler on" );
-			FireAlarmState = true;
-			
+//			SprinklerState = true;
 		} 
 		
 		if (Msg.GetMessage().equalsIgnoreCase(SPRINKLER_OFF)) // doorBreakSensor off
 		{
 			messageWindow.WriteMessage("Sprinkler off" );
-			FireAlarmState = false;
                         timeStart = null;
+                        SprinklerState = false;
 		}
 	}
         
@@ -161,9 +162,9 @@ public class FireSensor {
 		// Now we create the motionDetector, windowBreakDetector and doorBreakDetector status and message panel
 
 		float WinPosX = 0.10f; 	//This is the X position of the message window in term of a percentage of the screen height
-		float WinPosY = 0.90f;	//This is the Y position of the message window in terms of a percentage of the screen height
+		float WinPosY = 0.00f;	//This is the Y position of the message window in terms of a percentage of the screen height
 
-		messageWindow = new MessageWindow("Fire Alarm Sensor", WinPosX, WinPosY);
+		messageWindow = new MessageWindow("Fire Sensor", WinPosX, WinPosY);
 
 		// Now we put the indicators directly under the panel
 		
@@ -237,7 +238,6 @@ public class FireSensor {
 		
 		try
 		{
-			messageWindow.WriteMessage(msg);
 			messageManager.SendMessage( message ); // Here we send the message to the message manager.
 
 		}

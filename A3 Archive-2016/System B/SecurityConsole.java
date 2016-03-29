@@ -16,13 +16,14 @@ public class SecurityConsole {
 	 ************/
 	private static final int ARM_ID = 100;
 	private static final int DISARM_ID = 101;
-	private static final int FIRE_ALARM_STOP_ID = 102;
 	private static final int HALT_SECURITY_ID = 199;
 	private static final int MOTION_SIMULATE_ID = 160;
 	private static final int DOOR_SIMULATE_ID = 161;
 	private static final int WINDOW_SIMULATE_ID = 162;
 	private static final String SIMULATE_ON = "On";
 	private static final String SIMULATE_OFF = "Off";
+	private static final int FIRE_ALARM_MSG_ID = 9;
+	private static final int FIRE_ALARM_ACK_ID = -9;
 	
 	public static void main(String args[])
 	{
@@ -86,7 +87,7 @@ public class SecurityConsole {
 			{
 				haltSecuritySystem();
 			} 
-            ////////////option 7: Turn off alarm ////////////
+                        ////////////option 7: Turn off alarm ////////////
 			else if ( Option.equals( "7" ) )
 			{
 				turnOffAlarm();
@@ -119,7 +120,10 @@ public class SecurityConsole {
 	private static void turnOffAlarm() {
 		try
 		{
-			sendMessageToMessageManager("Fire Alarm Off", FIRE_ALARM_STOP_ID );
+			sendMessageToMessageManager("F0", FIRE_ALARM_MSG_ID ); // turn off fire alarm
+                        sendMessageToMessageManager("S0", FIRE_ALARM_MSG_ID ); // turn off sprinkler
+//                        sendMessageToMessageManager("F0", FIRE_ALARM_ACK_ID ); // turn off fire alarm
+//                        sendMessageToMessageManager("S0", FIRE_ALARM_ACK_ID ); // turn off sprinkler
 		} 
 
 		catch (Exception e)
