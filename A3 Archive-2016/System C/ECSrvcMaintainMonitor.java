@@ -1,5 +1,5 @@
 /******************************************************************************************************************
-* File:ECSMonitor.java
+* File:ECSrvcMaintainMonitor.java
 * Course: 17655
 * Project: Assignment A3
 * Copyright: Copyright (c) 2009 Carnegie Mellon University
@@ -8,18 +8,12 @@
 *
 * Description:
 *
-* This class monitors the environmental control systems that control museum temperature and humidity. In addition to
-* monitoring the temperature and humidity, the ECSMonitor also allows a user to set the humidity and temperature
-* ranges to be maintained. If temperatures exceed those limits over/under alarm indicators are triggered.
+* This class monitors the registered devices in the musuem environmental. If a registered devices stops sending message for 10s or more than what user has defined.
+* 
 *
 * Parameters: IP address of the message manager (on command line). If blank, it is assumed that the message manager is
 * on the local machine.
 *
-* Internal Methods:
-*   static private void Heater(MessageManagerInterface ei, boolean ON )
-*   static private void Chiller(MessageManagerInterface ei, boolean ON )
-*   static private void Humidifier(MessageManagerInterface ei, boolean ON )
-*   static private void Dehumidifier(MessageManagerInterface ei, boolean ON )
 *
 ******************************************************************************************************************/
 import InstrumentationPackage.*;
@@ -90,17 +84,13 @@ class ECSrvcMaintainMonitor extends Thread
         Message Msg = null;             // Message object
         MessageQueue eq = null;         // Message Queue
         int MsgId = 0;                  // User specified message ID
-        int Delay = 200;               // The loop delay (1/2 second)
+        int Delay = 2500;               // The loop delay (2.5 second, has been set same as other devices)
         boolean Done = false;           // Loop termination flag
 
         if (em != null)
         {
-            // Now we create the ECS status and message panel
-            // Note that we set up two indicators that are initially yellow. This is
-            // because we do not know if the temperature/humidity is high/low.
-            // This panel is placed in the upper left hand corner and the status
-            // indicators are placed directly to the right, one on top of the other
-
+            // Now we create the ECS status and message panel for Service maintenance
+ 
             mw = new MessageWindow("Service Maintainence ECS Monitoring Console", 0, 0);
             
 
@@ -173,14 +163,10 @@ class ECSrvcMaintainMonitor extends Thread
                             String[] messageSplitter = registeredDevices.get(entry.getKey()).split(":");
                             String deviceName = messageSplitter[0];
                             String deviceDescription = messageSplitter[1];
-                            mw.WriteMessage("Device ID - " + entry.getKey() + "-" + deviceName + " has not responded for more than " + waitingTime +" ms");
+                            mw.WriteMessage("Device ID - " + entry.getKey() + " : " + deviceName + " has not responded for more than " + waitingTime/1000 +" seconds");
                             mw.WriteMessage(deviceName + " : " + deviceDescription);
                         }
                     }
-                    
-                    if(Msg.GetMessageId() == -99){
-                        //ECSrvcMaintainMonitor.registeredDevices.remove(Msg.GetMessage());
-                    } // if
                     
                     // If the message ID == 99 then this is a signal that the simulation
                     // is to end. At this point, the loop termination flag is set to
@@ -292,9 +278,17 @@ class ECSrvcMaintainMonitor extends Thread
 
     } // Halt
 
-    /**
-     * 
-     */
+    /***************************************************************************
+     * CONCRETE METHOD:: showRegisteredProcesses
+     * Purpose: This method displays the registered devices
+     *
+     * Arguments: none
+     *
+     * Returns: none
+     *
+     * Exceptions: None
+     *
+     ***************************************************************************/
     public void showRegisteredProcesses() {
         // TODO Auto-generated method stub
         System.out.println("===================================");
@@ -310,9 +304,19 @@ class ECSrvcMaintainMonitor extends Thread
             System.out.println("===================================");
             // do stuff
          }
-        
     }
     
+    /***************************************************************************
+     * CONCRETE METHOD:: showLastSeenOfDevices
+     * Purpose: This method displays the last seen of the registered devices
+     *
+     * Arguments: none
+     *
+     * Returns: none
+     *
+     * Exceptions: None
+     *
+     ***************************************************************************/
     public void showLastSeenOfDevices() {
      // TODO Auto-generated method stub
         Calendar TimeStamp = Calendar.getInstance();
