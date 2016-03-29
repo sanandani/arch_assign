@@ -343,7 +343,7 @@ public class SecurityConsole {
 	{
 
 		Message message = new Message( id, msg); // Here we create the message.
-		
+		System.out.println("Sending" + message.GetMessage() + message.GetMessageId());
 		try
 		{
 			messageManager.SendMessage( message ); // Here we send the message to the message manager.

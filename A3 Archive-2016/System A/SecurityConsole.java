@@ -3,14 +3,14 @@ import MessagePackage.MessageManagerInterface;
 import TermioPackage.Termio;
 
 public class SecurityConsole {
-	
+
 	/***********************
 	 * Private class fields
 	 ***********************/
 	private static MessageManagerInterface messageManager;	// Interface object to the message manager
 	private static boolean Done = false;				// Loop termination flag
 	private static Termio UserInput = new Termio();	// Termio IO Object
-	
+
 	/************
 	 * Constants
 	 ************/
@@ -22,54 +22,55 @@ public class SecurityConsole {
 	private static final int WINDOW_SIMULATE_ID = 162;
 	private static final String SIMULATE_ON = "On";
 	private static final String SIMULATE_OFF = "Off";
-	
+	private static final int FIRE_ALARM_MSG_ID = 9;
+
 	public static void main(String args[])
 	{
 		instantiateMessageManager(args);
 
 		if (messageManager != null)
 		{
-			processControllerMessages(args); 
+			processControllerMessages(args);
 
 		} else {
 
 			System.out.println("Unable to register with the message manager.\n\n" );
 
-		} 
+		}
 
 	}
 
 	private static void processControllerMessages(String args[]) {
 		/*****************************************
-		*  Here we start the main console that 
-		*  will continuously wait for user input 
+		*  Here we start the main console that
+		*  will continuously wait for user input
 		******************************************/
 		String Option = null;
-		
+
 		while (!Done)
 		{
 			//Print Menu
 			printConsoleMenu(args);
 			//Read option
 			Option = UserInput.KeyboardReadString();
-	
+
 			//////////// option 1: Arm security system ////////////
 			if (Option == null) continue;
 			if ( Option.equals( "1" ) )
 			{
 				armSecuritySystem();
-			} 
+			}
 			////////////option 2: Disarm security system ////////////
 			else if ( Option.equals( "2" ) )
 			{
 				disarmSecuritySystem();
-			} 
+			}
 			////////////option 3: Simulate Door Break ////////////
-			
+
 			else if ( Option.equals( "3" ) )
 			{
 				simulateDoorBreak();
-			} 
+			}
 			////////////option 4: Simulate Window Break ////////////
 			else if ( Option.equals( "4" ) )
 			{
@@ -81,11 +82,11 @@ public class SecurityConsole {
 				simulateMotion();
 			}
 			////////////option 6: Stop Simulate Door Break ////////////
-			
+
 			else if ( Option.equals( "6" ) )
 			{
 				stopSimulateDoorBreak();
-			} 
+			}
 			////////////option 7:  Stop Simulate Window Break ////////////
 			else if ( Option.equals( "7" ) )
 			{
@@ -96,14 +97,15 @@ public class SecurityConsole {
 			{
 				stopSimulateMotion();
 			}
-			////////////option 9: Exit security system ////////////
+			////////////option 11: Exit security system ////////////
 			else if ( Option.equals( "9" ) )
 			{
 				haltSecuritySystem();
-			} 
+			}
 			else{
 				System.out.println( "Wrong Option" );
 			}
+
 		}
 	}
 
@@ -135,118 +137,144 @@ public class SecurityConsole {
 		{
 			sendMessageToMessageManager("Halt", HALT_SECURITY_ID );
 			messageManager.UnRegister();
-		} 
+		}
 
 		catch (Exception e)
 		{
 			System.out.println("Error unregistering: " + e);
 
-		} 
+		}
 	}
-	
+
 	private static void simulateDoorBreak() {
 		try
 		{
 			sendMessageToMessageManager(SIMULATE_ON, DOOR_SIMULATE_ID );
-		} 
+		}
 
 		catch (Exception e)
 		{
 			System.out.println("Error sending message: " + e);
 
-		} 
+		}
 	}
-	
+
 	private static void simulateWindowBreak() {
 		try
 		{
 			sendMessageToMessageManager(SIMULATE_ON, WINDOW_SIMULATE_ID );
-		} 
+		}
 
 		catch (Exception e)
 		{
 			System.out.println("Error sending message: " + e);
 
-		} 
+		}
 	}
-	
+
 	private static void simulateMotion() {
 		try
 		{
 			sendMessageToMessageManager(SIMULATE_ON, MOTION_SIMULATE_ID );
-		} 
+		}
 
 		catch (Exception e)
 		{
 			System.out.println("Error sending message: " + e);
 
-		} 
+		}
 	}
 
 	private static void stopSimulateDoorBreak() {
 		try
 		{
 				sendMessageToMessageManager(SIMULATE_OFF, DOOR_SIMULATE_ID );
-		} 
+		}
 
 		catch (Exception e)
 		{
 			System.out.println("Error sending message: " + e);
 
-		} 
+		}
 	}
-	
+
 	private static void stopSimulateWindowBreak() {
 		try
 		{
 				sendMessageToMessageManager(SIMULATE_OFF, WINDOW_SIMULATE_ID );
-		} 
+		}
 
 		catch (Exception e)
 		{
 			System.out.println("Error sending message: " + e);
 
-		} 
+		}
 	}
-	
+
 	private static void stopSimulateMotion() {
 		try
 		{
 				sendMessageToMessageManager(SIMULATE_OFF, MOTION_SIMULATE_ID );
-		} 
+		}
 
 		catch (Exception e)
 		{
 			System.out.println("Error sending message: " + e);
 
-		} 
+		}
+	}
+	private static void turnOnSprinkler() {
+		try
+		{
+                        sendMessageToMessageManager("S1", FIRE_ALARM_MSG_ID ); // turn on sprinkler
+		}
+
+		catch (Exception e)
+		{
+			System.out.println("Error unregistering: " + e);
+
+		}
+	}
+
+        private static void turnOffAlarm() {
+		try
+		{
+			sendMessageToMessageManager("F0", FIRE_ALARM_MSG_ID ); // turn off fire alarm
+                        sendMessageToMessageManager("S0", FIRE_ALARM_MSG_ID ); // turn off sprinkler
+		}
+
+		catch (Exception e)
+		{
+			System.out.println("Error unregistering: " + e);
+
+		}
 	}
 
 	private static void armSecuritySystem() {
 		try
 		{
-			
+
 			sendMessageToMessageManager("Arm", ARM_ID );
-		} 
+		}
 
 		catch (Exception e)
 		{
 			System.out.println("Error sending message: " + e);
 
-		} 
+		}
 	}
-	
+
 	private static void disarmSecuritySystem() {
 		try
 		{
 			sendMessageToMessageManager("Disarm", DISARM_ID );
-		} 
+		}
 
 		catch (Exception e)
 		{
 			System.out.println("Error sending message: " + e);
 
-		} 
+		}
 	}
 
 	private static void instantiateMessageManager(String[] args) {
@@ -269,10 +297,10 @@ public class SecurityConsole {
 			{
 				System.out.println("Error instantiating message manager interface: " + e);
 
-			} 
+			}
 
-		} 
-		
+		}
+
 		else {
 
 			// message manager is not on the local system
@@ -293,7 +321,7 @@ public class SecurityConsole {
 			{
 				System.out.println("Error instantiating message manager interface: " + e);
 
-			} 
+			}
 
 		}
 	}
@@ -302,7 +330,7 @@ public class SecurityConsole {
 	{
 
 		Message message = new Message( id, msg); // Here we create the message.
-		
+		System.out.println("Sending" + message.GetMessage() + message.GetMessageId());
 		try
 		{
 			messageManager.SendMessage( message ); // Here we send the message to the message manager.
@@ -313,7 +341,7 @@ public class SecurityConsole {
 		{
 			System.out.println("Error Confirming Message:: " + e);
 
-		} 
+		}
 
-	} 
+	}
 }

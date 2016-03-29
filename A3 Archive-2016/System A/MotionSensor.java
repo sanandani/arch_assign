@@ -29,6 +29,8 @@ public class MotionSensor {
 	private static final int MOTION_SIMULATE_ID = 160;
 	private static final String SIMULATE_ON = "On";
 	private static final int MOTION_SENSE_MSG_ID = 120;
+	private static final String STOP_ALARM = "STOP ALARM";
+	
 	
 	public static void main(String args[])
 	{
@@ -91,21 +93,29 @@ public class MotionSensor {
 					{
 						if(SIMULATE_ON.equals(Msg.GetMessage())){
 							simulate = true;
+							messageWindow.WriteMessage("Send MOTION_DETECTED");
+							sendMessageToMessageManager(MOTION_DETECTED,MOTION_SENSE_MSG_ID);
 						}
 						else{
 							simulate = false;
+							messageWindow.WriteMessage("Send STOP_ALARM");
+							sendMessageToMessageManager(STOP_ALARM,MOTION_SENSE_MSG_ID);
 						}
 					}
-					if(simulate)
-					{
-						sendMessageToMessageManager(MOTION_DETECTED,MOTION_SENSE_MSG_ID);
-					}
-					else
-					{
-						sendMessageToMessageManager(OK,MOTION_SENSE_MSG_ID);
-					}
 				}
-			} 
+			}
+			if (MotionSensorState){
+			if(simulate)
+			{
+				messageWindow.WriteMessage("Send MOTION_DETECTED");
+				sendMessageToMessageManager(MOTION_DETECTED,MOTION_SENSE_MSG_ID);
+			}
+			else
+			{
+				messageWindow.WriteMessage("Send OK");
+				sendMessageToMessageManager(OK,MOTION_SENSE_MSG_ID);
+			}
+			}
 
 			try
 			{

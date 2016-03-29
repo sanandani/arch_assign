@@ -29,7 +29,7 @@ public class WindowBreakSensor {
 	private static final String OK = "OK";
 	private static final int WINDOW_SIMULATE_ID = 162;
 	private static final String SIMULATE_ON = "On";
-
+	private static final String STOP_ALARM = "STOP ALARM";
 
 	
 	public static void main(String args[])
@@ -88,28 +88,34 @@ public class WindowBreakSensor {
 				{
 					handleExitMessage();
 				}
-				
 				if ( WindowBreakSensorState){
 					if(Msg.GetMessageId() == WINDOW_SIMULATE_ID )
 					{
 						if(SIMULATE_ON.equals(Msg.GetMessage())){
 							simulate = true;
+							messageWindow.WriteMessage("Send WINDOW_BREAK_DETECTED");
+							sendMessageToMessageManager(WINDOW_BREAK_DETECTED,WINDOW_BREAK_MSG_ID);
 						}
 						else{
 							simulate = false;
+							messageWindow.WriteMessage("Send STOP_ALARM");
+							sendMessageToMessageManager(STOP_ALARM,WINDOW_BREAK_MSG_ID);
 						}
 					}
-					if(simulate)
-					{
-						sendMessageToMessageManager(WINDOW_BREAK_DETECTED,WINDOW_BREAK_MSG_ID);
-					}
-					else
-					{
-						sendMessageToMessageManager(OK,WINDOW_BREAK_MSG_ID);
-					}
 				}
-				
-			} 
+			}
+			if ( WindowBreakSensorState){
+			if(simulate)
+			{
+				messageWindow.WriteMessage("Send WINDOW_BREAK_DETECTED");
+				sendMessageToMessageManager(WINDOW_BREAK_DETECTED,WINDOW_BREAK_MSG_ID);
+			}
+			else
+			{
+				messageWindow.WriteMessage("Send OK");
+				sendMessageToMessageManager(OK,WINDOW_BREAK_MSG_ID);
+			}
+			}
 
 			try
 			{

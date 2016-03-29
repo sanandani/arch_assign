@@ -30,6 +30,8 @@ public class DoorBreakSensor {
 	private static final String OK = "OK";
 	private static final int DOOR_SIMULATE_ID = 161;
 	private static final String SIMULATE_ON = "On";
+	private static final String STOP_ALARM = "STOP ALARM";
+	
 	
 
 	
@@ -89,28 +91,34 @@ public class DoorBreakSensor {
 					handleExitMessage();
 				}
 				
-				
 				if ( DoorBreakSensorState){
 					if(Msg.GetMessageId() == DOOR_SIMULATE_ID )
 					{
 						if(SIMULATE_ON.equals(Msg.GetMessage())){
 							simulate = true;
+							messageWindow.WriteMessage("Send DOOR_BREAK_DETECTED");
+							sendMessageToMessageManager(DOOR_BREAK_DETECTED,DOOR_BREAK_MSG_ID);
 						}
 						else{
 							simulate = false;
+							messageWindow.WriteMessage("Send STOP_ALARM");
+							sendMessageToMessageManager(STOP_ALARM,DOOR_BREAK_MSG_ID);
 						}
-					}
-					if(simulate)
-					{
-						sendMessageToMessageManager(DOOR_BREAK_DETECTED,DOOR_BREAK_MSG_ID);
-					}
-					else
-					{
-						sendMessageToMessageManager(OK,DOOR_BREAK_MSG_ID);
 					}
 				}
 			} 
-
+			if ( DoorBreakSensorState){
+			if(simulate)
+			{
+				messageWindow.WriteMessage("Send DOOR_BREAK_DETECTED");
+				sendMessageToMessageManager(DOOR_BREAK_DETECTED,DOOR_BREAK_MSG_ID);
+			}
+			else
+			{
+				messageWindow.WriteMessage("Send OK");
+				sendMessageToMessageManager(OK,DOOR_BREAK_MSG_ID);
+			}
+			}
 			try
 			{
 				Thread.sleep( Delay );

@@ -40,6 +40,7 @@ public class SecurityMonitor {
 	private static final int MOTION_SENSE_MSG_ID = 120;
 	private static final int DOOR_BREAK_MSG_ID = 121;
 	private static final int WINDOW_BREAK_MSG_ID = 122;
+	private static final String STOP_ALARM = "STOP ALARM";
 	
 	
 	public static void main(String args[])
@@ -156,10 +157,12 @@ public class SecurityMonitor {
 			messageWindow.WriteMessage(Msg.GetMessage());
 			sendMessageToMessageManager(SOUND_MOTION_ALARM,MOTION_ALARM_ID);
 		}
-		else{
+		else if (STOP_ALARM.equals(Msg.GetMessage())){
 				messageWindow.WriteMessage(Msg.GetMessage());
 				sendMessageToMessageManager(STOP_MOTION_ALARM,MOTION_ALARM_ID);
-			
+		}
+		else{
+			messageWindow.WriteMessage("Motion" + Msg.GetMessage());
 		}
 	}
 
@@ -169,10 +172,12 @@ public class SecurityMonitor {
 			messageWindow.WriteMessage(Msg.GetMessage());
 			sendMessageToMessageManager(SOUND_DOOR_ALARM,DOOR_ALARM_ID);
 		}
-		else{
+		else if (STOP_ALARM.equals(Msg.GetMessage())){
 				messageWindow.WriteMessage(Msg.GetMessage());
 				sendMessageToMessageManager(STOP_DOOR_ALARM,DOOR_ALARM_ID);
-			
+		}
+		else{
+			messageWindow.WriteMessage("Door" + Msg.GetMessage());
 		}
 	}
 
@@ -182,10 +187,12 @@ public class SecurityMonitor {
 				messageWindow.WriteMessage(Msg.GetMessage());
 				sendMessageToMessageManager(SOUND_WINDOW_ALARM,WINDOW_ALARM_ID);
 			}
-			else{
+			else if (STOP_ALARM.equals(Msg.GetMessage())){
 					messageWindow.WriteMessage(Msg.GetMessage());
 					sendMessageToMessageManager(STOP_WINDOW_ALARM,WINDOW_ALARM_ID);
-				
+			}
+			else{
+				messageWindow.WriteMessage("Window" + Msg.GetMessage());
 			}
 	}
 
