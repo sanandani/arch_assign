@@ -130,29 +130,29 @@ public class FireSensor {
 		
 		if (Msg.GetMessage().equalsIgnoreCase(FIRE_ALARM_ON)) // doorBreakSensor on
 		{
-			messageWindow.WriteMessage("Fire Sensed - Fire Alarm on" );
+			messageWindow.WriteMessage("Fire Sensed" );
 //			FireAlarmState = true;
 			
 		} 
 		
 		if (Msg.GetMessage().equalsIgnoreCase(FIRE_ALARM_OFF)) // doorBreakSensor off
 		{
-			messageWindow.WriteMessage("No Fire - Fire Alarm off" );
+			messageWindow.WriteMessage("Fire Cleared" );
 			FireAlarmState = false;
 		}
                 
-                if (Msg.GetMessage().equalsIgnoreCase(SPRINKLER_ON)) // doorBreakSensor on
-		{
-			messageWindow.WriteMessage("Fire Sensed - Sprinkler on" );
-//			SprinklerState = true;
-		} 
+//                 if (Msg.GetMessage().equalsIgnoreCase(SPRINKLER_ON)) // doorBreakSensor on
+// 		{
+// 			messageWindow.WriteMessage("Fire Sensed" );
+// //			SprinklerState = true;
+// 		} 
 		
-		if (Msg.GetMessage().equalsIgnoreCase(SPRINKLER_OFF)) // doorBreakSensor off
-		{
-			messageWindow.WriteMessage("No Fire - Sprinkler off" );
-                        timeStart = null;
-                        SprinklerState = false;
-		}
+// 		if (Msg.GetMessage().equalsIgnoreCase(SPRINKLER_OFF)) // doorBreakSensor off
+// 		{
+// 			messageWindow.WriteMessage("Fire Cleared" );
+//                         timeStart = null;
+//                         SprinklerState = false;
+// 		}
 	}
         
 	private static void initializeDisplays() {
