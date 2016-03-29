@@ -1,10 +1,6 @@
 %ECHO OFF
 %ECHO Starting ECS System
 PAUSE
-%ECHO Starting System Maintenance Controller Console
-START "System Maintenance CONTROLLER CONSOLE" /MIN /NORMAL java ECSSrvcMaintainConsole %1
-%ECHO Starting Service Monitor Console
-START "TEMPERATURE CONTROLLER CONSOLE" /MIN /NORMAL java ECSrvcMaintainMonitor %1
 %ECHO Starting Temperature Controller Console
 START "TEMPERATURE CONTROLLER CONSOLE" /MIN /NORMAL java TemperatureController %1
 %ECHO Starting Humidity Sensor Console

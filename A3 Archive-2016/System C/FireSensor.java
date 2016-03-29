@@ -68,6 +68,7 @@ public class FireSensor {
 			try
 			{
 				queue = messageManager.GetMessageQueue(); //get messages from message manager
+				sendHeartBeat(messageManager,"11","Fire Sensor","This device senses whether there is a fire");
 			} 
 
 			catch( Exception e )
@@ -257,5 +258,24 @@ public class FireSensor {
 		return(r.nextBoolean());
 
 	}
+	static private void sendHeartBeat(MessageManagerInterface ei, String ID,String DeviceName, String DeviceDescription){
+        // Here we create the message.
+
+        Message msg = new Message( (int) 0, ID + ":" + DeviceName + ":" + DeviceDescription);
+
+        // Here we send the message to the message manager.
+
+        try
+        {
+            ei.SendMessage( msg );
+
+        } // try
+
+        catch (Exception e)
+        {
+            System.out.println("Error Registering the Message:: " + e);
+
+        } // catch
+    }
 
 }

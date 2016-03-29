@@ -54,6 +54,7 @@ public class FireAlarmMonitor {
 			try
 			{
 				queue = messageManager.GetMessageQueue(); //get messages from message manager
+				sendHeartBeat(messageManager,"12","FireAlarmMonitor","This device monitors the states of the fire alarm");
 			} 
 
 			catch( Exception e )
@@ -175,6 +176,25 @@ public class FireAlarmMonitor {
 
 		}
 	}
+	static private void sendHeartBeat(MessageManagerInterface ei, String ID,String DeviceName, String DeviceDescription){
+        // Here we create the message.
+
+        Message msg = new Message( (int) 0, ID + ":" + DeviceName + ":" + DeviceDescription);
+
+        // Here we send the message to the message manager.
+
+        try
+        {
+            ei.SendMessage( msg );
+
+        } // try
+
+        catch (Exception e)
+        {
+            System.out.println("Error Registering the Message:: " + e);
+
+        } // catch
+    }
 
 
 }

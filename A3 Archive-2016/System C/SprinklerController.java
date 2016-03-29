@@ -61,6 +61,7 @@ public class SprinklerController {
 			try
 			{
 				queue = messageManager.GetMessageQueue(); //get messages from message manager
+				sendHeartBeat(messageManager,"10","Sprinkler Controller","This device controls the sprinkler");
 			} 
 
 			catch( Exception e )
@@ -273,5 +274,25 @@ public class SprinklerController {
 		} 
 
 	} 
+
+		static private void sendHeartBeat(MessageManagerInterface ei, String ID,String DeviceName, String DeviceDescription){
+        // Here we create the message.
+
+        Message msg = new Message( (int) 0, ID + ":" + DeviceName + ":" + DeviceDescription);
+
+        // Here we send the message to the message manager.
+
+        try
+        {
+            ei.SendMessage( msg );
+
+        } // try
+
+        catch (Exception e)
+        {
+            System.out.println("Error Registering the Message:: " + e);
+
+        } // catch
+    }
 
 }
