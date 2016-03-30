@@ -5,7 +5,7 @@ import MessagePackage.MessageManagerInterface;
 import MessagePackage.MessageQueue;
 
 public class AlarmController {
-
+	
 	/***********************
 	 * Private class fields
 	 ***********************/
@@ -26,7 +26,7 @@ public class AlarmController {
 	private static Indicator wa;								// window alarm
 	private static Indicator ma;								// motion alarm
 
-
+	
 	/************
 	 * Constants
 	 ************/
@@ -42,24 +42,25 @@ public class AlarmController {
 	private static final String DOOR_BREAK_SENSOR_OFF = "DB0";
 	private static final String MOTION_SENSOR_ON = "M1";
 	private static final String MOTION_SENSOR_OFF = "M0";
-
+	
 	private static final int ARM_ID = 100;
 	private static final int DISARM_ID = 101;
 	private static final int HALT_SECURITY_ID = 199;
-
-
+	
+	
 	private static final int MOTION_ALARM_ID = 150;
 	private static final int DOOR_ALARM_ID = 151;
 	private static final int WINDOW_ALARM_ID = 152;
-
+	
+	
 	private static final String SOUND_WINDOW_ALARM = "SOUND WINDOW ALARM";
 	private static final String SOUND_DOOR_ALARM = "SOUND DOOR ALARM";
 	private static final String SOUND_MOTION_ALARM = "SOUND MOTION ALARM";
 	private static final String MOTION_DETECTED = "MOTION DETECTED";
 	private static final String DOOR_BREAK_DETECTED = "DOOR BREAK DETECTED";
 	private static final String WINDOW_BREAK_DETECTED = "WINDOW BREAK DETECTED";
-
-
+	
+	
 	public static void main(String args[])
 	{
 		instantiateMessageManager(args);
@@ -70,19 +71,19 @@ public class AlarmController {
 		if (messageManager != null)
 		{
 			initializeDisplays();
-			processControllerMessages();
+			processControllerMessages(); 
 
 		} else {
 
 			System.out.println("Unable to register with the message manager.\n\n" );
 
-		}
+		} 
 
 	}
 
 	private static void processControllerMessages() {
 		/**************************************************
-		*  Here we start the main simulation loop that
+		*  Here we start the main simulation loop that 
 		*  will continuously look for control messages
 		***************************************************/
 		messageWindow.WriteMessage("Alarm Controller disarmed." );
@@ -91,65 +92,65 @@ public class AlarmController {
 			try
 			{
 				queue = messageManager.GetMessageQueue(); //get messages from message manager
-				sendHeartBeat(messageManager,"170","Alarm controller","This is the alarm controller which controls the security sensors and alarms");
-			}
+				sendHeartBeat(messageManager,"24","AlarmController","This device controls the security alarms");
+			} 
 
 			catch( Exception e )
 			{
 				messageWindow.WriteMessage("Error getting message queue::" + e );
-			}
+			} 
 
 			int qlen = queue.GetSize();
 
 			for ( int i = 0; i < qlen; i++ )
 			{
 				Msg = queue.GetMessage();
-
+				
 				if ( Msg.GetMessageId() == ARM_ID )
 				{
-					handleArm();
+					handleArm(); 
 				}
-
+				
 				if ( Msg.GetMessageId() == DISARM_ID )
 				{
-					handleDisarm();
+					handleDisarm(); 
 				}
-
+				
 				if ( Msg.GetMessageId() == HALT_SECURITY_ID )
 				{
 					handleExitMessage();
 				}
-
+				
 				if(ArmState){
 
 				if ( Msg.GetMessageId() == MOTION_ALARM_ID )
 				{
-					handleMotionSensorMessage(Msg);
+					handleMotionSensorMessage(Msg); 
 				}
-
+				
 				if ( Msg.GetMessageId() == WINDOW_ALARM_ID )
 				{
 					handleWindowBreakMessage(Msg);
 				}
-
+				
 				if ( Msg.GetMessageId() == DOOR_ALARM_ID )
 				{
 					handleDoorBreakMessage(Msg);
 				}
 				}
-			}
+			} 
 			if(ArmState){
 				handleLampColors();
 			}
 			try
 			{
 				Thread.sleep( Delay );
-			}
+			} 
 
 			catch( Exception e )
 			{
 				System.out.println( "Sleep error:: " + e );
-			}
+			} 
 
 		}
 	}
@@ -158,7 +159,7 @@ public class AlarmController {
 		{
 			// Set to red, motion detected
 			ma.SetLampColorAndMessage(MOTION_DETECTED, 3);
-		}
+		} 
 		else{
 			ma.SetLampColorAndMessage("No Motion", 1);
 		}
@@ -175,7 +176,7 @@ public class AlarmController {
 
 			da.SetLampColorAndMessage("No Door Break", 1);
 
-		}
+		} 
 		if (SoundWindowBreakAlarm)
 		{
 			// Set to red, window break detected
@@ -188,7 +189,7 @@ public class AlarmController {
 
 			wa.SetLampColorAndMessage("No Door Break", 1);
 
-		}
+		} 
 	}
 
 	private static void handleExitMessage() {
@@ -198,13 +199,13 @@ public class AlarmController {
 		{
 			messageManager.UnRegister();
 
-		}
+		} 
 
 		catch (Exception e)
 		{
 			messageWindow.WriteMessage("Error unregistering: " + e);
 
-		}
+		} 
 		wa.dispose();
 		da.dispose();
 		ma.dispose();
@@ -230,14 +231,14 @@ public class AlarmController {
 		{	SoundDoorBreakAlarm = true;
 			messageWindow.WriteMessage(Msg.GetMessage());
 			sendMessageToMessageManager(Msg.GetMessage(),DOOR_BREAK_ACK_ID);
-
+			
 		}
 		else{
 				SoundDoorBreakAlarm = false;
 				messageWindow.WriteMessage(Msg.GetMessage());
 				sendMessageToMessageManager(Msg.GetMessage(),DOOR_BREAK_ACK_ID);
-
-
+				
+			
 		}
 	}
 
@@ -247,7 +248,7 @@ public class AlarmController {
 			SoundWindowBreakAlarm = true;
 			messageWindow.WriteMessage(Msg.GetMessage());
 			sendMessageToMessageManager(Msg.GetMessage(),WINDOW_BREAK_ACK_ID);
-
+			
 		}
 		else{
 				SoundWindowBreakAlarm = false;
@@ -257,18 +258,18 @@ public class AlarmController {
 	}
 
 	private static void handleArm() {
-
+			
 			ArmState = true;
 			messageWindow.WriteMessage("Received arm message. Arming alarms." );
-
+			
 			MotionAlarmState = true;
 			ma.SetLampColorAndMessage("Motion Alarm On", 1);
 			messageWindow.WriteMessage("Motion Alarm Armed" );
-
+			
 			DoorBreakAlarmState = true;
 			messageWindow.WriteMessage("Door Break Alarm Armed" );
 			da.SetLampColorAndMessage("Door Alarm On", 1);
-
+			
 			WindowBreakAlarmState = true;
 			messageWindow.WriteMessage(" Break Alarm Armed" );
 			wa.SetLampColorAndMessage("Window Alarm On", 1);
@@ -278,23 +279,23 @@ public class AlarmController {
 			sendMessageToMessageManager( DOOR_BREAK_SENSOR_ON, DOOR_BREAK_SENSOR_ID );
 			sendMessageToMessageManager( WINDOW_BREAK_SENSOR_ON, WINDOW_BREAK_SENSOR_ID );
 			messageWindow.WriteMessage(" All Sensors Armed" );
-
-
+			
+			
 	}
-
+	
 	private static void handleDisarm() {
-
+		
 		ArmState = false;
 		messageWindow.WriteMessage("Received arm message. Disarming alarms." );
-
+		
 		MotionAlarmState = false;
 		ma.SetLampColorAndMessage("Motion Alarm Off", 0);
 		messageWindow.WriteMessage("Motion Alarm Disarmed" );
-
+		
 		DoorBreakAlarmState = false;
 		da.SetLampColorAndMessage("Door Alarm Off", 0);
 		messageWindow.WriteMessage("Door Break Alarm Disarmed" );
-
+		
 		WindowBreakAlarmState = false;
 		wa.SetLampColorAndMessage("Window Alarm Off", 0);
 		messageWindow.WriteMessage(" Break Alarm Disarmed" );
@@ -304,13 +305,13 @@ public class AlarmController {
 		sendMessageToMessageManager(DOOR_BREAK_SENSOR_OFF, DOOR_BREAK_SENSOR_ID );
 		sendMessageToMessageManager(WINDOW_BREAK_SENSOR_OFF, WINDOW_BREAK_SENSOR_ID );
 		messageWindow.WriteMessage(" All Sensors Disarmed" );
-
+	
 }
 
 	private static void initializeDisplays() {
-
+		
 		System.out.println("Registered with the message manager." );
-
+		
 		// Now we create the motionDetector, windowBreakDetector and doorBreakDetector status and message panel
 
 		float WinPosX = 0.0f; 	//This is the X position of the message window in term of a percentage of the screen height
@@ -327,13 +328,13 @@ public class AlarmController {
 		{
 			messageWindow.WriteMessage("   Participant id: " + messageManager.GetMyId() );
 			messageWindow.WriteMessage("   Registration Time: " + messageManager.GetRegistrationTime() );
-		}
+		} 
 
 		catch (Exception e)
 		{
 			System.out.println("Error:: " + e);
 
-		}
+		} 
 	}
 
 	private static void instantiateMessageManager(String[] args) {
@@ -356,10 +357,10 @@ public class AlarmController {
 			{
 				System.out.println("Error instantiating message manager interface: " + e);
 
-			}
+			} 
 
-		}
-
+		} 
+		
 		else {
 
 			// message manager is not on the local system
@@ -380,7 +381,7 @@ public class AlarmController {
 			{
 				System.out.println("Error instantiating message manager interface: " + e);
 
-			}
+			} 
 
 		}
 	}
@@ -389,7 +390,7 @@ public class AlarmController {
 	{
 
 		Message message = new Message( id, msg); // Here we create the message.
-
+		
 		try
 		{
 			messageManager.SendMessage( message ); // Here we send the message to the message manager.
@@ -400,27 +401,11 @@ public class AlarmController {
 		{
 			System.out.println("Error Confirming Message:: " + e);
 
-		}
+		} 
 
 	}
-
-	/***************************************************************************
-	    * CONCRETE METHOD:: sendHeartBeat
-	    * Purpose: This method posts the specified message to the specified message
-	    * manager. This method assumes an message ID of 0 which indicates a heartbeat message
-	    *
-	    * Arguments: MessageManagerInterface ei - this is the messagemanger interface
-	    *            where the message will be posted.
-	    *
-	    *            string m - this is the received command.
-	    *
-	    * Returns: none
-	    *
-	    * Exceptions: None
-	    *
-	    ***************************************************************************/	
 	static private void sendHeartBeat(MessageManagerInterface ei, String ID,String DeviceName, String DeviceDescription){
-           // Here we create the message.
+        // Here we create the message.
 
         Message msg = new Message( (int) 0, ID + ":" + DeviceName + ":" + DeviceDescription);
 
@@ -434,9 +419,10 @@ public class AlarmController {
 
         catch (Exception e)
         {
-            System.out.println("Error Registering the device :: " + e);
+            System.out.println("Error Registering the Message:: " + e);
 
         } // catch
-       }
+
+} 
 
 }

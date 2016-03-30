@@ -13,12 +13,13 @@ public class MotionSensor {
 	private static Message Msg;					// Message object
 	private static boolean MotionSensorState = false;	// Door Break Sensor State : false == off, true == on
 	private static int	Delay = 2500;					// The loop delay (2.5 seconds)
+	private static boolean simulate = false;	// Simulate break in  : false == off, true == on
 	private static boolean Done = false;				// Loop termination flag
-
+	
 	/************
 	 * Constants
 	 ************/
-
+	
 	private static final int MOTION_SENSOR_ID = -110;
 	private static final String MOTION_SENSOR_ON = "M1";
 	private static final String MOTION_SENSOR_OFF = "M0";
@@ -28,7 +29,9 @@ public class MotionSensor {
 	private static final int MOTION_SIMULATE_ID = 160;
 	private static final String SIMULATE_ON = "On";
 	private static final int MOTION_SENSE_MSG_ID = 120;
-
+	private static final String STOP_ALARM = "STOP ALARM";
+	
+	
 	public static void main(String args[])
 	{
 		instantiateMessageManager(args);
@@ -39,75 +42,92 @@ public class MotionSensor {
 		if (messageManager != null)
 		{
 			initializeDisplays();
-			performSensorprocess();
+			performSensorprocess(); 
 
 		} else {
 
 			System.out.println("Unable to register with the message manager.\n\n" );
 
-		}
+		} 
 
 	}
 
 	private static void performSensorprocess() {
 		/**************************************************
-		*  Here we start the main simulation loop that
+		*  Here we start the main simulation loop that 
 		*  will continuously look for control messages
 		***************************************************/
 		messageWindow.WriteMessage("Motion Sensor off" );
-
+		
 		while ( !Done )
 		{
 			//postArmStatus
-
+			
 			try
 			{
 				queue = messageManager.GetMessageQueue(); //get messages from message manager
-				sendHeartBeat(messageManager,"174","Motion Sensor","This is a motion sensor.");
-
-			}
+				sendHeartBeat(messageManager,"22","MotionSensor","This device detectes motion");
+			} 
 
 			catch( Exception e )
 			{
 				messageWindow.WriteMessage("Error getting message queue::" + e );
-			}
+			} 
 
 			int qlen = queue.GetSize();
 
 			for ( int i = 0; i < qlen; i++ )
-			{
+			{	
 				Msg = queue.GetMessage();
-
+				
 				if ( Msg.GetMessageId() == MOTION_SENSOR_ID)
 				{
 					handleMotionSensorControllerMessage(Msg);
 				}
-
+				
 				if ( Msg.GetMessageId() == HALT_SECURITY_ID )
 				{
 					handleExitMessage();
 				}
-				if ( MotionSensorState && Msg.GetMessageId() == MOTION_SIMULATE_ID )
-				{
-					if(SIMULATE_ON.equals(Msg.GetMessage())){
-						sendMessageToMessageManager(MOTION_DETECTED,MOTION_SENSE_MSG_ID);
-					}
-					else{
-						sendMessageToMessageManager(OK,MOTION_SENSE_MSG_ID);
+				if ( MotionSensorState){
+					if(Msg.GetMessageId() == MOTION_SIMULATE_ID )
+					{
+						if(SIMULATE_ON.equals(Msg.GetMessage())){
+							simulate = true;
+							messageWindow.WriteMessage("Send MOTION_DETECTED");
+							sendMessageToMessageManager(MOTION_DETECTED,MOTION_SENSE_MSG_ID);
+						}
+						else{
+							simulate = false;
+							messageWindow.WriteMessage("Send STOP_ALARM");
+							sendMessageToMessageManager(STOP_ALARM,MOTION_SENSE_MSG_ID);
+						}
 					}
 				}
+			}
+			if (MotionSensorState){
+			if(simulate)
+			{
+				messageWindow.WriteMessage("Send MOTION_DETECTED");
+				sendMessageToMessageManager(MOTION_DETECTED,MOTION_SENSE_MSG_ID);
+			}
+			else
+			{
+				messageWindow.WriteMessage("Send OK");
+				sendMessageToMessageManager(OK,MOTION_SENSE_MSG_ID);
+			}
 			}
 
 			try
 			{
 				Thread.sleep( Delay );
-			}
+			} 
 
 			catch( Exception e )
 			{
 				System.out.println( "Sleep error:: " + e );
 
-			}
+			} 
 		}
 	}
 
@@ -118,28 +138,28 @@ public class MotionSensor {
 		{
 			messageManager.UnRegister();
 
-		}
+		} 
 
 		catch (Exception e)
 		{
 			messageWindow.WriteMessage("Error unregistering: " + e);
 
-		}
+		} 
 
 		messageWindow.WriteMessage( "\n\nSimulation Stopped. \n");
 
 	}
 
 	private static void handleMotionSensorControllerMessage(Message Msg) {
-
-
+		
+		
 		if (Msg.GetMessage().equalsIgnoreCase(MOTION_SENSOR_ON)) // window break Sensor on
 		{
 			messageWindow.WriteMessage("Motion Sensor on" );
 			MotionSensorState = true;
-
-		}
-
+			
+		} 
+		
 		if (Msg.GetMessage().equalsIgnoreCase(MOTION_SENSOR_OFF)) // window break Sensor off
 		{
 			messageWindow.WriteMessage("Motion Sensor off" );
@@ -148,9 +168,9 @@ public class MotionSensor {
 	}
 
 	private static void initializeDisplays() {
-
+		
 		System.out.println("Registered with the message manager." );
-
+		
 		// Now we create the window break Sensor status and message panel
 
 		float WinPosX = 0.10f; 	//This is the X position of the message window in term of a percentage of the screen height
@@ -159,19 +179,19 @@ public class MotionSensor {
 		messageWindow = new MessageWindow("Motion Sensor", WinPosX, WinPosY);
 
 		// Now we put the indicators directly under the panel
-
+		
 		messageWindow.WriteMessage("Registered with the message manager." );
 
 		try
 		{
 			messageWindow.WriteMessage("   Participant id: " + messageManager.GetMyId() );
 			messageWindow.WriteMessage("   Registration Time: " + messageManager.GetRegistrationTime() );
-		}
+		} 
 
 		catch (Exception e)
 		{
 			System.out.println("Error:: " + e);
-		}
+		} 
 	}
 
 	private static void instantiateMessageManager(String[] args) {
@@ -194,10 +214,10 @@ public class MotionSensor {
 			{
 				System.out.println("Error instantiating message manager interface: " + e);
 
-			}
+			} 
 
-		}
-
+		} 
+		
 		else {
 
 			// message manager is not on the local system
@@ -218,7 +238,7 @@ public class MotionSensor {
 			{
 				System.out.println("Error instantiating message manager interface: " + e);
 
-			}
+			} 
 
 		}
 	}
@@ -227,7 +247,7 @@ public class MotionSensor {
 	{
 
 		Message message = new Message( id, msg); // Here we create the message.
-
+		
 		try
 		{
 			messageWindow.WriteMessage(msg);
@@ -239,27 +259,12 @@ public class MotionSensor {
 		{
 			System.out.println("Error Sending Message:: " + e);
 
-		}
+		} 
 
-	}
+	} 
 
-	/***************************************************************************
-	    * CONCRETE METHOD:: sendHeartBeat
-	    * Purpose: This method posts the specified message to the specified message
-	    * manager. This method assumes an message ID of 0 which indicates a heartbeat message
-	    *
-	    * Arguments: MessageManagerInterface ei - this is the messagemanger interface
-	    *            where the message will be posted.
-	    *
-	    *            string m - this is the received command.
-	    *
-	    * Returns: none
-	    *
-	    * Exceptions: None
-	    *
-	    ***************************************************************************/
 	static private void sendHeartBeat(MessageManagerInterface ei, String ID,String DeviceName, String DeviceDescription){
-           // Here we create the message.
+        // Here we create the message.
 
         Message msg = new Message( (int) 0, ID + ":" + DeviceName + ":" + DeviceDescription);
 
@@ -273,9 +278,9 @@ public class MotionSensor {
 
         catch (Exception e)
         {
-            System.out.println("Error Registering the device :: " + e);
+            System.out.println("Error Registering the Message:: " + e);
 
         } // catch
-    }
 
-}
+}}
+

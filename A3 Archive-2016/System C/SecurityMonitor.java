@@ -4,7 +4,7 @@ import MessagePackage.MessageManagerInterface;
 import MessagePackage.MessageQueue;
 
 public class SecurityMonitor {
-
+	
 	/***********************
 	 * Private class fields
 	 ***********************/
@@ -16,14 +16,14 @@ public class SecurityMonitor {
 	private static boolean Done = false;				// Loop termination flag
 	private static boolean ArmState = false;				// Loop termination flag
 
-
+	
 	/************
 	 * Constants
 	 ************/
 	private static final int MOTION_ALARM_ID = 150;
 	private static final int DOOR_ALARM_ID = 151;
 	private static final int WINDOW_ALARM_ID = 152;
-
+	
 	private static final String SOUND_WINDOW_ALARM = "SOUND WINDOW ALARM";
 	private static final String SOUND_DOOR_ALARM = "SOUND DOOR ALARM";
 	private static final String SOUND_MOTION_ALARM = "SOUND MOTION ALARM";
@@ -33,15 +33,16 @@ public class SecurityMonitor {
 	private static final String MOTION_DETECTED = "MOTION DETECTED";
 	private static final String DOOR_BREAK_DETECTED = "DOOR BREAK DETECTED";
 	private static final String WINDOW_BREAK_DETECTED = "WINDOW BREAK DETECTED";
-
+	
 	private static final int ARM_ID = 100;
 	private static final int DISARM_ID = 101;
 	private static final int HALT_SECURITY_ID = 199;
 	private static final int MOTION_SENSE_MSG_ID = 120;
 	private static final int DOOR_BREAK_MSG_ID = 121;
 	private static final int WINDOW_BREAK_MSG_ID = 122;
-
-
+	private static final String STOP_ALARM = "STOP ALARM";
+	
+	
 	public static void main(String args[])
 	{
 		instantiateMessageManager(args);
@@ -52,19 +53,19 @@ public class SecurityMonitor {
 		if (messageManager != null)
 		{
 			initializeDisplays();
-			processMonitorMessages();
+			processMonitorMessages(); 
 
 		} else {
 
 			System.out.println("Unable to register with the message manager.\n\n" );
 
-		}
+		} 
 
 	}
 
 	private static void processMonitorMessages() {
 		/**************************************************
-		*  Here we start the main simulation loop that
+		*  Here we start the main simulation loop that 
 		*  will continuously look for control messages
 		***************************************************/
 		messageWindow.WriteMessage("Security Monitor disarmed." );
@@ -73,29 +74,28 @@ public class SecurityMonitor {
 			try
 			{
 				queue = messageManager.GetMessageQueue(); //get messages from message manager
-				sendHeartBeat(messageManager,"171","Security Monitor","This is a the security controller which monitors the security messages");
-
-			}
+				sendHeartBeat(messageManager,"21","SecurityMonitor","This device monitors the security condition");
+			} 
 
 			catch( Exception e )
 			{
 				messageWindow.WriteMessage("Error getting message queue::" + e );
-			}
+			} 
 
 			int qlen = queue.GetSize();
 
 			for ( int i = 0; i < qlen; i++ )
 			{
 				Msg = queue.GetMessage();
-
+				
 				if ( Msg.GetMessageId() == ARM_ID )
 				{
-					handleArm();
+					handleArm(); 
 				}
-
+				
 				if ( Msg.GetMessageId() == DISARM_ID )
 				{
-					handleDisarm();
+					handleDisarm(); 
 				}
 				if ( Msg.GetMessageId() == HALT_SECURITY_ID )
 				{
@@ -105,30 +105,30 @@ public class SecurityMonitor {
 				{
 					if ( Msg.GetMessageId() == MOTION_SENSE_MSG_ID )
 					{
-						handleMotionSensorMessage(Msg);
+						handleMotionSensorMessage(Msg); 
 					}
-
+					
 					if ( Msg.GetMessageId() == WINDOW_BREAK_MSG_ID )
 					{
 						handleWindowBreakMessage(Msg);
 					}
-
+					
 					if ( Msg.GetMessageId() == DOOR_BREAK_MSG_ID )
 					{
 						handleDoorBreakMessage(Msg);
 					}
 				}
-			}
+			} 
 
 			try
 			{
 				Thread.sleep( Delay );
-			}
+			} 
 
 			catch( Exception e )
 			{
 				System.out.println( "Sleep error:: " + e );
-			}
+			} 
 
 		}
 	}
@@ -140,16 +140,16 @@ public class SecurityMonitor {
 		{
 			messageManager.UnRegister();
 
-		}
+		} 
 
 		catch (Exception e)
 		{
 			messageWindow.WriteMessage("Error unregistering: " + e);
 
-		}
+		} 
 
 		messageWindow.WriteMessage( "\n\nSimulation Stopped. \n");
-
+		
 	}
 
 	private static void handleMotionSensorMessage(Message Msg) {
@@ -158,10 +158,12 @@ public class SecurityMonitor {
 			messageWindow.WriteMessage(Msg.GetMessage());
 			sendMessageToMessageManager(SOUND_MOTION_ALARM,MOTION_ALARM_ID);
 		}
-		else{
+		else if (STOP_ALARM.equals(Msg.GetMessage())){
 				messageWindow.WriteMessage(Msg.GetMessage());
 				sendMessageToMessageManager(STOP_MOTION_ALARM,MOTION_ALARM_ID);
-
+		}
+		else{
+			messageWindow.WriteMessage("Motion" + Msg.GetMessage());
 		}
 	}
 
@@ -171,10 +173,12 @@ public class SecurityMonitor {
 			messageWindow.WriteMessage(Msg.GetMessage());
 			sendMessageToMessageManager(SOUND_DOOR_ALARM,DOOR_ALARM_ID);
 		}
-		else{
+		else if (STOP_ALARM.equals(Msg.GetMessage())){
 				messageWindow.WriteMessage(Msg.GetMessage());
 				sendMessageToMessageManager(STOP_DOOR_ALARM,DOOR_ALARM_ID);
-
+		}
+		else{
+			messageWindow.WriteMessage("Door" + Msg.GetMessage());
 		}
 	}
 
@@ -184,10 +188,12 @@ public class SecurityMonitor {
 				messageWindow.WriteMessage(Msg.GetMessage());
 				sendMessageToMessageManager(SOUND_WINDOW_ALARM,WINDOW_ALARM_ID);
 			}
-			else{
+			else if (STOP_ALARM.equals(Msg.GetMessage())){
 					messageWindow.WriteMessage(Msg.GetMessage());
 					sendMessageToMessageManager(STOP_WINDOW_ALARM,WINDOW_ALARM_ID);
-
+			}
+			else{
+				messageWindow.WriteMessage("Window" + Msg.GetMessage());
 			}
 	}
 
@@ -195,16 +201,16 @@ public class SecurityMonitor {
 			ArmState = true;
 			messageWindow.WriteMessage("Received arm message. Arming." );
 	}
-
+	
 	private static void handleDisarm() {
 		ArmState = false;
-		messageWindow.WriteMessage("Received disarm message. Disarming." );
+		messageWindow.WriteMessage("Received disarm message. Disarming." );		
 }
 
 	private static void initializeDisplays() {
-
+		
 		System.out.println("Registered with the message manager." );
-
+		
 		// Now we create the motionDetector, windowBreakDetector and doorBreakDetector status and message panel
 
 		float WinPosX = 0.0f; 	//This is the X position of the message window in term of a percentage of the screen height
@@ -218,13 +224,13 @@ public class SecurityMonitor {
 		{
 			messageWindow.WriteMessage("   Participant id: " + messageManager.GetMyId() );
 			messageWindow.WriteMessage("   Registration Time: " + messageManager.GetRegistrationTime() );
-		}
+		} 
 
 		catch (Exception e)
 		{
 			System.out.println("Error:: " + e);
 
-		}
+		} 
 	}
 
 	private static void instantiateMessageManager(String[] args) {
@@ -247,10 +253,10 @@ public class SecurityMonitor {
 			{
 				System.out.println("Error instantiating message manager interface: " + e);
 
-			}
+			} 
 
-		}
-
+		} 
+		
 		else {
 
 			// message manager is not on the local system
@@ -271,7 +277,7 @@ public class SecurityMonitor {
 			{
 				System.out.println("Error instantiating message manager interface: " + e);
 
-			}
+			} 
 
 		}
 	}
@@ -280,7 +286,7 @@ public class SecurityMonitor {
 	{
 
 		Message message = new Message( id, msg); // Here we create the message.
-
+		
 		try
 		{
 			messageManager.SendMessage( message ); // Here we send the message to the message manager.
@@ -291,26 +297,11 @@ public class SecurityMonitor {
 		{
 			System.out.println("Error Confirming Message:: " + e);
 
-		}
+		} 
 
-	}
-	/***************************************************************************
-	    * CONCRETE METHOD:: sendHeartBeat
-	    * Purpose: This method posts the specified message to the specified message
-	    * manager. This method assumes an message ID of 0 which indicates a heartbeat message
-	    *
-	    * Arguments: MessageManagerInterface ei - this is the messagemanger interface
-	    *            where the message will be posted.
-	    *
-	    *            string m - this is the received command.
-	    *
-	    * Returns: none
-	    *
-	    * Exceptions: None
-	    *
-	    ***************************************************************************/
+	} 
 	static private void sendHeartBeat(MessageManagerInterface ei, String ID,String DeviceName, String DeviceDescription){
-           // Here we create the message.
+        // Here we create the message.
 
         Message msg = new Message( (int) 0, ID + ":" + DeviceName + ":" + DeviceDescription);
 
@@ -324,8 +315,8 @@ public class SecurityMonitor {
 
         catch (Exception e)
         {
-            System.out.println("Error Registering the device :: " + e);
+            System.out.println("Error Registering the Message:: " + e);
 
         } // catch
-       }
-}
+
+}}

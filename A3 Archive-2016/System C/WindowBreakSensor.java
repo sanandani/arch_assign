@@ -13,12 +13,13 @@ public class WindowBreakSensor {
 	private static Message Msg;					// Message object
 	private static boolean WindowBreakSensorState = false;	// Door Break Sensor State : false == off, true == on
 	private static int	Delay = 2500;					// The loop delay (2.5 seconds)
+	private static boolean simulate = false;	// Simulate break in  : false == off, true == on
 	private static boolean Done = false;				// Loop termination flag
-
+	
 	/************
 	 * Constants
 	 ************/
-
+	
 	private static final int WINDOW_BREAK_SENSOR_ID = -112;
 	private static final String WINDOW_BREAK_SENSOR_ON = "W1";
 	private static final String WINDOW_BREAK_SENSOR_OFF = "W0";
@@ -28,9 +29,9 @@ public class WindowBreakSensor {
 	private static final String OK = "OK";
 	private static final int WINDOW_SIMULATE_ID = 162;
 	private static final String SIMULATE_ON = "On";
+	private static final String STOP_ALARM = "STOP ALARM";
 
-
-
+	
 	public static void main(String args[])
 	{
 		instantiateMessageManager(args);
@@ -41,75 +42,92 @@ public class WindowBreakSensor {
 		if (messageManager != null)
 		{
 			initializeDisplays();
-			performSensorprocess();
+			performSensorprocess(); 
 
 		} else {
 
 			System.out.println("Unable to register with the message manager.\n\n" );
 
-		}
+		} 
 
 	}
 
 	private static void performSensorprocess() {
 		messageWindow.WriteMessage("Window Break Sensor off" );
 		/**************************************************
-		*  Here we start the main simulation loop that
+		*  Here we start the main simulation loop that 
 		*  will continuously look for control messages
 		***************************************************/
-
+		
 		while ( !Done )
 		{
 			//postArmStatus
-
+			
 			try
 			{
 				queue = messageManager.GetMessageQueue(); //get messages from message manager
-				sendHeartBeat(messageManager,"173","Window Break Sensor","This is a Window Break Sensor");
-			}
+				sendHeartBeat(messageManager,"20","WindowBreakSensor Controller","This device senses whether windows are broken");
+			} 
 
 			catch( Exception e )
 			{
 				messageWindow.WriteMessage("Error getting message queue::" + e );
-			}
+			} 
 
 			int qlen = queue.GetSize();
 
 			for ( int i = 0; i < qlen; i++ )
-			{
+			{	
 				Msg = queue.GetMessage();
-
+				
 				if ( Msg.GetMessageId() == WINDOW_BREAK_SENSOR_ID)
 				{
 					handleWindowBreakControllerMessage(Msg);
 				}
-
+				
 				if ( Msg.GetMessageId() == HALT_SECURITY_ID )
 				{
 					handleExitMessage();
 				}
-				if ( WindowBreakSensorState && Msg.GetMessageId() == WINDOW_SIMULATE_ID )
-				{
-					if(SIMULATE_ON.equals(Msg.GetMessage())){
-						sendMessageToMessageManager(WINDOW_BREAK_DETECTED,WINDOW_BREAK_MSG_ID);
-					}
-					else{
-						sendMessageToMessageManager(OK,WINDOW_BREAK_MSG_ID);
+				if ( WindowBreakSensorState){
+					if(Msg.GetMessageId() == WINDOW_SIMULATE_ID )
+					{
+						if(SIMULATE_ON.equals(Msg.GetMessage())){
+							simulate = true;
+							messageWindow.WriteMessage("Send WINDOW_BREAK_DETECTED");
+							sendMessageToMessageManager(WINDOW_BREAK_DETECTED,WINDOW_BREAK_MSG_ID);
+						}
+						else{
+							simulate = false;
+							messageWindow.WriteMessage("Send STOP_ALARM");
+							sendMessageToMessageManager(STOP_ALARM,WINDOW_BREAK_MSG_ID);
+						}
 					}
 				}
-
+			}
+			if ( WindowBreakSensorState){
+			if(simulate)
+			{
+				messageWindow.WriteMessage("Send WINDOW_BREAK_DETECTED");
+				sendMessageToMessageManager(WINDOW_BREAK_DETECTED,WINDOW_BREAK_MSG_ID);
+			}
+			else
+			{
+				messageWindow.WriteMessage("Send OK");
+				sendMessageToMessageManager(OK,WINDOW_BREAK_MSG_ID);
+			}
 			}
 
 			try
 			{
 				Thread.sleep( Delay );
-			}
+			} 
 
 			catch( Exception e )
 			{
 				System.out.println( "Sleep error:: " + e );
 
-			}
+			} 
 		}
 	}
 
@@ -121,28 +139,28 @@ public class WindowBreakSensor {
 		{
 			messageManager.UnRegister();
 
-		}
+		} 
 
 		catch (Exception e)
 		{
 			messageWindow.WriteMessage("Error unregistering: " + e);
 
-		}
+		} 
 
 		messageWindow.WriteMessage( "\n\nSimulation Stopped. \n");
 
 	}
 
 	private static void handleWindowBreakControllerMessage(Message Msg) {
-
-
+		
+		
 		if (Msg.GetMessage().equalsIgnoreCase(WINDOW_BREAK_SENSOR_ON)) // window break Sensor on
 		{
 			messageWindow.WriteMessage("Window Break Sensor on" );
 			WindowBreakSensorState = true;
-
-		}
-
+			
+		} 
+		
 		if (Msg.GetMessage().equalsIgnoreCase(WINDOW_BREAK_SENSOR_OFF)) // window break Sensor off
 		{
 			messageWindow.WriteMessage("Window Break Sensor off" );
@@ -151,12 +169,12 @@ public class WindowBreakSensor {
 	}
 
 
-
+	
 
 	private static void initializeDisplays() {
-
+		
 		System.out.println("Registered with the message manager." );
-
+		
 		// Now we create the window break Sensor status and message panel
 
 		float WinPosX = 0.10f; 	//This is the X position of the message window in term of a percentage of the screen height
@@ -165,19 +183,19 @@ public class WindowBreakSensor {
 		messageWindow = new MessageWindow("Window Break Sensor", WinPosX, WinPosY);
 
 		// Now we put the indicators directly under the panel
-
+		
 		messageWindow.WriteMessage("Registered with the message manager." );
 
 		try
 		{
 			messageWindow.WriteMessage("   Participant id: " + messageManager.GetMyId() );
 			messageWindow.WriteMessage("   Registration Time: " + messageManager.GetRegistrationTime() );
-		}
+		} 
 
 		catch (Exception e)
 		{
 			System.out.println("Error:: " + e);
-		}
+		} 
 	}
 
 	private static void instantiateMessageManager(String[] args) {
@@ -200,10 +218,10 @@ public class WindowBreakSensor {
 			{
 				System.out.println("Error instantiating message manager interface: " + e);
 
-			}
+			} 
 
-		}
-
+		} 
+		
 		else {
 
 			// message manager is not on the local system
@@ -224,7 +242,7 @@ public class WindowBreakSensor {
 			{
 				System.out.println("Error instantiating message manager interface: " + e);
 
-			}
+			} 
 
 		}
 	}
@@ -233,7 +251,7 @@ public class WindowBreakSensor {
 	{
 
 		Message message = new Message( id, msg); // Here we create the message.
-
+		
 		try
 		{
 			messageWindow.WriteMessage(msg);
@@ -245,26 +263,12 @@ public class WindowBreakSensor {
 		{
 			System.out.println("Error Sending Message:: " + e);
 
-		}
+		} 
 
-	}
-	/***************************************************************************
-	    * CONCRETE METHOD:: sendHeartBeat
-	    * Purpose: This method posts the specified message to the specified message
-	    * manager. This method assumes an message ID of 0 which indicates a heartbeat message
-	    *
-	    * Arguments: MessageManagerInterface ei - this is the messagemanger interface
-	    *            where the message will be posted.
-	    *
-	    *            string m - this is the received command.
-	    *
-	    * Returns: none
-	    *
-	    * Exceptions: None
-	    *
-	    ***************************************************************************/
-	static private void sendHeartBeat(MessageManagerInterface ei, String ID,String DeviceName, String DeviceDescription){
-           // Here we create the message.
+}
+
+static private void sendHeartBeat(MessageManagerInterface ei, String ID,String DeviceName, String DeviceDescription){
+        // Here we create the message.
 
         Message msg = new Message( (int) 0, ID + ":" + DeviceName + ":" + DeviceDescription);
 
@@ -278,8 +282,11 @@ public class WindowBreakSensor {
 
         catch (Exception e)
         {
-            System.out.println("Error Registering the device :: " + e);
+            System.out.println("Error Registering the Message:: " + e);
 
         } // catch
-       }
+
+	} 
+
+
 }
